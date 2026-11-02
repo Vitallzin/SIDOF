@@ -2,7 +2,7 @@
 
 import pandas as pd
 
-from financas.normalizacao import normalizar, normalizar_texto, separar_operacao
+from financas.normalizacao import chave_de_loja, normalizar, normalizar_texto, separar_operacao
 
 
 def _extrato(descricoes, valores=None, parcelas=None):
@@ -58,3 +58,8 @@ def test_normalizar_nao_altera_o_original():
     original = _extrato(["padaria"])
     normalizar(original)
     assert original.loc[0, "descricao"] == "padaria"
+
+
+def test_chave_de_loja():
+    assert chave_de_loja("LV*SUSHIKAZU") == chave_de_loja("SUSHI KAZU 1234") == "SUSHIKAZU"
+    assert chave_de_loja("CRD*SUPERMERCADOBOMPRECO") == "SUPERMERCADOBOMPRECO"

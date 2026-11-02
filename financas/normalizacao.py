@@ -33,6 +33,15 @@ def normalizar_texto(texto):
     return re.sub(r"\s+", " ", sem_acento).strip().upper()
 
 
+def chave_de_loja(contraparte):
+    """Forma "limpa" do nome para comparar lojas: sem prefixo de maquininha, números e espaços.
+
+    Ex.: "LV*SUSHIKAZU" e "SUSHI KAZU 1234" viram ambos "SUSHIKAZU".
+    """
+    sem_prefixo = re.sub(r"^[A-Z]{1,10}\*", "", contraparte)
+    return re.sub(r"[^A-Z]", "", sem_prefixo)
+
+
 def separar_operacao(descricao):
     """Separa o prefixo do banco da contraparte (quem recebeu ou pagou)."""
     for prefixo, operacao in PREFIXOS_OPERACAO:

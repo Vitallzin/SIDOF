@@ -202,3 +202,17 @@ def test_teste_duro_marca_lojas_novas():
     assert (hibrido.loc[hibrido["loja_nova"], "loja"] != "").all()
     tabela = experimento.comparar_por_grupo_de_loja(resultado)
     assert set(tabela.index.get_level_values("grupo")) == {"loja nova", "loja já vista", "sem loja (ex.: PIX p/ pessoa)"}
+
+
+def test_memoria_reaproveita_loja_escrita_de_outro_jeito():
+    from financas.modelo import buscar_na_memoria
+    memoria = {("U01", "SUSHI KAZU"): "restaurantes_bares"}
+    assert buscar_na_memoria(memoria, "U01", "LV*SUSHIKAZU SAO PAULO") == ("restaurantes_bares", "SUSHI KAZU")
+    assert buscar_na_memoria(memoria, "U02", "SUSHI KAZU") is None  # memória é de cada usuário
+
+
+def test_memoria_nao_confunde_pessoas_parecidas():
+    from financas.modelo import buscar_na_memoria
+    memoria = {("U01", "MARIA SILVA"): "moradia"}
+    assert buscar_na_memoria(memoria, "U01", "MARIA SILVA") == ("moradia", "MARIA SILVA")
+    assert buscar_na_memoria(memoria, "U01", "MARIA SOUZA") is None

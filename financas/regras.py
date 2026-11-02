@@ -66,9 +66,16 @@ MARCAS_DE_EMPRESA = ("LTDA", "ME", "SA", "EIRELI", "CIA", "SERVICOS")
 
 
 def parece_pessoa(contraparte):
-    """Duas ou três palavras sem nenhum indício de empresa, ex.: 'MARIA SOUZA'."""
+    """Duas ou três palavras só com letras e sem indício de empresa, ex.: 'MARIA SOUZA'.
+
+    Nomes de pessoa não têm '*' (prefixo de maquininha) nem números (código do terminal).
+    """
     palavras = contraparte.split()
-    return 2 <= len(palavras) <= 3 and not any(palavra in MARCAS_DE_EMPRESA for palavra in palavras)
+    return (
+        2 <= len(palavras) <= 3
+        and all(palavra.isalpha() for palavra in palavras)
+        and not any(palavra in MARCAS_DE_EMPRESA for palavra in palavras)
+    )
 
 
 def _nome_categoria(categoria):

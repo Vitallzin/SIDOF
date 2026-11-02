@@ -12,12 +12,17 @@ Entradas de dinheiro ficam com o resultado das regras; renda é tratada na Fase 
 import pandas as pd
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.linear_model import LogisticRegression
+from sklearn.metrics.pairwise import cosine_similarity
 from sklearn.pipeline import make_pipeline
 
 from financas import SEMENTE
+from financas.normalizacao import chave_de_loja
 from financas.regras import CONFIANCA_MINIMA, parece_pessoa
 
 CONFIANCA_MEMORIA = 0.90
+# Semelhança mínima para reaproveitar a resposta dada para uma loja escrita de outro jeito
+# (decidida antes de medir; é o mesmo limite usado para "loja já vista" nas anomalias)
+SEMELHANCA_MEMORIA = 0.5
 # Trava de segurança: num PIX para uma pessoa, só o usuário sabe a finalidade.
 # O palpite do modelo nunca passa desta confiança, então vira pergunta.
 CONFIANCA_MAXIMA_PIX_PESSOA = 0.50
@@ -49,6 +54,31 @@ def prever(modelo, textos):
     return modelo.classes_[indices], probabilidades.max(axis=1)
 
 
+def buscar_na_memoria(memoria, usuario, contraparte):
+    """Procura a resposta do usuário para esta contraparte. Devolve (categoria, nome lembrado) ou None.
+
+    - Nome exatamente igual: sempre vale.
+    - Lojas com nome escrito diferente ("LV*SUSHIKAZU" e "SUSHI KAZU 1234"): vale se forem
+      parecidas o bastante (pedaços de letras em comum).
+    - Pessoas: só nome exato. "MARIA SILVA" e "MARIA SOUZA" são pessoas diferentes.
+    """
+    if (usuario, contraparte) in memoria:
+        return memoria[(usuario, contraparte)], contraparte
+    if parece_pessoa(contraparte):
+        return None
+    # Nomes curtos de loja ("SUSHI KAZU") podem parecer de pessoa: entram como candidatos mesmo assim
+    candidatos = [nome for (dono, nome) in memoria if dono == usuario]
+    if not candidatos:
+        return None
+    chaves = [chave_de_loja(nome) for nome in [contraparte] + candidatos]
+    vetores = TfidfVectorizer(analyzer="char", ngram_range=(3, 3)).fit_transform(chaves)
+    semelhancas = cosine_similarity(vetores[0], vetores[1:])[0]
+    melhor = semelhancas.argmax()
+    if semelhancas[melhor] < SEMELHANCA_MEMORIA:
+        return None
+    return memoria[(usuario, candidatos[melhor])], candidatos[melhor]
+
+
 def _nome_categoria(categoria):
     return categoria.replace("_", " ")
 
@@ -71,15 +101,19 @@ def classificar_hibrido(classificado, modelo, memoria=None):
 
     sem_regra = (tabela["regra"] == "sem_regra") & (tabela["direcao"] == "saida")
 
-    # Memória: respostas que o próprio usuário já deu
-    chaves = list(zip(tabela["id_usuario"], tabela["contraparte"]))
-    lembrado = sem_regra & pd.Series([chave in memoria for chave in chaves], index=tabela.index)
-    for i in tabela.index[lembrado]:
-        categoria = memoria[chaves[i]]
+    # Memória: respostas que o próprio usuário já deu (iguais ou, para lojas, parecidas)
+    lembrado = pd.Series(False, index=tabela.index)
+    for i in tabela.index[sem_regra]:
+        achado = buscar_na_memoria(memoria, tabela.loc[i, "id_usuario"], tabela.loc[i, "contraparte"])
+        if achado is None:
+            continue
+        categoria, lembrada = achado
+        lembrado[i] = True
         tabela.loc[i, ["categoria_final", "confianca_final", "origem"]] = [categoria, CONFIANCA_MEMORIA, "memoria"]
-        tabela.loc[i, "explicacao_final"] = (
-            f'Você já informou que pagamentos para "{tabela.loc[i, "contraparte"]}" são {_nome_categoria(categoria)}.'
-        )
+        texto = f'Você já informou que pagamentos para "{lembrada}" são {_nome_categoria(categoria)}.'
+        if lembrada != tabela.loc[i, "contraparte"]:
+            texto += f' "{tabela.loc[i, "contraparte"]}" parece ser o mesmo lugar.'
+        tabela.loc[i, "explicacao_final"] = texto
 
     # Modelo: só para o que as regras e a memória não resolveram
     para_modelo = sem_regra & ~lembrado
