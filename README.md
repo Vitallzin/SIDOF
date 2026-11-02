@@ -48,6 +48,17 @@ Hoje esse comando gera os dados sintéticos em `dados_gerados/` (semente fixa 42
 
 O comando leva cerca de 1 minuto e meio, porque o modelo é treinado várias vezes no experimento.
 
+## Interface
+
+```bash
+.venv\Scripts\streamlit run app.py
+```
+
+Abre no navegador (http://localhost:8501). Na barra lateral: escolha o usuário e o "mês atual",
+que simula os meses chegando. Abas: diagnóstico, notificações do mês, perguntas (suas respostas
+valem para pagamentos parecidos), parcelas e metas. A interface usa só o sistema em uso
+(`financas/sistema.py`), que nunca lê a verdade dos usuários.
+
 ## Como rodar os testes
 
 ```bash
@@ -73,5 +84,6 @@ O comando leva cerca de 1 minuto e meio, porque o modelo é treinado várias vez
 - [x] Fase 5: parcelas e compromissos futuros
 - [x] Fase 6: indicadores e diagnóstico
 - [x] Fase 7: metas financeiras
-- [x] Fase 8: anomalias (aguardando aprovação)
-- [ ] Fase 9: interface e monitoramento simulado
+- [x] Fase 8: anomalias
+- [x] Fase 9: interface e monitoramento simulado (aguardando aprovação)
+- [ ] Fase 10: avaliação e documentação

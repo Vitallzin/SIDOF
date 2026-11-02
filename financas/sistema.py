@@ -54,7 +54,8 @@ class Sistema:
         perguntas = saidas[saidas["perguntar_usuario"]]
         if id_usuario is not None:
             perguntas = perguntas[perguntas["id_usuario"] == id_usuario]
-        return perguntas[["id_transacao", "id_usuario", "data", "descricao", "valor", "sugestao_modelo", "explicacao_final"]]
+        colunas = ["id_transacao", "id_usuario", "data", "descricao", "contraparte", "valor", "sugestao_modelo", "explicacao_final"]
+        return perguntas[colunas]
 
     def responder(self, id_transacao, categoria):
         """Guarda a resposta do usuário; ela passa a valer para pagamentos parecidos."""

@@ -44,3 +44,4 @@ Rodar a partir da pasta do projeto (Windows):
 - Instalar: `python -m venv .venv` e depois `.venv\Scripts\python -m pip install -r requirements.txt`
 - Rodar: `.venv\Scripts\python -m financas`
 - Testar: `.venv\Scripts\python -m pytest`
+- Interface: `.venv\Scripts\streamlit run app.py`

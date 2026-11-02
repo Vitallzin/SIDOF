@@ -18,6 +18,7 @@ from sklearn.metrics.pairwise import cosine_similarity
 
 from financas import SEMENTE
 from financas.formatacao import mes_por_extenso, reais
+from financas.regras import parece_pessoa
 
 # Transações que não entram na detecção: movimentam dinheiro entre contas ou são parcelas esperadas
 FORA_DA_DETECCAO = ("transferencia_interna", "pagamento_fatura")
@@ -59,7 +60,9 @@ def detectar_picos(tabela):
     """Mês em que o gasto de uma categoria ficou bem acima da média dos meses anteriores."""
     meses = sorted(tabela["mes"].unique())
     alertas = []
-    por_mes = tabela.groupby(["id_usuario", "categoria_final", "mes"])["gasto"].sum()
+    # Sem categoria ainda ("a confirmar") não dá para dizer que um tipo de gasto aumentou
+    com_categoria = tabela[tabela["categoria_final"] != "nao_identificado"]
+    por_mes = com_categoria.groupby(["id_usuario", "categoria_final", "mes"])["gasto"].sum()
     for (usuario, categoria), serie in por_mes.groupby(level=[0, 1]):
         totais = serie.droplevel([0, 1]).reindex(meses, fill_value=0)
         for posicao in range(MESES_MINIMOS_HISTORICO, len(meses)):
@@ -129,8 +132,10 @@ def detectar_lojas_novas_caras(tabela, novidades):
                 continue
             limite = max(VEZES_A_MEDIANA * historico.median(), historico.quantile(0.95))
             if linha["gasto"] > limite:
+                eh_pix_para_pessoa = linha["descricao"].startswith("PIX ENVIADO") and parece_pessoa(linha["contraparte"])
+                inicio = "Primeiro PIX para" if eh_pix_para_pessoa else "Primeira compra em"
                 alertas.append(_alerta(usuario, "estabelecimento_novo_alto", [linha["id_transacao"]], (
-                    f'Primeira compra em "{linha["contraparte"]}" e no valor de {reais(linha["gasto"])}, '
+                    f'{inicio} "{linha["contraparte"]}" e no valor de {reais(linha["gasto"])}, '
                     f"acima do seu habitual (até {reais(limite)})."
                 )))
     return alertas

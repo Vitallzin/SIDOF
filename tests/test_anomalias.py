@@ -26,7 +26,7 @@ def _saidas(linhas):
     """linhas: (data, descricao, valor, categoria)"""
     tabela = pd.DataFrame([
         {"id_transacao": f"T{i:03d}", "id_usuario": "U01", "data": data, "descricao": descricao,
-         "contraparte": descricao, "valor": valor, "parcela": "", "categoria_final": categoria, "mes": data[:7]}
+         "contraparte": descricao.removeprefix("PIX ENVIADO "), "valor": valor, "parcela": "", "categoria_final": categoria, "mes": data[:7]}
         for i, (data, descricao, valor, categoria) in enumerate(linhas)
     ])
     return preparar(tabela)
@@ -159,3 +159,16 @@ def test_isolation_forest_acha_duplicadas_e_lojas_novas(resultado_gerado):
 def test_todo_alerta_tem_explicacao(resultado_gerado):
     for resultado in resultado_gerado.values():
         assert (resultado["alertas"]["explicacao"].str.len() > 20).all()
+
+
+def test_pix_alto_para_pessoa_nova_fala_em_pix():
+    linhas = _rotina() + [("2026-04-18", "PIX ENVIADO CAMILA SOARES", -2500.0, "compras")]
+    tabela = _saidas(linhas)
+    alertas = detectar_lojas_novas_caras(tabela, novidade(tabela))
+    assert alertas[0]["explicacao"].startswith('Primeiro PIX para "CAMILA SOARES"')
+
+
+def test_nao_avisa_pico_de_gasto_sem_categoria():
+    linhas = _rotina() + [(f"2026-0{m}-09", "XYZ 123", -20.0, "nao_identificado") for m in range(1, 4)]
+    linhas += [("2026-04-09", "XYZ 123", -900.0, "nao_identificado")]
+    assert detectar_picos(_saidas(linhas)) == []
