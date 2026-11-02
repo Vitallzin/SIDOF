@@ -1,0 +1,8 @@
+# Ambiente virtual e caches do Python
+.venv/
+__pycache__/
+.pytest_cache/
+
+# Dados gerados (podem ser recriados com a semente fixa)
+dados_gerados/*
+!dados_gerados/.gitkeep
