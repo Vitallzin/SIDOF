@@ -44,6 +44,7 @@ Hoje esse comando gera os dados sintéticos em `dados_gerados/` (semente fixa 42
 | `relatorio_metas.txt` | Meta exemplo (R$ 4.000 em 10 meses) acompanhada para cada usuário | O maestro |
 | `alertas.csv` | Alertas de anomalia dos dois métodos, com explicação | Fases seguintes |
 | `relatorio_anomalias.txt` | Precisão e revocação por tipo, exemplos detectados e perdidos | O maestro |
+| `relatorio_sistema.txt` | O sistema em uso (modelo treinado numa base separada) nos usuários atendidos | O maestro |
 
 O comando leva cerca de 1 minuto e meio, porque o modelo é treinado várias vezes no experimento.
 
@@ -57,7 +58,7 @@ O comando leva cerca de 1 minuto e meio, porque o modelo é treinado várias vez
 
 | Pasta | O que tem |
 |---|---|
-| `financas/` | Código do sistema |
+| `financas/` | Código do sistema (`sistema.py` é o sistema em uso; os outros módulos são as fases) |
 | `tests/` | Testes automáticos (pytest) |
 | `dados_gerados/` | CSVs criados pelo gerador (não vão para o repositório) |
 | `docs/` | Proposta e plano |

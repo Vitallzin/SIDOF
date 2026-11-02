@@ -10,6 +10,7 @@ from pathlib import Path
 import pandas as pd
 
 from financas.diagnostico import NOMES_BLOCOS, diagnosticar
+from financas.experimento import metricas
 from financas.gerador import PASTA_PADRAO, TIPOS_NAO_PREVISTOS
 
 
@@ -328,4 +329,23 @@ def relatorio_anomalias(resultados, instancias, semente=0):
     for alerta in falsos.groupby("detector").head(2).itertuples():
         linhas.append(f"  [{alerta.detector}] {alerta.id_usuario}: {alerta.explicacao}")
     linhas += ["", "Lembrete: dados sintéticos; os limites foram fixados antes de olhar os resultados."]
+    return "\n".join(linhas)
+
+
+def relatorio_sistema(saidas, verdade):
+    """Como o sistema em uso (modelo treinado numa base separada) se sai nos usuários atendidos."""
+    junto = saidas.merge(verdade[["id_transacao", "categoria"]], on="id_transacao")
+    geral = metricas(junto)
+    perguntas = junto.groupby("id_usuario")["perguntar_usuario"].sum()
+    origem = junto["origem"].value_counts(normalize=True)
+    linhas = [
+        "=== Sistema em uso (sem a verdade dos atendidos) ===",
+        "Modelo treinado numa base separada de usuários fictícios (outra semente).",
+        f"Saídas decididas sozinho: {geral['automaticas']:.1%}, com {geral['precisao']:.1%} de acerto",
+        f"Erros silenciosos: {geral['erros_silenciosos']:.1%} | Perguntas: {geral['perguntas']:.1%}",
+        "Quem decidiu: " + ", ".join(f"{nome} {parte:.0%}" for nome, parte in origem.items()),
+        f"Perguntas por usuário (6 meses): mínimo {perguntas.min()}, média {perguntas.mean():.0f}, máximo {perguntas.max()}",
+        "",
+        "Lembrete: a base e os atendidos compram nas mesmas lojas inventadas; em lojas novas o modelo ajuda pouco (ver teste duro).",
+    ]
     return "\n".join(linhas)

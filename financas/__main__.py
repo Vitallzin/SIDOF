@@ -16,6 +16,7 @@ from financas.avaliacao import (
     relatorio_diagnostico,
     relatorio_parcelas,
     relatorio_regras,
+    relatorio_sistema,
     relatorio_renda,
 )
 from financas.anomalias import detectar_estatistico, detectar_isolation_forest
@@ -26,6 +27,7 @@ from financas.gerador import PASTA_PADRAO, gerar_dados, resumo, salvar_dados
 from financas.normalizacao import carregar_dados, normalizar
 from financas.parcelas import comprometimento_da_renda, compromissos_futuros, identificar_parcelamentos
 from financas.regras import classificar_por_regras
+from financas.sistema import Sistema, treinar_modelo_da_base
 from financas.renda import classificar_entradas, perfil_de_renda
 
 
@@ -115,6 +117,13 @@ def executar():
     resultados = {nome: avaliar_anomalias(tabela, instancias) for nome, tabela in alertas.items()}
     texto = relatorio_anomalias(resultados, instancias)
     (PASTA_PADRAO / "relatorio_anomalias.txt").write_text(texto, encoding="utf-8")
+    print(texto)
+    print()
+
+    # Sistema em uso: modelo treinado numa base separada; nada lê a verdade dos atendidos
+    atendido = Sistema(extrato, usuarios, treinar_modelo_da_base())
+    texto = relatorio_sistema(atendido.saidas(), verdade)
+    (PASTA_PADRAO / "relatorio_sistema.txt").write_text(texto, encoding="utf-8")
     print(texto)
 
 
