@@ -66,3 +66,17 @@ def test_interface_abre_e_troca_de_usuario_e_mes():
     assert not app.exception
     assert "abril de 2026" in _textos(app)
     assert "Olá" in app.header[0].value
+
+
+def test_tema_escuro_liga_sem_erro():
+    app = AppTest.from_file("../app.py", default_timeout=180).run()
+    app.sidebar.toggle[0].set_value(True).run()
+    assert not app.exception
+
+
+def test_interface_sem_emojis():
+    import re
+    from pathlib import Path
+
+    codigo = (Path(__file__).parent.parent / "app.py").read_text(encoding="utf-8")
+    assert not re.findall(r"[\U0001F300-\U0001FAFF☀-➿]", codigo)

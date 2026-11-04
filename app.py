@@ -19,7 +19,7 @@ from financas.parcelas import comprometimento_da_renda, compromissos_futuros, id
 from financas.renda import classificar_entradas, perfil_de_renda
 from financas.sistema import Sistema, treinar_modelo_da_base
 
-st.set_page_config(page_title="Diagnóstico financeiro (protótipo)", page_icon="💰", layout="wide")
+st.set_page_config(page_title="Diagnóstico financeiro (protótipo)", layout="wide")
 
 # ---------- Visual ----------
 
@@ -33,48 +33,90 @@ CORES_BLOCOS = {
 }
 VERDE, AMARELO, VERMELHO = "#15803D", "#B45309", "#B91C1C"
 
-ICONES_NOTIFICACAO = {
-    "Queda de renda": ("📉", VERMELHO),
-    "Nova parcela": ("💳", "#8B5CF6"),
-    "Possível cobrança duplicada": ("🔁", AMARELO),
-    "Compra alta em lugar novo": ("🛍️", AMARELO),
-    "Muitas compras em pouco tempo": ("⚡", AMARELO),
-    "Aumento de gasto": ("📈", AMARELO),
+# Cor da borda de cada tipo de notificação
+CORES_NOTIFICACAO = {
+    "Queda de renda": VERMELHO,
+    "Nova parcela": "#8B5CF6",
+    "Possível cobrança duplicada": AMARELO,
+    "Compra alta em lugar novo": AMARELO,
+    "Muitas compras em pouco tempo": AMARELO,
+    "Aumento de gasto": AMARELO,
 }
 
-st.markdown(
-    """
+# Duas paletas: a interface troca entre elas pela chave "Tema escuro" na barra lateral
+PALETAS = {
+    "claro": {
+        "fundo": "#F6F8F7", "lateral": "#E8F1EF", "cartao": "#FFFFFF", "borda": "#E5ECEA", "linha": "#EEF2F1",
+        "texto": "#111827", "suave": "#6B7280", "forte": "#374151",
+        "alerta_fundo": "#FEF3C7", "alerta_texto": "#92400E", "alerta_borda": "#FDE68A",
+        "ok_fundo": "#DCFCE7", "ok_texto": "#166534", "ok_borda": "#BBF7D0",
+        "verde": "#15803D", "amarelo": "#B45309", "vermelho": "#B91C1C",
+    },
+    "escuro": {
+        "fundo": "#0E1514", "lateral": "#15201E", "cartao": "#1A2624", "borda": "#2A3A37", "linha": "#24332F",
+        "texto": "#E5E7EB", "suave": "#9CA3AF", "forte": "#D1D5DB",
+        "alerta_fundo": "#3A2E12", "alerta_texto": "#FCD34D", "alerta_borda": "#5B4718",
+        "ok_fundo": "#12301F", "ok_texto": "#86EFAC", "ok_borda": "#1F4D33",
+        "verde": "#4ADE80", "amarelo": "#FBBF24", "vermelho": "#F87171",
+    },
+}
+
+
+def aplicar_tema(cores):
+    """Injeta as cores da paleta como variáveis CSS e estiliza a página e os componentes."""
+    variaveis = "".join(f"--{nome.replace('_', '-')}: {valor};" for nome, valor in cores.items())
+    st.markdown(
+        f"""
     <style>
-    .block-container {padding-top: 2rem; max-width: 1200px;}
-    .cartao {background: #FFFFFF; border-radius: 14px; padding: 1rem 1.2rem;
-             box-shadow: 0 1px 3px rgba(15, 23, 42, .08); border: 1px solid #E5ECEA; height: 100%;}
-    .cartao .rotulo {font-size: .75rem; color: #6B7280; text-transform: uppercase; letter-spacing: .04em;
-                     min-height: 2.2em;}
-    .cartao .valor {font-size: clamp(1.05rem, 2.1vw, 1.7rem); font-weight: 700; color: #111827; line-height: 1.3;
-                    white-space: nowrap;}
-    .cartao .detalhe {font-size: .85rem; color: #6B7280;}
-    .bloco {display: flex; align-items: center; gap: .7rem; padding: .55rem .2rem; border-bottom: 1px solid #EEF2F1;}
-    .bloco:last-child {border-bottom: none;}
-    .bolinha {width: 12px; height: 12px; border-radius: 50%; flex-shrink: 0;}
-    .bloco .corpo {flex: 1; min-width: 0;}
-    .bloco .topo, .bloco .base {display: flex; justify-content: space-between; gap: .6rem;}
-    .bloco .nome {color: #111827; font-weight: 500;}
-    .bloco .quanto {font-weight: 600; color: #111827; white-space: nowrap;}
-    .bloco .base {font-size: .78rem; color: #6B7280;}
-    .bloco .base span:last-child {white-space: nowrap;}
-    .faixa {border-radius: 14px; padding: 1rem 1.3rem; color: #FFFFFF; margin: .3rem 0 1rem 0;}
-    .faixa .grande {font-size: 1.5rem; font-weight: 700;}
-    .etiqueta {display: inline-block; padding: .35rem .75rem; border-radius: 999px; margin: 0 .4rem .5rem 0;
-               font-size: .88rem; background: #FEF3C7; color: #92400E; border: 1px solid #FDE68A;}
-    .etiqueta.ok {background: #DCFCE7; color: #166534; border-color: #BBF7D0;}
-    .aviso {background: #FFFFFF; border-radius: 12px; padding: .8rem 1rem; margin-bottom: .6rem;
-            border: 1px solid #E5ECEA; border-left-width: 6px;}
-    .aviso .titulo {font-weight: 600; margin-bottom: .15rem;}
-    .secao {font-size: 1.05rem; font-weight: 600; margin: .2rem 0 .4rem 0; color: #111827;}
+    :root {{{variaveis}}}
+    .stApp, [data-testid="stHeader"] {{background-color: var(--fundo); color: var(--texto);}}
+    [data-testid="stSidebar"] {{background-color: var(--lateral);}}
+    .stApp h1, .stApp h2, .stApp h3, .stApp p, .stApp li, .stApp label,
+    [data-testid="stMarkdownContainer"], [data-testid="stText"] {{color: var(--texto);}}
+    [data-testid="stCaptionContainer"], [data-testid="stCaptionContainer"] p {{color: var(--suave);}}
+    [data-baseweb="select"] > div, [data-baseweb="input"] > div, .stApp input, .stApp textarea,
+    [data-baseweb="popover"] ul, [data-baseweb="popover"] li, [role="listbox"], [role="option"],
+    [data-testid="stSelectbox"] div:has(input), [data-testid="stNumberInput"] div:has(> input),
+    [data-testid="stTextInput"] div:has(> input) {{background-color: var(--cartao) !important; color: var(--texto) !important;}}
+    [data-testid="stExpander"] details, [data-testid="stVerticalBlockBorderWrapper"] {{border-color: var(--borda) !important;}}
+    [data-testid="stExpander"] details {{background-color: var(--cartao);}}
+    button[data-baseweb="tab"] p {{color: var(--suave);}}
+    button[data-baseweb="tab"][aria-selected="true"] p {{color: #0F766E; font-weight: 600;}}
+    .block-container {{padding-top: 2rem; max-width: 1200px;}}
+    .cartao {{background: var(--cartao); border-radius: 14px; padding: 1rem 1.2rem;
+             box-shadow: 0 1px 3px rgba(15, 23, 42, .08); border: 1px solid var(--borda); height: 100%;}}
+    .cartao .rotulo {{font-size: .75rem; color: var(--suave); text-transform: uppercase; letter-spacing: .04em; min-height: 2.2em;}}
+    .cartao .valor {{font-size: clamp(1.05rem, 2.1vw, 1.7rem); font-weight: 700; color: var(--texto); line-height: 1.3; white-space: nowrap;}}
+    .cartao .detalhe {{font-size: .85rem; color: var(--suave);}}
+    .bloco {{display: flex; align-items: center; gap: .7rem; padding: .55rem .2rem; border-bottom: 1px solid var(--linha);}}
+    .bloco:last-child {{border-bottom: none;}}
+    .bolinha {{width: 12px; height: 12px; border-radius: 50%; flex-shrink: 0;}}
+    .bloco .corpo {{flex: 1; min-width: 0;}}
+    .bloco .topo, .bloco .base {{display: flex; justify-content: space-between; gap: .6rem;}}
+    .bloco .nome {{color: var(--texto); font-weight: 500;}}
+    .bloco .quanto {{font-weight: 600; color: var(--texto); white-space: nowrap;}}
+    .bloco .base {{font-size: .78rem; color: var(--suave);}}
+    .bloco .base span:last-child {{white-space: nowrap;}}
+    .faixa {{border-radius: 14px; padding: 1rem 1.3rem; color: #FFFFFF; margin: .3rem 0 1rem 0;}}
+    .faixa .grande {{font-size: 1.5rem; font-weight: 700;}}
+    .etiqueta {{display: inline-block; padding: .35rem .75rem; border-radius: 999px; margin: 0 .4rem .5rem 0; font-size: .88rem;
+               background: var(--alerta-fundo); color: var(--alerta-texto); border: 1px solid var(--alerta-borda);}}
+    .etiqueta.ok {{background: var(--ok-fundo); color: var(--ok-texto); border-color: var(--ok-borda);}}
+    .aviso {{background: var(--cartao); border-radius: 12px; padding: .8rem 1rem; margin-bottom: .6rem;
+            border: 1px solid var(--borda); border-left-width: 6px;}}
+    .aviso .titulo {{font-weight: 600; margin-bottom: .15rem;}}
+    .secao {{font-size: 1.05rem; font-weight: 600; margin: .2rem 0 .4rem 0; color: var(--texto);}}
     </style>
     """,
-    unsafe_allow_html=True,
-)
+        unsafe_allow_html=True,
+    )
+
+
+def estilo_grafico(grafico):
+    """Fundo transparente e textos na cor do tema atual."""
+    return grafico.configure(background="transparent").configure_view(strokeWidth=0).configure_axis(
+        labelColor=CORES["suave"], titleColor=CORES["suave"], gridColor=CORES["linha"], domainColor=CORES["borda"]
+    ).configure_legend(labelColor=CORES["texto"])
 
 
 def md(texto):
@@ -93,7 +135,7 @@ def reais_curto(valor):
     return f"{sinal}R$ " + f"{abs(valor):,.0f}".replace(",", ".")
 
 
-def cartao(rotulo, valor, detalhe="", cor_valor="#111827"):
+def cartao(rotulo, valor, detalhe="", cor_valor="var(--texto)"):
     return html(
         f'<div class="cartao"><div class="rotulo">{rotulo}</div>'
         f'<div class="valor" style="color:{cor_valor}">{valor}</div>'
@@ -101,18 +143,20 @@ def cartao(rotulo, valor, detalhe="", cor_valor="#111827"):
     )
 
 
-def cor_da_sobra(taxa):
-    if taxa < 0:
-        return VERMELHO
-    return AMARELO if taxa < 0.10 else VERDE
+def cor_da_sobra(taxa, para_texto=True):
+    """Verde, amarelo ou vermelho. Para texto usa o tom do tema; para fundo (com letra branca), o tom escuro."""
+    nome = "vermelho" if taxa < 0 else "amarelo" if taxa < 0.10 else "verde"
+    if para_texto:
+        return f"var(--{nome})"
+    return {"verde": VERDE, "amarelo": AMARELO, "vermelho": VERMELHO}[nome]
 
 
 def seta(variacao):
     """Variação do 1º para o 2º trimestre. Neutra: mostra direção, sem julgar."""
     if abs(variacao) < 0.05:
-        return '<span style="color:#6B7280">→ estável</span>'
+        return '<span style="color:var(--suave)">→ estável</span>'
     simbolo = "↑" if variacao > 0 else "↓"
-    return f'<span style="color:#374151">{simbolo} {abs(variacao):.0%}</span>'
+    return f'<span style="color:var(--forte)">{simbolo} {abs(variacao):.0%}</span>'
 
 
 # ---------- Dados ----------
@@ -156,14 +200,18 @@ if "respostas" not in st.session_state:
 # ---------- Barra lateral ----------
 nomes = usuarios.set_index("id_usuario")["nome"]
 with st.sidebar:
-    st.title("💰 Diagnóstico financeiro")
+    st.title("Diagnóstico financeiro")
     usuario = st.selectbox("Usuário", list(nomes.index), format_func=lambda u: f"{u} · {nomes[u].title()}")
     mes = st.select_slider(
         "Mês atual (simulação)", options=meses[2:], value=meses[-1], format_func=mes_por_extenso,
         help="Simula os meses chegando: o sistema só enxerga o extrato até este mês.",
     )
+    escuro = st.toggle("Tema escuro", key="tema_escuro")
     st.divider()
     st.caption("Protótipo de estudo. **Todos os dados são fictícios.** O sistema não recomenda investimentos.")
+
+CORES = PALETAS["escuro" if escuro else "claro"]
+aplicar_tema(CORES)
 
 resultado = calcular(mes, tuple(sorted(st.session_state.respostas.items())))
 indicador = resultado["indicadores"].set_index("id_usuario").loc[usuario]
@@ -172,7 +220,7 @@ perguntas_usuario = resultado["perguntas"][resultado["perguntas"]["id_usuario"] 
 notificacoes_usuario = resultado["notificacoes"][resultado["notificacoes"]["id_usuario"] == usuario]
 
 # ---------- Cabeçalho ----------
-st.header(f"Olá, {nomes[usuario].title().split()[0]} 👋", anchor=False)
+st.header(f"Olá, {nomes[usuario].title().split()[0]}", anchor=False)
 st.markdown(f"**Seu diagnóstico até {mes_por_extenso(mes)}**")
 st.caption(md(secoes["renda"]))
 
@@ -187,17 +235,17 @@ colunas[2].markdown(
 colunas[3].markdown(
     cartao("Parcelas no próximo mês", reais_curto(indicador["comprometido_proximo_mes"]),
            f"{indicador['percentual_comprometido']:.0%} da renda",
-           VERMELHO if indicador["alto_comprometimento"] else "#111827"),
+           "var(--vermelho)" if indicador["alto_comprometimento"] else "var(--texto)"),
     unsafe_allow_html=True,
 )
 st.write("")
 
 abas = st.tabs([
-    "📊 Diagnóstico",
-    f"🔔 Notificações ({len(notificacoes_usuario)})",
-    f"❓ Perguntas ({len(perguntas_usuario)})",
-    "💳 Parcelas",
-    "🎯 Metas",
+    "Diagnóstico",
+    f"Notificações ({len(notificacoes_usuario)})",
+    f"Perguntas ({len(perguntas_usuario)})",
+    "Parcelas",
+    "Metas",
 ])
 
 # ---------- Diagnóstico ----------
@@ -221,9 +269,9 @@ with abas[0]:
             tooltip=[alt.Tooltip("bloco:N", title="Bloco"), alt.Tooltip("valor:Q", title="R$ por mês", format=",.2f")],
         )
         centro = alt.Chart(pd.DataFrame({"texto": [reais_curto(indicador["gastos_total"])]})).mark_text(
-            fontSize=20, fontWeight="bold", color="#111827"
+            fontSize=20, fontWeight="bold", color=CORES["texto"]
         ).encode(text="texto:N")
-        st.altair_chart((rosca + centro).properties(height=260), use_container_width=True)
+        st.altair_chart(estilo_grafico((rosca + centro).properties(height=260)), use_container_width=True)
         st.caption("Gasto médio por mês no centro. Passe o mouse para ver cada bloco.")
     with direita:
         base = indicador["renda_media"] if indicador["renda_media"] > 0 else 1
@@ -244,7 +292,7 @@ with abas[0]:
         st.caption("% da renda efetiva · setas comparam o último trimestre com o anterior")
         st.markdown(
             html(
-                f'<div class="faixa" style="background:{cor_da_sobra(taxa)}">Sobra média por mês'
+                f'<div class="faixa" style="background:{cor_da_sobra(taxa, para_texto=False)}">Sobra média por mês'
                 f'<div class="grande">{reais(indicador["sobra_media"])} · {taxa:.0%} da renda</div></div>'
             ),
             unsafe_allow_html=True,
@@ -254,15 +302,15 @@ with abas[0]:
 
     st.markdown('<div class="secao">Pontos de atenção</div>', unsafe_allow_html=True)
     if secoes["pontos"]:
-        st.markdown("".join(html(f'<span class="etiqueta">⚠️ {ponto}</span>') for ponto in secoes["pontos"]), unsafe_allow_html=True)
+        st.markdown("".join(html(f'<span class="etiqueta">{ponto}</span>') for ponto in secoes["pontos"]), unsafe_allow_html=True)
     else:
-        st.markdown('<span class="etiqueta ok">✅ Nenhum ponto de atenção no período</span>', unsafe_allow_html=True)
+        st.markdown('<span class="etiqueta ok">Nenhum ponto de atenção no período</span>', unsafe_allow_html=True)
 
     st.write("")
     for coluna, (titulo, texto) in zip(st.columns(3), [
-        ("📈 Evolução", secoes["evolucao"]),
-        ("💳 Compromissos futuros", secoes["compromissos"]),
-        ("🏦 Reserva", secoes["reserva"]),
+        ("Evolução", secoes["evolucao"]),
+        ("Compromissos futuros", secoes["compromissos"]),
+        ("Reserva", secoes["reserva"]),
     ]):
         coluna.markdown(html(f'<div class="cartao"><div class="secao">{titulo}</div>{texto}</div>'), unsafe_allow_html=True)
 
@@ -276,11 +324,11 @@ with abas[0]:
 with abas[1]:
     st.markdown(f'<div class="secao">O que mudou em {mes_por_extenso(mes)}</div>', unsafe_allow_html=True)
     if notificacoes_usuario.empty:
-        st.markdown('<span class="etiqueta ok">✅ Nenhuma notificação neste mês</span>', unsafe_allow_html=True)
+        st.markdown('<span class="etiqueta ok">Nenhuma notificação neste mês</span>', unsafe_allow_html=True)
     for linha in notificacoes_usuario.itertuples():
-        icone, cor = ICONES_NOTIFICACAO.get(linha.tipo, ("🔔", AMARELO))
+        cor = CORES_NOTIFICACAO.get(linha.tipo, AMARELO)
         st.markdown(
-            html(f'<div class="aviso" style="border-left-color:{cor}"><div class="titulo">{icone} {linha.tipo}</div>{linha.mensagem}</div>'),
+            html(f'<div class="aviso" style="border-left-color:{cor}"><div class="titulo" style="color:{cor}">{linha.tipo}</div>{linha.mensagem}</div>'),
             unsafe_allow_html=True,
         )
     st.caption("Mude o mês na barra lateral para simular a chegada de um novo mês.")
@@ -294,7 +342,7 @@ with abas[2]:
         "adivinhar, e cada resposta vale também para pagamentos parecidos."
     )
     if perguntas_usuario.empty:
-        st.markdown('<span class="etiqueta ok">✅ Tudo classificado</span>', unsafe_allow_html=True)
+        st.markdown('<span class="etiqueta ok">Tudo classificado</span>', unsafe_allow_html=True)
     opcoes = sorted(CATEGORIAS)
     for linha in perguntas_usuario.head(10).itertuples():
         with st.container(border=True):
@@ -341,7 +389,7 @@ with abas[3]:
             y=alt.Y("contraparte:N", title=None, sort="-x"),
             tooltip=[alt.Tooltip("contraparte:N", title="Onde"), alt.Tooltip("faltam:N", title="Faltam")],
         ).properties(height=max(120, 45 * len(ativas)))
-        st.altair_chart(grafico, use_container_width=True)
+        st.altair_chart(estilo_grafico(grafico), use_container_width=True)
     for explicacao in parcelas["explicacao"]:
         st.markdown(md(f"- {explicacao}"))
 
@@ -356,12 +404,12 @@ with abas[4]:
     acompanhamento = acompanhar(meta, list(resultado["aportes"].loc[usuario]))
     resumo = previsao(meta, acompanhamento)
 
-    cores_situacao = {"concluída": VERDE, "adiantada": VERDE, "no ritmo": VERDE, "atrasada": AMARELO}
+    cores_situacao = {"concluída": "var(--verde)", "adiantada": "var(--verde)", "no ritmo": "var(--verde)", "atrasada": "var(--amarelo)"}
     colunas = st.columns(3)
     colunas[0].markdown(cartao("Reservar por mês", reais_curto(meta.valor_mensal), f"até {mes_por_extenso(meta.mes_final)}"), unsafe_allow_html=True)
     colunas[1].markdown(cartao("Guardado até agora", reais_curto(resumo["acumulado"]), f"de {reais_curto(meta.valor_alvo)}"), unsafe_allow_html=True)
     colunas[2].markdown(
-        cartao("Situação", resumo["situacao"].capitalize(), "comparado ao ritmo necessário", cores_situacao.get(resumo["situacao"], AMARELO)),
+        cartao("Situação", resumo["situacao"].capitalize(), "comparado ao ritmo necessário", cores_situacao.get(resumo["situacao"], "var(--amarelo)")),
         unsafe_allow_html=True,
     )
     st.write("")
@@ -378,5 +426,5 @@ with abas[4]:
         color=alt.Color("serie:N", title=None, scale=alt.Scale(range=["#0F766E", "#9CA3AF"]), legend=alt.Legend(orient="top")),
         strokeDash=alt.StrokeDash("serie:N", legend=None, scale=alt.Scale(range=[[1, 0], [6, 4]])),
     ).properties(height=280)
-    st.altair_chart(linhas, use_container_width=True)
+    st.altair_chart(estilo_grafico(linhas), use_container_width=True)
     st.caption("O acompanhamento usa o que foi transferido para a poupança desde janeiro.")
