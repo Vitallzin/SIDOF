@@ -1,0 +1,11 @@
+# Tema da interface (cores em verde-azulado, que passam a ideia de dinheiro e calma)
+[theme]
+base = "light"
+primaryColor = "#0F766E"
+backgroundColor = "#F6F8F7"
+secondaryBackgroundColor = "#E8F1EF"
+textColor = "#1F2937"
+font = "sans serif"
+
+[client]
+toolbarMode = "minimal"

@@ -52,12 +52,17 @@ def test_notificacao_nao_usa_meses_futuros(dados, modelo):
     assert com_tudo.equals(sem_futuro)
 
 
+def _textos(app):
+    return " ".join(elemento.value for elemento in app.markdown)
+
+
 def test_interface_abre_e_troca_de_usuario_e_mes():
     app = AppTest.from_file("../app.py", default_timeout=180).run()
     assert not app.exception
-    assert "junho de 2026" in app.header[0].value  # abre no último mês
+    assert "junho de 2026" in _textos(app)  # abre no último mês
     app.sidebar.selectbox[0].set_value("U09").run()
     assert not app.exception
     app.sidebar.select_slider[0].set_value("2026-04").run()
     assert not app.exception
-    assert "abril de 2026" in app.header[0].value
+    assert "abril de 2026" in _textos(app)
+    assert "Olá" in app.header[0].value

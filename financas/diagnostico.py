@@ -176,26 +176,19 @@ def _pontos_de_atencao(linha, perfil, a_confirmar_pct):
     return pontos
 
 
-def texto_diagnostico(linha, perfil, comprometimento, saidas, meses, coluna_categoria="categoria_final"):
-    """Relatório em texto, neutro, de um usuário."""
-    base = linha["renda_media"] if linha["renda_media"] > 0 else 1
-    periodo = f"{mes_por_extenso(meses[0]).split()[0]} a {mes_por_extenso(meses[-1])}"
-    linhas = [f"=== Diagnóstico de {linha['id_usuario']} ({periodo}) ===", f"Renda: {perfil['explicacao']}", ""]
-    linhas.append("Para onde foi o dinheiro (média por mês, % da renda efetiva):")
-    for nome, rotulo in BLOCOS:
-        linhas.append(f"  {rotulo:<52} {reais(linha[nome]):>14}  {linha[nome] / base:>4.0%}")
-    linhas.append(f"  {'Sobra (renda efetiva - gastos)':<52} {reais(linha['sobra_media']):>14}  {linha['sobra_media'] / base:>4.0%}")
-    if linha["outras_entradas_por_mes"] > 0:
-        linhas.append(
-            f"Além da renda efetiva, entraram em média {reais(linha['outras_entradas_por_mes'])} por mês "
-            "de ajudas ou de origem não identificada (não contam como renda)."
-        )
-    linhas.append("")
+ORIGEM_DOS_NUMEROS = (
+    "Renda efetiva = salário e pagamentos por trabalho (sem ajudas nem entradas não identificadas). "
+    "Gastos não incluem transferências entre suas contas nem o pagamento da fatura, porque as compras "
+    "do cartão já foram contadas uma a uma. 'A confirmar' são transações que o sistema vai perguntar a você."
+)
 
+
+def secoes_diagnostico(linha, perfil, comprometimento, saidas, meses, coluna_categoria="categoria_final"):
+    """As partes do diagnóstico separadas, para o texto e para a interface montarem do seu jeito."""
     metade = len(meses) // 2
     trimestre_1 = f"{mes_por_extenso(meses[0]).split()[0]}–{mes_por_extenso(meses[metade - 1]).split()[0]}"
     trimestre_2 = f"{mes_por_extenso(meses[metade]).split()[0]}–{mes_por_extenso(meses[-1]).split()[0]}"
-    evolucao = f"Evolução: comparando {trimestre_2} com {trimestre_1}, os gastos totais {_sentido(linha['variacao_gastos'])}"
+    evolucao = f"Comparando {trimestre_2} com {trimestre_1}, os gastos totais {_sentido(linha['variacao_gastos'])}"
     mudancas = [
         f"{rotulo.split(' (')[0].lower()} {_sentido(linha[f'variacao_{nome}'])}"
         for nome, rotulo in BLOCOS[:4]
@@ -205,22 +198,52 @@ def texto_diagnostico(linha, perfil, comprometimento, saidas, meses, coluna_cate
     maior = _maior_categoria_discricionaria(saidas, linha["id_usuario"], meses, coluna_categoria)
     if maior and linha["variacao_discricionarios"] >= VARIACAO_ESTAVEL:
         evolucao += f" O que mais cresceu foi {maior[0]}: cerca de {reais(maior[1])} a mais por mês."
-    linhas += [evolucao, "", f"Compromissos futuros: {comprometimento['explicacao']}"]
 
     if linha["poupanca_por_mes"] > 0:
-        linhas.append(f"Reserva: em média {reais(linha['poupanca_por_mes'])} por mês foram para a poupança.")
+        reserva = f"Em média {reais(linha['poupanca_por_mes'])} por mês foram para a poupança."
     else:
-        linhas.append("Reserva: no período não houve saldo líquido transferido para a poupança.")
+        reserva = "No período não houve saldo líquido transferido para a poupança."
 
+    outras = ""
+    if linha["outras_entradas_por_mes"] > 0:
+        outras = (
+            f"Além da renda efetiva, entraram em média {reais(linha['outras_entradas_por_mes'])} por mês "
+            "de ajudas ou de origem não identificada (não contam como renda)."
+        )
     a_confirmar_pct = linha["a_confirmar"] / linha["gastos_total"] if linha["gastos_total"] > 0 else 0
-    pontos = _pontos_de_atencao(linha, perfil, a_confirmar_pct)
-    linhas += ["", "Pontos de atenção:"] + ([f"  - {ponto}" for ponto in pontos] or ["  - Nenhum ponto de atenção no período."])
+    return {
+        "periodo": f"{mes_por_extenso(meses[0]).split()[0]} a {mes_por_extenso(meses[-1])}",
+        "renda": perfil["explicacao"],
+        "outras_entradas": outras,
+        "evolucao": evolucao,
+        "compromissos": comprometimento["explicacao"],
+        "reserva": reserva,
+        "pontos": _pontos_de_atencao(linha, perfil, a_confirmar_pct),
+        "origem": ORIGEM_DOS_NUMEROS,
+    }
+
+
+def texto_diagnostico(linha, secoes):
+    """Relatório em texto, neutro, de um usuário."""
+    base = linha["renda_media"] if linha["renda_media"] > 0 else 1
+    linhas = [f"=== Diagnóstico de {linha['id_usuario']} ({secoes['periodo']}) ===", f"Renda: {secoes['renda']}", ""]
+    linhas.append("Para onde foi o dinheiro (média por mês, % da renda efetiva):")
+    for nome, rotulo in BLOCOS:
+        linhas.append(f"  {rotulo:<52} {reais(linha[nome]):>14}  {linha[nome] / base:>4.0%}")
+    linhas.append(f"  {'Sobra (renda efetiva - gastos)':<52} {reais(linha['sobra_media']):>14}  {linha['sobra_media'] / base:>4.0%}")
+    if secoes["outras_entradas"]:
+        linhas.append(secoes["outras_entradas"])
     linhas += [
         "",
-        "De onde vêm os números: renda efetiva = salário e pagamentos por trabalho (sem ajudas nem entradas "
-        "não identificadas). Gastos não incluem transferências entre suas contas nem o pagamento da fatura, "
-        "porque as compras do cartão já foram contadas uma a uma. 'A confirmar' são transações que o sistema vai perguntar a você.",
+        f"Evolução: {secoes['evolucao']}",
+        "",
+        f"Compromissos futuros: {secoes['compromissos']}",
+        f"Reserva: {secoes['reserva']}",
+        "",
+        "Pontos de atenção:",
     ]
+    linhas += [f"  - {ponto}" for ponto in secoes["pontos"]] or ["  - Nenhum ponto de atenção no período."]
+    linhas += ["", f"De onde vêm os números: {secoes['origem']}"]
     return "\n".join(linhas)
 
 
@@ -244,10 +267,12 @@ def diagnosticar(classificado, usuarios, saidas=None, coluna_categoria="categori
     )
     perfis_por_id = perfis.set_index("id_usuario")
     comprometimento_por_id = comprometimento.set_index("id_usuario")
-    textos = {
-        linha["id_usuario"]: texto_diagnostico(
+    secoes = [
+        secoes_diagnostico(
             linha, perfis_por_id.loc[linha["id_usuario"]], comprometimento_por_id.loc[linha["id_usuario"]], saidas, meses, coluna_categoria
         )
         for linha in tabela.to_dict("records")
-    }
+    ]
+    textos = {linha["id_usuario"]: texto_diagnostico(linha, secao) for linha, secao in zip(tabela.to_dict("records"), secoes)}
+    tabela["secoes"] = secoes  # partes do texto, usadas pela interface
     return tabela, textos
