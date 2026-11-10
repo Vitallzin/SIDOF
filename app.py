@@ -108,6 +108,22 @@ def aplicar_tema(cores):
     .aviso {{background: var(--cartao); border-radius: 12px; padding: .8rem 1rem; margin-bottom: .6rem;
             border: 1px solid var(--borda); border-left-width: 6px;}}
     .aviso .titulo {{font-weight: 600; margin-bottom: .15rem;}}
+    .parcelamento {{margin-bottom: .8rem;}}
+    .parcelamento .topo {{display: flex; justify-content: space-between; gap: .8rem; align-items: flex-start;}}
+    .parcelamento .nome {{font-weight: 600; color: var(--texto);}}
+    .parcelamento .tipo {{font-size: .72rem; color: var(--suave); text-transform: uppercase; letter-spacing: .04em;}}
+    .parcelamento .mensal {{font-weight: 700; font-size: 1.15rem; color: var(--texto); text-align: right; white-space: nowrap;}}
+    .parcelamento .mensal small {{display: block; font-weight: 400; font-size: .72rem; color: var(--suave);}}
+    .parcelamento .barra {{height: 8px; border-radius: 999px; background: var(--linha); margin: .7rem 0 .45rem 0; overflow: hidden;}}
+    .parcelamento .barra div {{height: 100%; background: #8B5CF6; border-radius: 999px;}}
+    .parcelamento .base {{display: flex; justify-content: space-between; gap: .6rem; flex-wrap: wrap; font-size: .8rem; color: var(--suave);}}
+    .stApp button[kind="secondary"], .stApp [data-testid="stDownloadButton"] button {{
+        background-color: var(--cartao) !important; color: var(--texto) !important; border: 1px solid var(--borda) !important;}}
+    .stApp button[kind="secondary"]:hover, .stApp [data-testid="stDownloadButton"] button:hover {{
+        border-color: #0F766E !important; color: #0F766E !important;}}
+    .stApp button[kind="secondary"] p, .stApp [data-testid="stDownloadButton"] button p {{color: inherit !important;}}
+    [data-testid="stFileUploaderDropzone"] {{background-color: var(--lateral) !important; border: 1px dashed var(--borda) !important;}}
+    [data-testid="stFileUploaderDropzone"] span, [data-testid="stFileUploaderDropzone"] small {{color: var(--suave) !important;}}
     .secao {{font-size: 1.05rem; font-weight: 600; margin: .2rem 0 .4rem 0; color: var(--texto);}}
     </style>
     """,
@@ -192,6 +208,7 @@ def calcular(mes, respostas):
         "perguntas": sistema.perguntas(),
         "parcelamentos": parcelamentos,
         "comprometimento": comprometimento_da_renda(parcelamentos, compromissos, perfis),
+        "compromissos": compromissos,
         "aportes": aportes_por_mes(sistema.classificado, meses_vistos),
         "notificacoes": notificacoes_do_mes(extrato, usuarios, modelo, mes, dict(respostas)),
     }
@@ -365,11 +382,30 @@ with abas[2]:
         st.caption(f"Mostrando 10 de {len(perguntas_usuario)}.")
 
 # ---------- Parcelas ----------
+def cartao_parcelamento(item):
+    """Um parcelamento: onde, quanto por mês, barra de quanto já foi pago e até quando vai."""
+    pagas = item["ultima_paga"] / item["total_parcelas"]
+    if item["parcelas_restantes"] > 0:
+        rodape = f'Faltam {reais(item["valor_restante"])} · até {mes_por_extenso(item["mes_final"])}'
+    else:
+        rodape = "Quitado"
+    return html(
+        f'<div class="cartao parcelamento">'
+        f'<div class="topo"><div><div class="nome">{item["contraparte"]}</div>'
+        f'<span class="tipo">{item["tipo"]}</span></div>'
+        f'<div class="mensal">{reais(item["valor_parcela"])}<small>por mês</small></div></div>'
+        f'<div class="barra"><div style="width:{pagas:.0%}"></div></div>'
+        f'<div class="base"><span>{item["ultima_paga"]} de {item["total_parcelas"]} pagas</span><span>{rodape}</span></div>'
+        f"</div>"
+    )
+
+
 with abas[3]:
     comprometimento = resultado["comprometimento"].set_index("id_usuario").loc[usuario]
     parcelas = resultado["parcelamentos"]
     parcelas = parcelas[parcelas["id_usuario"] == usuario].sort_values("parcelas_restantes", ascending=False)
     ativas = parcelas[parcelas["parcelas_restantes"] > 0]
+    quitadas = parcelas[parcelas["parcelas_restantes"] == 0]
 
     colunas = st.columns(3)
     colunas[0].markdown(cartao("Parcelamentos em aberto", str(len(ativas))), unsafe_allow_html=True)
@@ -378,24 +414,33 @@ with abas[3]:
     ultimo = f"{ultimo_mes[5:]}/{ultimo_mes[:4]}" if len(ativas) else "—"  # formato curto para caber no cartão
     colunas[2].markdown(cartao("Última parcela", ultimo), unsafe_allow_html=True)
     st.write("")
-    st.info(md(comprometimento["explicacao"]))
+    cor_aviso = "var(--vermelho)" if comprometimento["alto_comprometimento"] else "#8B5CF6"
+    st.markdown(
+        html(f'<div class="aviso" style="border-left-color:{cor_aviso}">{comprometimento["explicacao"]}</div>'),
+        unsafe_allow_html=True,
+    )
 
     if len(ativas):
-        st.markdown('<div class="secao">Até quando cada parcela vai</div>', unsafe_allow_html=True)
-        linha_do_tempo = ativas.assign(
-            inicio=pd.to_datetime(mes + "-01"),
-            fim=pd.to_datetime(ativas["mes_final"] + "-28"),
-            faltam=ativas["parcelas_restantes"].astype(str) + "x de " + ativas["valor_parcela"].map(reais),
-        )
-        grafico = alt.Chart(linha_do_tempo).mark_bar(cornerRadius=4, color="#8B5CF6").encode(
-            x=alt.X("inicio:T", title=None, axis=alt.Axis(format="%m/%Y")),
-            x2="fim:T",
-            y=alt.Y("contraparte:N", title=None, sort="-x"),
-            tooltip=[alt.Tooltip("contraparte:N", title="Onde"), alt.Tooltip("faltam:N", title="Faltam")],
-        ).properties(height=max(120, 45 * len(ativas)))
-        st.altair_chart(estilo_grafico(grafico), use_container_width=True)
-    for explicacao in parcelas["explicacao"]:
-        st.markdown(md(f"- {explicacao}"))
+        compromissos = resultado["compromissos"].loc[usuario]
+        por_mes = pd.DataFrame({"mes": [f"{m[5:]}/{m[2:4]}" for m in compromissos.index], "valor": compromissos.values})
+        st.markdown('<div class="secao">Quanto já está reservado para parcelas nos próximos meses</div>', unsafe_allow_html=True)
+        barras = alt.Chart(por_mes).mark_bar(cornerRadiusTopLeft=4, cornerRadiusTopRight=4, color="#8B5CF6").encode(
+            x=alt.X("mes:N", title=None, sort=None, axis=alt.Axis(labelAngle=0)),
+            y=alt.Y("valor:Q", title="R$"),
+            tooltip=[alt.Tooltip("mes:N", title="Mês"), alt.Tooltip("valor:Q", title="R$", format=",.2f")],
+        ).properties(height=200)
+        st.altair_chart(estilo_grafico(barras), use_container_width=True)
+
+        st.markdown('<div class="secao">Em aberto</div>', unsafe_allow_html=True)
+        for coluna, item in zip(st.columns(2) * len(ativas), ativas.to_dict("records")):
+            coluna.markdown(cartao_parcelamento(item), unsafe_allow_html=True)
+    else:
+        st.markdown('<span class="etiqueta ok">Nenhuma parcela em aberto</span>', unsafe_allow_html=True)
+
+    if len(quitadas):
+        with st.expander(f"Já quitados ({len(quitadas)})"):
+            for item in quitadas.to_dict("records"):
+                st.markdown(cartao_parcelamento(item), unsafe_allow_html=True)
 
 # ---------- Metas ----------
 def anel_de_progresso(fracao):
@@ -495,7 +540,7 @@ with abas[5]:
     envio, exemplo = st.columns([3, 1], vertical_alignment="bottom")
     arquivo = envio.file_uploader("Fatura em PDF", type="pdf")
     exemplo.download_button(
-        "Baixar fatura de exemplo",
+        "Fatura de exemplo",
         data=gerar_fatura_pdf(compras_no_cartao(extrato, usuario, mes), f"{nomes[usuario]} (FICTICIA)", mes),
         file_name=f"fatura_ficticia_{usuario}_{mes}.pdf",
         mime="application/pdf",

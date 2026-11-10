@@ -65,7 +65,7 @@ valem para pagamentos parecidos), parcelas e metas. A interface usa só o sistem
 
 Na aba **Importar fatura** é possível enviar uma fatura de cartão em PDF (fictícia ou real) no formato
 comum "data, descrição, parcela, valor". O sistema lê as compras, classifica cada uma e pergunta o que
-não souber. O botão "Baixar fatura de exemplo" gera uma fatura fictícia para testar.
+não souber. O botão "Fatura de exemplo" gera uma fatura fictícia para testar.
 
 - O arquivo é lido **só em memória**: não é salvo, não vai para o Git e não é usado para treinar.
 - Faturas escaneadas (imagem) ou com layout muito diferente não são lidas.
