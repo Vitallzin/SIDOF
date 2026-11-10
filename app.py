@@ -9,15 +9,17 @@ import altair as alt
 import pandas as pd
 import streamlit as st
 
-from financas.categorias import CATEGORIAS
+from financas.categorias import CATEGORIAS, nome_exibicao
 from financas.diagnostico import BLOCOS
 from financas.formatacao import mes_por_extenso, reais
+from financas.faturas_pdf import compras_no_cartao, gerar_fatura_pdf, ler_fatura_pdf
 from financas.gerador import gerar_dados
 from financas.metas import Meta, acompanhar, aportes_por_mes, plano_da_meta, previsao
 from financas.monitoramento import extrato_ate, notificacoes_do_mes
 from financas.parcelas import comprometimento_da_renda, compromissos_futuros, identificar_parcelamentos
 from financas.renda import classificar_entradas, perfil_de_renda
-from financas.sistema import Sistema, treinar_modelo_da_base
+from financas.normalizacao import normalizar_texto
+from financas.sistema import Sistema, classificar_fatura, treinar_modelo_da_base
 
 st.set_page_config(page_title="Diagnóstico financeiro (protótipo)", layout="wide")
 
@@ -102,6 +104,7 @@ def aplicar_tema(cores):
     .etiqueta {{display: inline-block; padding: .35rem .75rem; border-radius: 999px; margin: 0 .4rem .5rem 0; font-size: .88rem;
                background: var(--alerta-fundo); color: var(--alerta-texto); border: 1px solid var(--alerta-borda);}}
     .etiqueta.ok {{background: var(--ok-fundo); color: var(--ok-texto); border-color: var(--ok-borda);}}
+    .etiqueta.pendente {{background: transparent; color: var(--suave); border-color: var(--borda);}}
     .aviso {{background: var(--cartao); border-radius: 12px; padding: .8rem 1rem; margin-bottom: .6rem;
             border: 1px solid var(--borda); border-left-width: 6px;}}
     .aviso .titulo {{font-weight: 600; margin-bottom: .15rem;}}
@@ -246,6 +249,7 @@ abas = st.tabs([
     f"Perguntas ({len(perguntas_usuario)})",
     "Parcelas",
     "Metas",
+    "Importar fatura",
 ])
 
 # ---------- Diagnóstico ----------
@@ -352,7 +356,7 @@ with abas[2]:
             sugestao = linha.sugestao_modelo if linha.sugestao_modelo in opcoes else "nao_identificado"
             categoria = escolha.selectbox(
                 "Categoria", opcoes, index=opcoes.index(sugestao), key=f"cat_{linha.id_transacao}",
-                format_func=lambda c: c.replace("_", " ").capitalize(), label_visibility="collapsed",
+                format_func=nome_exibicao, label_visibility="collapsed",
             )
             if botao.button("Confirmar", key=f"ok_{linha.id_transacao}", type="primary", use_container_width=True):
                 st.session_state.respostas[(usuario, linha.contraparte)] = categoria
@@ -394,6 +398,35 @@ with abas[3]:
         st.markdown(md(f"- {explicacao}"))
 
 # ---------- Metas ----------
+def anel_de_progresso(fracao):
+    """Anel com a parte da meta já guardada e a porcentagem no centro."""
+    fracao = max(min(fracao, 1.0), 0.0)
+    partes = pd.DataFrame({"parte": ["guardado", "falta"], "valor": [fracao, 1 - fracao], "ordem": [0, 1]})
+    anel = alt.Chart(partes).mark_arc(innerRadius=62, outerRadius=82, cornerRadius=6).encode(
+        theta=alt.Theta("valor:Q", stack=True),
+        color=alt.Color("parte:N", legend=None, scale=alt.Scale(domain=["guardado", "falta"], range=["#0F766E", CORES["linha"]])),
+        order="ordem:Q",
+    )
+    centro = alt.Chart(pd.DataFrame({"texto": [f"{fracao:.0%}"]})).mark_text(
+        fontSize=26, fontWeight="bold", color=CORES["texto"]
+    ).encode(text="texto:N")
+    return estilo_grafico((anel + centro).properties(height=190))
+
+
+def proximo_passo(meta, resumo):
+    """Uma frase curta e neutra sobre o que manteria a meta no rumo."""
+    if resumo["falta"] == 0:
+        return "Meta atingida."
+    if resumo["mensal_para_cumprir_prazo"]:
+        return (
+            f"Guardar {reais(resumo['mensal_para_cumprir_prazo'])} por mês mantém o prazo de "
+            f"{mes_por_extenso(meta.mes_final)}."
+        )
+    if resumo["meses_previstos"]:
+        return f"No ritmo atual ({reais(resumo['ritmo_mensal'])} por mês), a meta chega em cerca de {resumo['meses_previstos']} meses."
+    return f"Reservar {reais(meta.valor_mensal)} por mês leva à meta no prazo."
+
+
 with abas[4]:
     st.markdown('<div class="secao">Simular uma meta</div>', unsafe_allow_html=True)
     coluna_nome, coluna_valor, coluna_prazo = st.columns([2, 1, 1])
@@ -403,20 +436,34 @@ with abas[4]:
     meta = Meta(nome_meta, valor_meta, int(prazo), meses[0])
     acompanhamento = acompanhar(meta, list(resultado["aportes"].loc[usuario]))
     resumo = previsao(meta, acompanhamento)
+    fracao = resumo["acumulado"] / meta.valor_alvo if meta.valor_alvo else 0.0
 
     cores_situacao = {"concluída": "var(--verde)", "adiantada": "var(--verde)", "no ritmo": "var(--verde)", "atrasada": "var(--amarelo)"}
-    colunas = st.columns(3)
-    colunas[0].markdown(cartao("Reservar por mês", reais_curto(meta.valor_mensal), f"até {mes_por_extenso(meta.mes_final)}"), unsafe_allow_html=True)
-    colunas[1].markdown(cartao("Guardado até agora", reais_curto(resumo["acumulado"]), f"de {reais_curto(meta.valor_alvo)}"), unsafe_allow_html=True)
-    colunas[2].markdown(
-        cartao("Situação", resumo["situacao"].capitalize(), "comparado ao ritmo necessário", cores_situacao.get(resumo["situacao"], "var(--amarelo)")),
-        unsafe_allow_html=True,
-    )
-    st.write("")
-    progresso = min(resumo["acumulado"] / meta.valor_alvo, 1.0) if meta.valor_alvo else 0.0
-    st.progress(max(progresso, 0.0), text=f"{progresso:.0%} da meta")
-    st.write(md(plano_da_meta(meta, indicador["sobra_media"], indicador["alto_comprometimento"], indicador["tipo_renda"])))
-    st.write(md(resumo["explicacao"]))
+    cor_situacao = cores_situacao.get(resumo["situacao"], "var(--amarelo)")
+    anel, painel = st.columns([1, 2], gap="large")
+    with anel:
+        st.altair_chart(anel_de_progresso(fracao), use_container_width=True)
+        st.markdown(
+            html(f'<div style="text-align:center;color:var(--suave)">{reais(resumo["acumulado"])} de {reais(meta.valor_alvo)}</div>'),
+            unsafe_allow_html=True,
+        )
+    with painel:
+        colunas = st.columns(2)
+        colunas[0].markdown(cartao("Reservar por mês", reais_curto(meta.valor_mensal), f"até {mes_por_extenso(meta.mes_final)}"), unsafe_allow_html=True)
+        colunas[1].markdown(cartao("Situação", resumo["situacao"].capitalize(), "comparado ao ritmo necessário", cor_situacao), unsafe_allow_html=True)
+        st.write("")
+        st.markdown(
+            html(
+                f'<div class="aviso" style="border-left-color:{cor_situacao}"><div class="titulo">Próximo passo</div>'
+                f"{proximo_passo(meta, resumo)}</div>"
+            ),
+            unsafe_allow_html=True,
+        )
+        marcos = "".join(
+            f'<span class="etiqueta{" ok" if fracao >= marco else " pendente"}">{marco:.0%}</span>'
+            for marco in (0.25, 0.5, 0.75, 1.0)
+        )
+        st.markdown(f'<div style="color:var(--suave);font-size:.85rem;margin-bottom:.3rem">Marcos</div>{marcos}', unsafe_allow_html=True)
 
     grafico = acompanhamento.melt(id_vars="mes", value_vars=["acumulado", "esperado"], var_name="serie", value_name="valor")
     grafico["serie"] = grafico["serie"].map({"acumulado": "Guardado (poupança)", "esperado": "Necessário para o prazo"})
@@ -425,6 +472,91 @@ with abas[4]:
         y=alt.Y("valor:Q", title="R$"),
         color=alt.Color("serie:N", title=None, scale=alt.Scale(range=["#0F766E", "#9CA3AF"]), legend=alt.Legend(orient="top")),
         strokeDash=alt.StrokeDash("serie:N", legend=None, scale=alt.Scale(range=[[1, 0], [6, 4]])),
-    ).properties(height=280)
+    ).properties(height=260)
     st.altair_chart(estilo_grafico(linhas), use_container_width=True)
-    st.caption("O acompanhamento usa o que foi transferido para a poupança desde janeiro.")
+    with st.expander("Detalhes da meta"):
+        st.write(md(plano_da_meta(meta, indicador["sobra_media"], indicador["alto_comprometimento"], indicador["tipo_renda"])))
+        st.write(md(resumo["explicacao"]))
+        st.caption("O acompanhamento usa o que foi transferido para a poupança desde janeiro.")
+
+# ---------- Importar fatura ----------
+@st.cache_data(max_entries=5, show_spinner="Lendo a fatura...")
+def ler_fatura(conteudo):
+    """Lê a fatura só em memória; nada é gravado em disco."""
+    return ler_fatura_pdf(conteudo)
+
+
+with abas[5]:
+    st.markdown('<div class="secao">Importar uma fatura de cartão em PDF</div>', unsafe_allow_html=True)
+    st.caption(
+        "Funciona com faturas fictícias ou reais no formato comum 'data, descrição, parcela, valor'. "
+        "O arquivo é lido só na memória desta sessão: não é salvo, não vai para o repositório e não é usado para treinar."
+    )
+    envio, exemplo = st.columns([3, 1], vertical_alignment="bottom")
+    arquivo = envio.file_uploader("Fatura em PDF", type="pdf")
+    exemplo.download_button(
+        "Baixar fatura de exemplo",
+        data=gerar_fatura_pdf(compras_no_cartao(extrato, usuario, mes), f"{nomes[usuario]} (FICTICIA)", mes),
+        file_name=f"fatura_ficticia_{usuario}_{mes}.pdf",
+        mime="application/pdf",
+        use_container_width=True,
+    )
+    titular = st.text_input("Nome do titular (opcional)", help="Ajuda a reconhecer transferências para você mesmo.")
+
+    if arquivo is not None:
+        compras, ignoradas = ler_fatura(arquivo.getvalue())
+        if compras.empty:
+            st.warning(
+                "Não encontrei compras no formato 'data, descrição, valor'. Faturas escaneadas (imagem) "
+                "ou com layout muito diferente não são lidas por este protótipo."
+            )
+        else:
+            if "respostas_fatura" not in st.session_state:
+                st.session_state.respostas_fatura = {}
+            classificadas = classificar_fatura(compras, modelo, normalizar_texto(titular), st.session_state.respostas_fatura)
+            automaticas = (~classificadas["perguntar_usuario"]).mean()
+            colunas = st.columns(4)
+            colunas[0].markdown(cartao("Compras lidas", str(len(compras)), f"{ignoradas} linha(s) ignorada(s)"), unsafe_allow_html=True)
+            colunas[1].markdown(cartao("Total das compras", reais_curto(compras["valor"].sum())), unsafe_allow_html=True)
+            colunas[2].markdown(cartao("Classificadas sozinho", f"{automaticas:.0%}"), unsafe_allow_html=True)
+            colunas[3].markdown(cartao("Parceladas", str((compras["parcela"] != "").sum())), unsafe_allow_html=True)
+            st.write("")
+
+            por_categoria = (
+                classificadas.assign(categoria=classificadas["categoria_final"].map(nome_exibicao), valor=-classificadas["valor"])
+                .groupby("categoria", as_index=False)["valor"].sum()
+            )
+            barras = alt.Chart(por_categoria).mark_bar(cornerRadius=4, color="#0F766E").encode(
+                x=alt.X("valor:Q", title="R$"),
+                y=alt.Y("categoria:N", title=None, sort="-x"),
+                tooltip=[alt.Tooltip("categoria:N", title="Categoria"), alt.Tooltip("valor:Q", title="R$", format=",.2f")],
+            ).properties(height=max(140, 32 * len(por_categoria)))
+            st.markdown('<div class="secao">Gastos da fatura por categoria</div>', unsafe_allow_html=True)
+            st.altair_chart(estilo_grafico(barras), use_container_width=True)
+
+            tabela = classificadas.assign(
+                Valor=(-classificadas["valor"]).map(reais),
+                Categoria=classificadas["categoria_final"].map(nome_exibicao),
+                Confiança=classificadas["confianca_final"].map(lambda valor: f"{valor:.0%}"),
+            ).rename(columns={"data": "Data", "descricao": "Descrição", "parcela": "Parcela", "explicacao_final": "Por quê"})
+            st.dataframe(
+                tabela[["Data", "Descrição", "Parcela", "Valor", "Categoria", "Confiança", "Por quê"]],
+                hide_index=True, use_container_width=True,
+            )
+
+            pendentes = classificadas[classificadas["perguntar_usuario"]]
+            if len(pendentes):
+                st.markdown(f'<div class="secao">Ajude a classificar ({len(pendentes)})</div>', unsafe_allow_html=True)
+                opcoes = sorted(CATEGORIAS)
+                for linha in pendentes.head(8).itertuples():
+                    with st.container(border=True):
+                        texto, escolha, botao = st.columns([3, 2, 1], vertical_alignment="center")
+                        texto.markdown(md(f"**{linha.descricao}**  \n{reais(-linha.valor)} · {linha.data:%d/%m/%Y}"))
+                        sugestao = linha.sugestao_modelo if linha.sugestao_modelo in opcoes else "nao_identificado"
+                        categoria = escolha.selectbox(
+                            "Categoria", opcoes, index=opcoes.index(sugestao), key=f"fcat_{linha.id_transacao}",
+                            format_func=nome_exibicao, label_visibility="collapsed",
+                        )
+                        if botao.button("Confirmar", key=f"fok_{linha.id_transacao}", type="primary", use_container_width=True):
+                            st.session_state.respostas_fatura[("PDF", linha.contraparte)] = categoria
+                            st.rerun()

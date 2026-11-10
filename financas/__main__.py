@@ -4,6 +4,7 @@ import pandas as pd
 
 from financas.avaliacao import (
     avaliar_anomalias,
+    avaliar_faturas,
     avaliar_regras,
     instancias_plantadas,
     avaliar_renda,
@@ -14,6 +15,7 @@ from financas.avaliacao import (
     carregar_verdade,
     relatorio_anomalias,
     relatorio_diagnostico,
+    relatorio_faturas,
     relatorio_parcelas,
     relatorio_regras,
     relatorio_sistema,
@@ -21,6 +23,7 @@ from financas.avaliacao import (
 )
 from financas.anomalias import detectar_estatistico, detectar_isolation_forest
 from financas.diagnostico import diagnosticar
+from financas.faturas_pdf import compras_no_cartao, gerar_fatura_pdf, ler_faturas_do_conjunto
 from financas.experimento import executar_experimento, relatorio_modelo, relatorio_teste_duro
 from financas.metas import aportes_por_mes, relatorio_metas
 from financas.gerador import PASTA_PADRAO, gerar_dados, resumo, salvar_dados
@@ -124,6 +127,18 @@ def executar():
     atendido = Sistema(extrato, usuarios, treinar_modelo_da_base())
     texto = relatorio_sistema(atendido.saidas(), verdade)
     (PASTA_PADRAO / "relatorio_sistema.txt").write_text(texto, encoding="utf-8")
+    print(texto)
+    print()
+
+    # Faturas em PDF: gera a fatura de cada usuário em cada mês, lê de volta e classifica
+    exemplo = gerar_fatura_pdf(compras_no_cartao(extrato, "U08", "2026-03"), "JULIANA (FICTICIA)", "2026-03")
+    (PASTA_PADRAO / "fatura_exemplo.pdf").write_bytes(exemplo)
+    modelos = {
+        "modelo treinado com faturas": treinar_modelo_da_base(),
+        "modelo treinado sem faturas": treinar_modelo_da_base(incluir_faturas=False),
+    }
+    texto = relatorio_faturas(avaliar_faturas(ler_faturas_do_conjunto(extrato, usuarios), extrato, verdade, modelos))
+    (PASTA_PADRAO / "relatorio_faturas.txt").write_text(texto, encoding="utf-8")
     print(texto)
 
 

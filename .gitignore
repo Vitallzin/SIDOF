@@ -6,3 +6,6 @@ __pycache__/
 # Dados gerados (podem ser recriados com a semente fixa)
 dados_gerados/*
 !dados_gerados/.gitkeep
+
+# Faturas em PDF (podem ser reais): nunca vão para o repositório
+*.pdf

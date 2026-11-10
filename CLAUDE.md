@@ -26,7 +26,8 @@ Contexto completo:
   - Mostre exemplos concretos (acertos e erros), não só métricas.
   - Lembre que os dados são sintéticos: resultados não provam desempenho no mundo real.
 - **Anomalias:** o modelo é não supervisionado. Os rótulos das anomalias plantadas servem **só para avaliar**, nunca para treinar.
-- **Dados:** nunca usar dados financeiros reais. Nunca colocar chaves de API ou credenciais no código.
+- **Dados:** os dados do projeto (gerador, testes, treino, avaliação) são sempre fictícios. Nunca colocar chaves de API ou credenciais no código.
+- **Faturas em PDF (decisão do maestro):** a interface aceita faturas enviadas pelos testadores, inclusive reais. Elas são lidas só em memória: nunca salvas em disco, nunca no Git (`*.pdf` está no .gitignore) e nunca usadas para treinar.
 - **Código:** simples e legível, funções pequenas, sem otimização prematura.
 
 ## Regras de produto (não negociáveis)

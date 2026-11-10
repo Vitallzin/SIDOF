@@ -8,15 +8,18 @@ Diferente dos experimentos, aqui nada lê a verdade dos usuários atendidos:
 3. Cada resposta do usuário entra na memória dele e passa a valer para pagamentos parecidos.
 """
 
+from functools import lru_cache
+
 import pandas as pd
 
 from financas import SEMENTE
 from financas.anomalias import detectar_estatistico
 from financas.categorias import CATEGORIAS
 from financas.diagnostico import diagnosticar
+from financas.faturas_pdf import fatura_para_extrato, ler_faturas_do_conjunto
 from financas.gerador import gerar_dados
 from financas.modelo import classificar_hibrido, treinar
-from financas.normalizacao import normalizar
+from financas.normalizacao import normalizar, normalizar_texto
 from financas.regras import classificar_por_regras
 
 SEMENTE_BASE = SEMENTE + 1000  # base de "clientes antigos", diferente dos usuários atendidos
@@ -24,14 +27,26 @@ C_DO_MODELO = 10  # valor escolhido pela validação cruzada em todas as rodadas
 COLUNAS_ANOMALIAS = ["id_transacao", "id_usuario", "data", "mes", "descricao", "contraparte", "valor", "parcela", "categoria_final"]
 
 
-def treinar_modelo_da_base(semente=SEMENTE_BASE):
-    """Treina o modelo com as saídas confirmadas de uma base separada de usuários."""
+@lru_cache(maxsize=4)
+def treinar_modelo_da_base(semente=SEMENTE_BASE, incluir_faturas=True):
+    """Treina o modelo com as saídas confirmadas de uma base separada de usuários.
+
+    Com incluir_faturas, as compras no cartão também entram como aparecem numa fatura em PDF
+    (nome cortado, sem prefixo do banco), para o modelo reconhecer faturas importadas.
+    O resultado fica guardado: treinar de novo com os mesmos parâmetros devolve o mesmo modelo.
+    """
     base = gerar_dados(semente)
     classificado = classificar_por_regras(normalizar(base["extrato"]), base["usuarios"])
     saidas = classificado[classificado["direcao"] == "saida"].merge(
         base["verdade"][["id_transacao", "categoria"]], on="id_transacao"
     )
-    return treinar(saidas["descricao"], saidas["categoria"], C_DO_MODELO)
+    textos, categorias = list(saidas["descricao"]), list(saidas["categoria"])
+    if incluir_faturas:
+        lidas = ler_faturas_do_conjunto(base["extrato"], base["usuarios"]).dropna(subset=["id_origem"])
+        rotulos = base["verdade"].set_index("id_transacao")["categoria"]
+        textos += [normalizar_texto(texto) for texto in lidas["descricao"]]
+        categorias += list(rotulos[lidas["id_origem"]])
+    return treinar(textos, categorias, C_DO_MODELO)
 
 
 class Sistema:
@@ -71,3 +86,11 @@ class Sistema:
     def alertas(self):
         """Alertas de anomalia (método estatístico da Fase 8)."""
         return detectar_estatistico(self.saidas()[COLUNAS_ANOMALIAS])
+
+
+def classificar_fatura(compras, modelo, nome_titular="", memoria=None):
+    """Classifica as compras lidas de uma fatura em PDF (de qualquer origem), sem guardar nada."""
+    extrato = fatura_para_extrato(compras)
+    usuarios = pd.DataFrame({"id_usuario": ["PDF"], "nome": [nome_titular or "TITULAR DA FATURA"]})
+    classificado = classificar_por_regras(normalizar(extrato), usuarios)
+    return classificar_hibrido(classificado, modelo, memoria)

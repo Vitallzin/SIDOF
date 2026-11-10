@@ -349,3 +349,53 @@ def relatorio_sistema(saidas, verdade):
         "Lembrete: a base e os atendidos compram nas mesmas lojas inventadas; em lojas novas o modelo ajuda pouco (ver teste duro).",
     ]
     return "\n".join(linhas)
+
+
+def avaliar_faturas(lidas, extrato, verdade, modelos):
+    """Teste interno das faturas em PDF: a leitura recupera as compras? A classificação acerta?
+
+    lidas: saída de ler_faturas_do_conjunto (com id_origem).
+    modelos: {nome: modelo} para comparar, por exemplo, treino com e sem faturas.
+    """
+    from financas.sistema import classificar_fatura
+
+    originais = extrato.set_index("id_transacao")
+    alinhadas = lidas.dropna(subset=["id_origem"])
+    origem = originais.loc[alinhadas["id_origem"]]
+    conferido = pd.DataFrame({
+        "data": alinhadas["data"].values == origem["data"].values,
+        "valor": (alinhadas["valor"].values - (-origem["valor"].values)).__abs__() < 0.005,
+        "parcela": alinhadas["parcela"].values == origem["parcela"].fillna("").astype(str).values,
+        "descricao": [lida == original[:28].strip() for lida, original in zip(alinhadas["descricao"], origem["descricao"])],
+    })
+    rotulos = verdade.set_index("id_transacao")["categoria"]
+    classificacao = {}
+    for nome, modelo in modelos.items():
+        resultado = classificar_fatura(alinhadas[["data", "descricao", "parcela", "valor"]].reset_index(drop=True), modelo)
+        resultado["categoria"] = rotulos[alinhadas["id_origem"]].values
+        classificacao[nome] = metricas(resultado)
+    return {
+        "faturas": lidas[["id_usuario", "mes_fatura"]].drop_duplicates().shape[0],
+        "compras_lidas": len(lidas),
+        "faturas_desalinhadas": lidas[lidas["id_origem"].isna()][["id_usuario", "mes_fatura"]].drop_duplicates().shape[0],
+        "acerto_leitura": conferido.mean(),
+        "leitura_perfeita": conferido.all(axis=1).mean(),
+        "classificacao": pd.DataFrame(classificacao).T,
+    }
+
+
+def relatorio_faturas(resultado):
+    linhas = [
+        "=== Faturas em PDF (teste interno de ida e volta) ===",
+        f"Faturas fictícias geradas e lidas: {resultado['faturas']} | compras lidas: {resultado['compras_lidas']}",
+        f"Faturas em que a leitura perdeu ou inventou compras: {resultado['faturas_desalinhadas']}",
+        f"Compras lidas sem nenhum erro (data, descrição, parcela e valor): {resultado['leitura_perfeita']:.1%}",
+        "Acerto por campo: " + ", ".join(f"{campo} {taxa:.1%}" for campo, taxa in resultado["acerto_leitura"].items()),
+        "",
+        "Classificação das compras lidas do PDF (regras + modelo, sem respostas do usuário):",
+        resultado["classificacao"].map(lambda valor: f"{valor:.1%}").to_string(),
+        "",
+        "Lembrete: estas faturas foram geradas pelo próprio sistema; faturas reais de bancos têm",
+        "outros layouts e lojas que o modelo nunca viu, então o leitor e o modelo vão errar mais nelas.",
+    ]
+    return "\n".join(linhas)

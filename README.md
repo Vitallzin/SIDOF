@@ -45,6 +45,8 @@ Hoje esse comando gera os dados sintéticos em `dados_gerados/` (semente fixa 42
 | `alertas.csv` | Alertas de anomalia dos dois métodos, com explicação | Fases seguintes |
 | `relatorio_anomalias.txt` | Precisão e revocação por tipo, exemplos detectados e perdidos | O maestro |
 | `relatorio_sistema.txt` | O sistema em uso (modelo treinado numa base separada) nos usuários atendidos | O maestro |
+| `fatura_exemplo.pdf` | Uma fatura fictícia gerada pelo sistema | Testar a importação |
+| `relatorio_faturas.txt` | Leitura e classificação das faturas fictícias em PDF | O maestro |
 
 O comando leva cerca de 1 minuto e meio, porque o modelo é treinado várias vezes no experimento.
 
@@ -58,6 +60,17 @@ Abre no navegador (http://localhost:8501). Na barra lateral: escolha o usuário 
 que simula os meses chegando. Abas: diagnóstico, notificações do mês, perguntas (suas respostas
 valem para pagamentos parecidos), parcelas e metas. A interface usa só o sistema em uso
 (`financas/sistema.py`), que nunca lê a verdade dos usuários.
+
+### Importar fatura em PDF
+
+Na aba **Importar fatura** é possível enviar uma fatura de cartão em PDF (fictícia ou real) no formato
+comum "data, descrição, parcela, valor". O sistema lê as compras, classifica cada uma e pergunta o que
+não souber. O botão "Baixar fatura de exemplo" gera uma fatura fictícia para testar.
+
+- O arquivo é lido **só em memória**: não é salvo, não vai para o Git e não é usado para treinar.
+- Faturas escaneadas (imagem) ou com layout muito diferente não são lidas.
+- Internamente, o sistema gera uma fatura fictícia de cada usuário em cada mês, lê de volta e confere
+  com a verdade (`relatorio_faturas.txt`). O modelo também treina com as compras como aparecem nessas faturas.
 
 ## Como rodar os testes
 
