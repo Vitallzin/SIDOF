@@ -72,11 +72,15 @@ class Sistema:
         self.conhecimento = conhecimento or {}  # lojas aprendidas com todos os usuários
         self.classificado = classificar_por_regras(normalizar(extrato), usuarios)
         self.memoria = {}
+        self._ultimas_saidas = None  # (respostas usadas, resultado): evita classificar de novo sem mudança
 
     def saidas(self):
         """Saídas classificadas com o que o sistema sabe agora (inclui as respostas já dadas)."""
-        saidas = self.classificado[self.classificado["direcao"] == "saida"]
-        return classificar_hibrido(saidas, self.modelo, self.memoria, self.conhecimento)
+        respostas = tuple(sorted(self.memoria.items()))
+        if self._ultimas_saidas is None or self._ultimas_saidas[0] != respostas:
+            saidas = self.classificado[self.classificado["direcao"] == "saida"]
+            self._ultimas_saidas = (respostas, classificar_hibrido(saidas, self.modelo, self.memoria, self.conhecimento))
+        return self._ultimas_saidas[1].copy()
 
     def perguntas(self, id_usuario=None):
         """Transações que o sistema precisa que o usuário confirme."""

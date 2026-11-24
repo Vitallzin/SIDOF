@@ -166,7 +166,14 @@ def classificar_hibrido(classificado, modelo, memoria=None, conhecimento=None):
         tabela.loc[travado, "confianca_final"] = tabela.loc[travado, "confianca_final"].clip(upper=CONFIANCA_MAXIMA_PIX_PESSOA)
         for i in tabela.index[para_modelo]:
             categoria, confianca = tabela.loc[i, "sugestao_modelo"], tabela.loc[i, "confianca_modelo"]
-            if travado[i]:
+            if travado[i] and tabela.loc[i].get("mesmo_sobrenome", False):
+                # Mesmo sobrenome: a sugestão passa a ser família, mas continua sendo pergunta
+                tabela.loc[i, ["sugestao_modelo", "categoria_final"]] = ["transferencia_familiar", "transferencia_familiar"]
+                texto = (
+                    f'PIX para "{tabela.loc[i, "contraparte"]}", que tem o seu sobrenome: pode ser transferência '
+                    "para a família. Perguntar ao usuário."
+                )
+            elif travado[i]:
                 texto = (
                     f"PIX para uma pessoa: o modelo arrisca {_nome_categoria(categoria)}, "
                     "mas só o usuário sabe a finalidade. Perguntar ao usuário."

@@ -17,11 +17,12 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 
 from financas import SEMENTE
+from financas.categorias import CATEGORIAS_FORA_DOS_GASTOS
 from financas.formatacao import mes_por_extenso, reais
-from financas.regras import parece_pessoa
+from financas.regras import REGRAS, parece_pessoa
 
 # Transações que não entram na detecção: movimentam dinheiro entre contas ou são parcelas esperadas
-FORA_DA_DETECCAO = ("transferencia_interna", "pagamento_fatura")
+FORA_DA_DETECCAO = CATEGORIAS_FORA_DOS_GASTOS
 
 # Limites (escolhas de projeto, decididas antes de olhar os resultados)
 # Pico: 3 desvios e 3 meses de histórico, decididos por princípio (docs/03_decisoes_anomalias.md):
@@ -121,14 +122,23 @@ def novidade(tabela):
     return resultado
 
 
+# Impostos e documentos (IPTU, IPVA, licenciamento, DARF...) são obrigações reconhecidas pelas regras,
+# não compras numa loja: não entram no alerta de "lugar novo", mesmo aparecendo uma vez por ano.
+REGRAS_DE_OBRIGACAO = [regra for regra in REGRAS if regra.nome in ("iptu", "documentos_veiculo", "impostos")]
+
+
+def eh_obrigacao(descricao):
+    return any(regra.procurar(descricao) for regra in REGRAS_DE_OBRIGACAO)
+
+
 def detectar_lojas_novas_caras(tabela, novidades):
-    """Descrição que não parece nenhuma já vista e valor muito acima do habitual."""
+    """Descrição que não parece nenhuma já vista e valor muito acima do habitual (impostos e documentos ficam de fora)."""
     alertas = []
     primeiro_mes = tabela["mes"].min()
     for usuario, grupo in tabela.groupby("id_usuario"):
         for indice, linha in grupo[grupo["mes"] > primeiro_mes].iterrows():
             historico = grupo.loc[grupo["data"] < linha["data"], "gasto"]
-            if historico.empty or novidades[indice] < 1 - SIMILARIDADE_LOJA_CONHECIDA:
+            if historico.empty or novidades[indice] < 1 - SIMILARIDADE_LOJA_CONHECIDA or eh_obrigacao(linha["descricao"]):
                 continue
             limite = max(VEZES_A_MEDIANA * historico.median(), historico.quantile(0.95))
             if linha["gasto"] > limite:

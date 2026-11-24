@@ -11,7 +11,7 @@ Para não contar o mesmo dinheiro duas vezes:
 
 import pandas as pd
 
-from financas.categorias import CATEGORIAS
+from financas.categorias import CATEGORIAS, CATEGORIAS_FORA_DOS_GASTOS
 from financas.formatacao import mes_por_extenso, reais
 from financas.parcelas import comprometimento_da_renda, compromissos_futuros, identificar_parcelamentos
 from financas.regras import CONFIANCA_MINIMA, REGRAS_INTERNAS
@@ -27,7 +27,7 @@ BLOCOS = [
 ]
 NOMES_BLOCOS = [nome for nome, _ in BLOCOS]
 GRUPO_PARA_BLOCO = {"essencial": "essenciais", "prioritario": "prioritarios", "discricionario": "discricionarios"}
-FORA_DOS_GASTOS = ("transferencia_interna", "pagamento_fatura")
+FORA_DOS_GASTOS = CATEGORIAS_FORA_DOS_GASTOS
 
 # Limites dos "pontos de atenção" (escolhas de projeto, ajustáveis)
 VARIACAO_ESTAVEL = 0.05  # mudanças menores que 5% contam como "estável"
@@ -186,7 +186,7 @@ def _pontos_de_atencao(linha, perfil, a_confirmar_pct):
 
 ORIGEM_DOS_NUMEROS = (
     "Renda efetiva = salário e pagamentos por trabalho (sem ajudas nem entradas não identificadas). "
-    "Gastos não incluem transferências entre suas contas nem o pagamento da fatura, porque as compras "
+    "Gastos não incluem transferências entre suas contas, o que foi guardado ou investido, nem o pagamento da fatura, porque as compras "
     "do cartão já foram contadas uma a uma. 'A confirmar' são transações que o sistema vai perguntar a você."
 )
 
@@ -211,9 +211,9 @@ def secoes_diagnostico(linha, perfil, comprometimento, saidas, meses, coluna_cat
             evolucao += f" O que mais cresceu foi {maior[0]}: cerca de {reais(maior[1])} a mais por mês."
 
     if linha["poupanca_por_mes"] > 0:
-        reserva = f"Em média {reais(linha['poupanca_por_mes'])} por mês foram para a poupança."
+        reserva = f"Em média {reais(linha['poupanca_por_mes'])} por mês foram guardados (poupança ou investimento)."
     else:
-        reserva = "No período não houve saldo líquido transferido para a poupança."
+        reserva = "No período não houve saldo líquido guardado em poupança ou investimento."
 
     outras = ""
     if linha["outras_entradas_por_mes"] > 0:

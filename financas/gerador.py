@@ -52,6 +52,8 @@ PERFIS = {
         "parcelamentos": (0, 1), "dividas": (0, 0),
         "chance_poupanca": 1.0, "poupanca": (400, 900),
         "chance_ajuda_familia": 0.2, "chance_educacao": 0.4, "chance_plano_saude": 0.7,
+        "chance_carro": 0.8, "chance_envio_familia": 0.3, "chance_aplicacao": 0.9, "chance_iptu": 0.6,
+        "chance_tarifa": 0.4, "chance_saque": 0.4, "chance_darf": 0.5,
         "sobra_alvo": (0.25, 0.40),
     },
     "renda_variavel_autonomo": {
@@ -59,6 +61,8 @@ PERFIS = {
         "parcelamentos": (0, 2), "dividas": (0, 0),
         "chance_poupanca": 0.5, "poupanca": (200, 700),
         "chance_ajuda_familia": 0.4, "chance_educacao": 0.3, "chance_plano_saude": 0.3,
+        "chance_carro": 0.6, "chance_envio_familia": 0.3, "chance_aplicacao": 0.5, "chance_iptu": 0.3,
+        "chance_tarifa": 0.6, "chance_saque": 0.6, "chance_darf": 0.0,
         "sobra_alvo": (0.08, 0.22),
     },
     "renda_fixa_com_dividas": {
@@ -66,6 +70,8 @@ PERFIS = {
         "parcelamentos": (4, 6), "dividas": (2, 2),
         "chance_poupanca": 0.15, "poupanca": (100, 300),
         "chance_ajuda_familia": 0.3, "chance_educacao": 0.4, "chance_plano_saude": 0.3,
+        "chance_carro": 0.6, "chance_envio_familia": 0.4, "chance_aplicacao": 0.0, "chance_iptu": 0.3,
+        "chance_tarifa": 0.8, "chance_saque": 0.5, "chance_darf": 0.0,
         "sobra_alvo": (0.04, 0.12),
     },
     "renda_baixa_pouca_margem": {
@@ -73,6 +79,8 @@ PERFIS = {
         "parcelamentos": (0, 1), "dividas": (0, 1),
         "chance_poupanca": 0.2, "poupanca": (50, 150),
         "chance_ajuda_familia": 0.7, "chance_educacao": 0.2, "chance_plano_saude": 0.0,
+        "chance_carro": 0.2, "chance_envio_familia": 0.5, "chance_aplicacao": 0.0, "chance_iptu": 0.0,
+        "chance_tarifa": 0.6, "chance_saque": 0.8, "chance_darf": 0.0,
         "sobra_alvo": (0.06, 0.12),
     },
 }
@@ -84,7 +92,8 @@ FATOR_MINIMO, FATOR_MAXIMO = 0.4, 2.5
 # Quantas compras por mês em cada categoria do dia a dia (antes do hábito pessoal)
 FREQUENCIA_MENSAL = {
     "alimentacao_basica": (4, 7),
-    "transporte": (3, 7),
+    "transporte": (2, 6),
+    "veiculos": (2, 5),  # só para quem tem carro
     "saude": (0, 2),
     "restaurantes_bares": (2, 6),
     "lazer": (0, 2),
@@ -96,6 +105,7 @@ FREQUENCIA_MENSAL = {
 MEIOS = {
     "alimentacao_basica": ["cartao_debito", "pix", "cartao_credito", "pix"],
     "transporte": ["cartao_debito", "cartao_credito"],
+    "veiculos": ["cartao_debito", "cartao_credito"],
     "saude": ["cartao_debito", "cartao_credito", "pix"],
     "restaurantes_bares": ["cartao_credito", "pix", "cartao_debito", "pix"],
     "lazer": ["cartao_credito"],
@@ -336,6 +346,65 @@ def _contas_fixas(rng, cfg):
     return linhas + _assinaturas(rng)
 
 
+def _custos_do_carro(rng, cfg):
+    """Seguro mensal (nem todo dono tem), IPVA em 3 parcelas de janeiro a março e licenciamento em abril."""
+    linhas = []
+    if rng.random() < 0.6:
+        seguro, minimo, maximo = _escolher(rng, cat.SEGUROS_AUTO)
+        linhas += _conta_mensal(rng, seguro, "veiculos", _uniforme(rng, minimo, maximo) * cfg["escala"], 0)
+    ipva = _uniforme(rng, 600, 1800) * cfg["escala"] / 3
+    dia = _dia(rng)
+    linhas += [
+        _linha(_data(mes, dia), f"PAGTO BOLETO {cat.IPVA}", -ipva, "boleto", "veiculos", parcela=f"{mes}/3", loja=cat.IPVA)
+        for mes in (1, 2, 3)
+    ]
+    linhas.append(_linha(_data(4, _dia(rng)), f"PAGTO BOLETO {cat.LICENCIAMENTO}", -_uniforme(rng, 150, 250),
+                         "boleto", "veiculos", loja=cat.LICENCIAMENTO))
+    return linhas
+
+
+def _impostos_e_tarifas(rng, cfg):
+    """DAS do MEI (autônomos), IPTU em 10 parcelas a partir de fevereiro, DARF do IR, tarifas e juros do banco."""
+    linhas = []
+    if cfg["tipo_renda"] == "variavel":
+        nome, minimo, maximo = cat.DAS_MEI
+        linhas += _conta_mensal(rng, nome, "impostos_contribuicoes", _uniforme(rng, minimo, maximo), 0)
+    if rng.random() < cfg["chance_iptu"]:
+        parcela, dia = _uniforme(rng, 60, 200) * cfg["escala"], _dia(rng)
+        linhas += [
+            _linha(_data(mes, dia), f"PAGTO BOLETO {cat.IPTU}", -parcela, "boleto", "moradia", parcela=f"{mes - 1}/10", loja=cat.IPTU)
+            for mes in MESES if mes >= 2
+        ]
+    if rng.random() < cfg["chance_darf"]:
+        linhas.append(_linha(_data(4, _dia(rng)), f"PAGTO BOLETO {cat.DARF_IRPF}", -_uniforme(rng, 200, 900),
+                             "boleto", "impostos_contribuicoes", loja=cat.DARF_IRPF))
+    if rng.random() < cfg["chance_tarifa"]:
+        nome, minimo, maximo = _escolher(rng, cat.TARIFAS)
+        valor, dia = _uniforme(rng, minimo, maximo), _dia(rng)
+        linhas += [_linha(_data(mes, dia), nome, -valor, "debito_automatico", "tarifas_bancarias", loja=nome) for mes in MESES]
+    if cfg["dividas"][1] > 0 and rng.random() < 0.5:
+        # Quem tem dívidas às vezes entra no cheque especial
+        for mes in sorted(int(m) for m in rng.choice(MESES, size=int(rng.integers(1, 4)), replace=False)):
+            linhas.append(_linha(_data(mes, 28), cat.JUROS_CHEQUE_ESPECIAL, -_uniforme(rng, 15, 90), "debito_automatico",
+                                 "tarifas_bancarias", loja=cat.JUROS_CHEQUE_ESPECIAL))
+    return linhas
+
+
+def _envios_para_familia(rng, cfg, nome_usuario):
+    """PIX mensal para um parente (mesmo sobrenome), por exemplo ajuda aos pais ou mesada."""
+    if rng.random() >= cfg["chance_envio_familia"]:
+        return []
+    sobrenome = nome_usuario.split()[-1]
+    parente = _nome_pessoa(rng, sobrenome)
+    while parente == nome_usuario:
+        parente = _nome_pessoa(rng, sobrenome)
+    valor, dia = _uniforme(rng, 100, 400) * cfg["escala"], int(rng.integers(1, 15))
+    return [
+        _linha(_data(mes, dia), f"PIX ENVIADO {parente}", -valor * _uniforme(rng, 0.9, 1.1), "pix", "transferencia_familiar", ambigua=True)
+        for mes in MESES
+    ]
+
+
 def _dividas(rng, cfg):
     """Dívidas pagas por boleto, com número da parcela (ex.: 7/24)."""
     quantidade = int(rng.integers(cfg["dividas"][0], cfg["dividas"][1] + 1))
@@ -374,7 +443,7 @@ def _parcelamentos(rng, cfg):
 
 # ---------- Gastos do dia a dia, PIX ambíguos e transferências internas ----------
 
-def _sortear_habitos(rng):
+def _sortear_habitos(rng, tem_carro):
     """Cada usuário tem suas lojas favoritas e sua frequência de compra por categoria."""
     favoritos, frequencia = {}, {}
     for categoria, lojas in cat.ESTABELECIMENTOS.items():
@@ -383,6 +452,8 @@ def _sortear_habitos(rng):
         frequencia[categoria] = _uniforme(rng, 0.5, 1.5)
     if rng.random() < 0.5:
         frequencia["jogos"] = 0  # metade dos usuários não gasta com jogos
+    if not tem_carro:
+        frequencia["veiculos"] = 0
     return {"favoritos": favoritos, "frequencia": frequencia}
 
 
@@ -413,6 +484,35 @@ def _pix_ambiguos(rng, cfg):
         for nome, (categoria, minimo, maximo) in envios:
             valor = _uniforme(rng, minimo, maximo) * cfg["escala"]
             linhas.append(_linha(_data(mes, _dia(rng)), f"PIX ENVIADO {nome}", -valor, "pix", categoria, ambigua=True))
+    return linhas
+
+
+def _saques(rng, cfg):
+    """Saques em dinheiro: o extrato não mostra em que o dinheiro foi gasto."""
+    if rng.random() >= cfg["chance_saque"]:
+        return []
+    local = _escolher(rng, cat.SAQUES)
+    linhas = []
+    for mes in MESES:
+        for _ in range(int(rng.integers(0, 3))):
+            valor = round(_uniforme(rng, 50, 300) * cfg["escala"] / 10) * 10  # saque é valor redondo
+            linhas.append(_linha(_data(mes, _dia(rng)), local, -max(valor, 20), "saque", "saque", loja=local))
+    return linhas
+
+
+def _aplicacoes(rng, cfg):
+    """Aplicação mensal num investimento do próprio usuário (sai da conta corrente e entra na reserva)."""
+    if rng.random() >= cfg["chance_aplicacao"]:
+        return []
+    texto = _escolher(rng, cat.APLICACOES)
+    valor, dia = _uniforme(rng, 150, 500) * cfg["escala"], _dia(rng)
+    linhas = []
+    for mes in MESES:
+        if rng.random() < 0.8:
+            linhas += [
+                _linha(_data(mes, dia), texto, -valor, "ted", "guardar_investir", conta="corrente"),
+                _linha(_data(mes, dia), texto, valor, "ted", "guardar_investir", conta="poupanca"),
+            ]
     return linhas
 
 
@@ -620,13 +720,16 @@ def _gerar_usuario(id_usuario, perfil, rng, nomes_usados, tem_renda_desconhecida
         "renda_base": round(_uniforme(rng, *cfg["renda"]), 2),
         "troca_emprego": troca_emprego,
     }
-    habitos = _sortear_habitos(rng)
+    tem_carro = rng.random() < cfg["chance_carro"]
+    habitos = _sortear_habitos(rng, tem_carro)
 
     rendas = _rendas(rng, usuario, cfg, tem_renda_desconhecida)
     fixas = _contas_fixas(rng, cfg) + _dividas(rng, cfg) + _parcelamentos(rng, cfg)
-    ajustaveis = _gastos_do_dia_a_dia(rng, cfg, habitos) + _pix_ambiguos(rng, cfg)
+    fixas += (_custos_do_carro(rng, cfg) if tem_carro else []) + _impostos_e_tarifas(rng, cfg)
+    fixas += _envios_para_familia(rng, cfg, nome)
+    ajustaveis = _gastos_do_dia_a_dia(rng, cfg, habitos) + _pix_ambiguos(rng, cfg) + _saques(rng, cfg)
     _ajustar_ao_orcamento(rng, cfg, rendas, fixas, ajustaveis)
-    linhas = rendas + fixas + ajustaveis + _transferencias_internas(rng, cfg, nome)
+    linhas = rendas + fixas + ajustaveis + _transferencias_internas(rng, cfg, nome) + _aplicacoes(rng, cfg)
     linhas += _anomalias(rng, cfg, habitos, linhas)
     linhas += _anomalias_nao_previstas(rng, cfg, usuario["renda_base"], linhas)
     linhas += _faturas(rng, linhas)

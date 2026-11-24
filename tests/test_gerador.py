@@ -75,7 +75,7 @@ def test_categorias_validas_e_grupo_correto(dados):
 
 def test_renda_entra_e_gasto_sai(tabela):
     renda = tabela[tabela["categoria"].isin(CATEGORIAS_DE_RENDA)]
-    gastos = tabela[~tabela["categoria"].isin(CATEGORIAS_DE_RENDA + ["transferencia_interna"])]
+    gastos = tabela[~tabela["categoria"].isin(CATEGORIAS_DE_RENDA + ["transferencia_interna", "guardar_investir"])]
     assert (renda["valor"] > 0).all()
     assert (gastos["valor"] < 0).all()
 

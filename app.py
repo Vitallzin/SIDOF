@@ -27,7 +27,7 @@ from financas.aprendizado import (
     registrar_uso_fatura,
 )
 from financas.aprendizado import resumo as resumo_do_aprendizado
-from financas.categorias import CATEGORIAS, nome_exibicao
+from financas.categorias import CATEGORIAS, CATEGORIAS_FORA_DOS_GASTOS, nome_exibicao
 from financas.diagnostico import BLOCOS
 from financas.formatacao import mes_por_extenso, reais
 from financas.faturas_pdf import (
@@ -150,6 +150,11 @@ def aplicar_tema(cores):
     [data-testid="stFileUploaderDropzone"] {{background-color: var(--lateral) !important; border: 1px dashed var(--borda) !important;}}
     [data-testid="stFileUploaderDropzone"] span, [data-testid="stFileUploaderDropzone"] small {{color: var(--suave) !important;}}
     .secao {{font-size: 1.05rem; font-weight: 600; margin: .2rem 0 .4rem 0; color: var(--texto);}}
+    [data-testid="stToast"] {{background-color: var(--cartao) !important; color: var(--texto) !important;
+        border: 1px solid var(--borda) !important; box-shadow: 0 4px 14px rgba(0, 0, 0, .25) !important;}}
+    [data-testid="stToast"] p, [data-testid="stToast"] div, [data-testid="stToast"] span {{color: var(--texto) !important;}}
+    [data-testid="stToast"] button svg {{fill: var(--suave) !important; color: var(--suave) !important;}}
+    [data-testid="stSpinner"], [data-testid="stSpinner"] p {{color: var(--texto) !important;}}
     </style>
     """,
         unsafe_allow_html=True,
@@ -266,7 +271,7 @@ if "aviso" in st.session_state:
     st.toast(st.session_state.pop("aviso"))
 
 
-@st.cache_data(show_spinner="Calculando...", max_entries=20)
+@st.cache_data(show_spinner="Atualizando o diagnóstico...", max_entries=40)
 def calcular(chave_fonte, mes, respostas, conhecimento_itens, lojas_no_modelo, _modelo, _extrato, _usuarios):
     """Tudo o que a tela mostra, olhando só o extrato até o mês escolhido.
 
@@ -436,9 +441,12 @@ else:
     primeiro_nome = nomes_simulados[usuario].title().split()[0]
 
 meses_vistos = [m for m in meses if m <= mes]
+# Só o usuário escolhido: no SIDOF tudo é calculado por pessoa (cada um comparado com o próprio histórico),
+# então o resultado é o mesmo e a tela responde bem mais rápido
+respostas_do_usuario = tuple(sorted((chave, categoria) for chave, categoria in st.session_state.respostas.items() if chave[0] == usuario))
 resultado = calcular(
-    chave_fonte, mes, tuple(sorted(st.session_state.respostas.items())), tuple(sorted(conhecimento.items())),
-    lojas_no_modelo, modelo, extrato, usuarios,
+    f"{chave_fonte}|{usuario}", mes, respostas_do_usuario, tuple(sorted(conhecimento.items())),
+    lojas_no_modelo, modelo, extrato[extrato["id_usuario"] == usuario], usuarios[usuarios["id_usuario"] == usuario],
 )
 indicador = resultado["indicadores"].set_index("id_usuario").loc[usuario]
 secoes = indicador["secoes"]
@@ -488,15 +496,16 @@ st.write("")
 
 nomes_abas = {
     "diagnostico": "Diagnóstico",
-    "notificacoes": f"Notificações ({len(notificacoes_usuario)})",
-    "perguntas": f"Perguntas ({len(perguntas_usuario)})",
+    "notificacoes": "Notificações",
+    "perguntas": "Perguntas",
     "parcelas": "Parcelas",
     "metas": "Metas",
 }
 if modo_fatura:
     nomes_abas["compras"] = "Movimentações"
 nomes_abas["aprendizado"] = "Aprendizado"
-abas = dict(zip(nomes_abas, st.tabs(list(nomes_abas.values()))))
+# key: a aba escolhida é lembrada entre um clique e outro (ex.: depois de confirmar uma pergunta)
+abas = dict(zip(nomes_abas, st.tabs(list(nomes_abas.values()), key="aba_atual")))
 
 # ---------- Diagnóstico ----------
 with abas["diagnostico"]:
@@ -581,7 +590,8 @@ with abas["diagnostico"]:
 
 # ---------- Notificações ----------
 with abas["notificacoes"]:
-    st.markdown(f'<div class="secao">O que mudou em {mes_por_extenso(mes)}</div>', unsafe_allow_html=True)
+    avisos_no_mes = f"{len(notificacoes_usuario)} aviso" + ("s" if len(notificacoes_usuario) != 1 else "")
+    st.markdown(f'<div class="secao">O que mudou em {mes_por_extenso(mes)} ({avisos_no_mes})</div>', unsafe_allow_html=True)
     if notificacoes_usuario.empty:
         st.markdown('<span class="etiqueta ok">Nenhuma notificação neste mês</span>', unsafe_allow_html=True)
     for linha in notificacoes_usuario.itertuples():
@@ -619,8 +629,9 @@ with abas["perguntas"]:
                 format_func=nome_exibicao, label_visibility="collapsed",
             )
             if botao.button("Confirmar", key=f"ok_{linha.id_transacao}", type="primary", use_container_width=True):
-                st.session_state.respostas[(usuario, linha.contraparte)] = categoria
-                aprender(linha.contraparte, categoria, origem_voto, linha.descricao)
+                with st.spinner("Salvando sua resposta e atualizando o diagnóstico..."):
+                    st.session_state.respostas[(usuario, linha.contraparte)] = categoria
+                    aprender(linha.contraparte, categoria, origem_voto, linha.descricao)
                 st.rerun()
     if len(perguntas_usuario) > 10:
         st.caption(f"Mostrando 10 de {len(perguntas_usuario)}.")
@@ -755,7 +766,7 @@ with abas["metas"]:
         st.markdown(f'<div style="color:var(--suave);font-size:.85rem;margin-bottom:.3rem">Marcos</div>{marcos}', unsafe_allow_html=True)
 
     grafico = acompanhamento.melt(id_vars="mes", value_vars=["acumulado", "esperado"], var_name="serie", value_name="valor")
-    grafico["serie"] = grafico["serie"].map({"acumulado": "Guardado (poupança)", "esperado": "Necessário para o prazo"})
+    grafico["serie"] = grafico["serie"].map({"acumulado": "Guardado (poupança e investimentos)", "esperado": "Necessário para o prazo"})
     linhas = alt.Chart(grafico).mark_line(point=True, strokeWidth=3).encode(
         x=alt.X("mes:N", title=None),
         y=alt.Y("valor:Q", title="R$"),
@@ -768,12 +779,15 @@ with abas["metas"]:
         st.write(md(plano_da_meta(meta, sobra_para_meta, indicador["alto_comprometimento"], indicador["tipo_renda"])))
         st.write(md(resumo["explicacao"]))
         if modo_fatura:
-            st.caption("A fatura do cartão não mostra o que foi guardado na poupança: o acompanhamento começa do zero.")
+            st.caption(
+                "O acompanhamento usa as aplicações e transferências para a poupança que aparecem nos extratos "
+                "(uma fatura de cartão sozinha não mostra o que foi guardado)."
+            )
         else:
-            st.caption(f"O acompanhamento usa o que foi transferido para a poupança desde {mes_por_extenso(meses[0])}.")
+            st.caption(f"O acompanhamento usa o que foi guardado (poupança e investimentos) desde {mes_por_extenso(meses[0])}.")
 
 # ---------- Movimentações (só no modo Minha fatura) ----------
-FORA_DOS_GASTOS_NA_TABELA = ("transferencia_interna", "pagamento_fatura")
+FORA_DOS_GASTOS_NA_TABELA = CATEGORIAS_FORA_DOS_GASTOS
 if modo_fatura:
     with abas["compras"]:
         saidas_vistas = resultado["saidas"]

@@ -181,7 +181,7 @@ def relatorio_metas(indicadores, aportes):
     linhas = [
         "=== Metas financeiras (Fase 7) ===",
         f"Meta exemplo para todos: {reais(meta.valor_alvo)} em {meta.prazo_meses} meses, a partir de "
-        f"{mes_por_extenso(meta.mes_inicio)}. O acompanhamento usa o que cada um transferiu para a poupança.",
+        f"{mes_por_extenso(meta.mes_inicio)}. O acompanhamento usa o que cada um guardou (poupança ou investimento).",
         "",
     ]
     for linha in indicadores.to_dict("records"):

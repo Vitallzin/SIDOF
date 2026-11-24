@@ -3,7 +3,7 @@
 A categoria do banco NUNCA é usada para classificar: o SIDOF classifica sozinho e só depois compara.
 É uma checagem externa: "o SIDOF concordou com o banco em X% das saídas".
 Cada banco usa nomes próprios; o mapa abaixo traduz os nomes mais comuns para as categorias do SIDOF.
-Categorias do banco sem equivalente (ex.: "Saque", "Impostos", "Família") ficam fora da conta.
+Categorias do banco sem equivalente (ex.: "Serviços domésticos") ficam fora da conta.
 """
 
 import pandas as pd
@@ -13,7 +13,9 @@ from financas.normalizacao import normalizar_texto
 
 # Nome da categoria no banco -> categorias do SIDOF que contam como concordância
 MAPA_DO_BANCO = {
-    "TRANSPORTE": {"transporte"}, "COMBUSTIVEL": {"transporte"}, "MOBILIDADE": {"transporte"},
+    "TRANSPORTE": {"transporte", "veiculos"}, "MOBILIDADE": {"transporte", "veiculos"},
+    "COMBUSTIVEL": {"veiculos"}, "VEICULO": {"veiculos"}, "VEICULOS": {"veiculos"}, "AUTOMOVEL": {"veiculos"},
+    "CARRO": {"veiculos"}, "AUTO": {"veiculos"},
     "MERCADO": {"alimentacao_basica"}, "SUPERMERCADO": {"alimentacao_basica"},
     "ALIMENTACAO FORA": {"restaurantes_bares"}, "RESTAURANTES": {"restaurantes_bares"}, "RESTAURANTE": {"restaurantes_bares"},
     "BARES E RESTAURANTES": {"restaurantes_bares"}, "DELIVERY": {"restaurantes_bares"},
@@ -26,10 +28,17 @@ MAPA_DO_BANCO = {
     "EDUCACAO": {"educacao"},
     "COMPRAS": {"compras"}, "VESTUARIO": {"compras"},
     "LAZER": {"lazer"}, "ENTRETENIMENTO": {"lazer"}, "VIAGEM": {"lazer"}, "JOGOS": {"jogos"},
-    "INVESTIMENTO": {"transferencia_interna"}, "INVESTIMENTOS": {"transferencia_interna"},
+    "INVESTIMENTO": {"guardar_investir"}, "INVESTIMENTOS": {"guardar_investir"}, "POUPANCA": {"guardar_investir"},
+    "APLICACAO": {"guardar_investir"},
     "TRANSFERENCIA ENTRE CONTAS": {"transferencia_interna"},
     "EMPRESTIMO": {"pagamento_dividas"}, "DIVIDAS": {"pagamento_dividas"},
     "CARTAO DE CREDITO": {"pagamento_fatura"}, "FATURA": {"pagamento_fatura"},
+    "SAQUE": {"saque"},
+    "FAMILIA": {"transferencia_familiar"},
+    # "Impostos" no banco é amplo: IPTU é moradia, IPVA é veículo, o resto é imposto/contribuição
+    "IMPOSTOS": {"impostos_contribuicoes", "veiculos", "moradia"}, "TRIBUTOS": {"impostos_contribuicoes", "veiculos", "moradia"},
+    "TARIFAS": {"tarifas_bancarias"}, "TARIFAS BANCARIAS": {"tarifas_bancarias"}, "ENCARGOS": {"tarifas_bancarias"},
+    "JUROS": {"tarifas_bancarias"},
 }
 PENDENTE = "nao_identificado"
 

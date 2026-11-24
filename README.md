@@ -25,14 +25,15 @@ Os PDFs são gerados a partir dos HTMLs em `documentos/fontes/` com `.venv\Scrip
 
 | O que foi medido | Resultado |
 |---|---|
-| Saídas decididas sozinho pelo sistema em uso | **89,7%**, com **99,8%** de acerto e 0,2% de erros silenciosos |
-| Só regras (baseline) × regras + modelo + respostas do usuário | 51,5% → **93,9%** decididas sozinho, mantendo 99,9% de acerto |
-| Modelo em lojas já vistas × nunca vistas (teste duro) | 93,1% × **18,8%** de acerto (nesses casos ele pergunta) |
-| Origem das entradas / perfis de renda | 98,5% corretas / **12 de 12** perfis, incluindo trocas de emprego |
-| Parcelamentos encontrados | **27 de 27** |
-| Anomalias encontradas (método estatístico) | 95% dos tipos previstos e 65% dos não previstos |
-| Faturas fictícias em PDF lidas de volta | **907 de 907** compras sem erro |
-| Testes automáticos | **168**, todos passando |
+| Saídas decididas sozinho pelo sistema em uso | **88,1%**, com **99,8%** de acerto e 0,2% de erros silenciosos |
+| Só regras (baseline) × regras + modelo + respostas do usuário | 56,0% → **93,1%** decididas sozinho, mantendo 99,8% de acerto |
+| Modelo em lojas já vistas × nunca vistas (teste duro) | 97,5% × **34,9%** de acerto (nesses casos ele pergunta) |
+| Origem das entradas / perfis de renda | 97,6% corretas / **12 de 12** perfis, incluindo trocas de emprego |
+| Parcelamentos encontrados (inclui IPVA e IPTU) | **40 de 40** |
+| Anomalias encontradas (método estatístico) | 100% dos tipos previstos e 58% dos não previstos |
+| Faturas fictícias em PDF lidas de volta | **866 de 866** compras sem erro |
+| Extrato fictício de 6 meses: SIDOF × categoria do banco | **87%** de concordância nas saídas comparáveis |
+| Testes automáticos | **234**, todos passando |
 
 ## Como instalar (Windows)
 
@@ -98,7 +99,7 @@ Para não contar nada duas vezes:
 
 Aplicações e resgates (CDB, poupança) contam como dinheiro guardado; rendimentos e reembolsos entram, mas não são
 renda do trabalho. Quando o extrato traz a categoria do banco, o SIDOF **não a usa para classificar**: classifica
-sozinho e depois compara. Num extrato fictício de 6 meses, concordou com o banco em 82% das saídas comparáveis.
+sozinho e depois compara. Num extrato fictício de 6 meses, concordou com o banco em 87% das saídas comparáveis.
 
 O arquivo **nunca é salvo**: não fica no servidor nem vai para o repositório (`*.pdf` está no `.gitignore`, exceto os
 PDFs de `documentos/`). Documentos escaneados (imagem) ou com layout muito diferente não são lidos.
@@ -170,9 +171,12 @@ O comando `python -m financas` grava em `dados_gerados/` (semente fixa 42, sempr
 
 - **Dados sintéticos:** o mesmo autor escreveu o gerador, as regras e os detectores, então os números são otimistas.
   O protótipo demonstra o funcionamento do pipeline, não a eficácia no mundo real.
-- **Lojas novas:** o modelo de texto decorou as lojas que viu e acerta só 18,8% em lojas novas; quem resolve esses
+- **Lojas novas:** o modelo de texto decorou as lojas que viu e acerta só 34,9% em lojas novas; quem resolve esses
   casos são as regras e as respostas do usuário.
 - **PIX entre pessoas** é ambíguo por natureza: a resposta correta é baixa confiança e pergunta ao usuário.
+  O mesmo sobrenome só sugere "transferência familiar"; quem confirma é o usuário.
+- **Gastos legítimos raros e altos** (ex.: conserto do carro) também geram o alerta de "lugar novo"; por isso 74% dos
+  alertas acertam uma anomalia plantada.
 - **Nomes curtos de loja** ("EMPORIO DONA ROSA") podem ser tratados como pessoa e virar pergunta.
 - **Nova assinatura recorrente** não é detectada como anomalia por nenhum dos métodos.
 - **Limites de decisão** (0,70 de confiança, 30% de comprometimento, 3 desvios padrão, reserva de 3 ou 6 meses) são

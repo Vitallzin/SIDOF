@@ -17,14 +17,23 @@ ESTABELECIMENTOS = {
         ("QUITANDA DO VALE", 20, 90),
         ("SACOLAO BARATAO", 40, 160),
     ],
+    # Transporte: ônibus, metrô, trem e corridas por aplicativo
     "transporte": [
         ("APP CORRIDA *VIAGEM", 12, 40),
-        ("POSTO COMBUSTIVEL ESTRELA", 80, 220),
         ("RECARGA BILHETE TRANSPORTE", 50, 120),
-        ("ESTACIONAMENTO CENTRAL", 10, 30),
-        ("AUTOPOSTO TREVO", 80, 220),
         ("METRO LINHA AZUL", 5, 20),
+        ("PASSE ONIBUS URBANO", 5, 25),
+        ("MOBI APP *TRIP", 10, 35),  # sem palavra-chave óbvia
+    ],
+    # Veículo próprio: combustível, manutenção, estacionamento e pedágio (só para quem tem carro)
+    "veiculos": [
+        ("POSTO COMBUSTIVEL ESTRELA", 80, 220),
+        ("AUTOPOSTO TREVO", 80, 220),
+        ("ESTACIONAMENTO CENTRAL", 10, 30),
         ("TAG PEDAGIO RODOVIA", 15, 60),
+        ("OFICINA MECANICA DO TIAO", 120, 600),
+        ("AUTO PECAS RODA VIVA", 40, 300),
+        ("GASOLINA E CIA", 80, 220),  # sem palavra-chave óbvia
     ],
     "saude": [
         ("DROGARIA SAUDE TOTAL", 15, 120),
@@ -66,6 +75,7 @@ ESTABELECIMENTOS = {
         ("BAZAR DA ESQUINA", 15, 80),
         ("BRECHO VINTAGE", 30, 150),
         ("PERFUMARIA AROMA", 40, 200),
+        ("AUTO SHOP ACESSORIOS", 30, 150),  # kit de limpeza e acessórios do carro: é compra, não veículo
     ],
 }
 
@@ -101,6 +111,22 @@ ASSINATURAS = [
     ("ACADEMIA CORPO ATIVO", 99.90),
     ("CLUBE LIVROS DO MES", 49.90),
 ]
+
+# Veículo: seguro mensal, IPVA em 3 parcelas (jan-mar) e licenciamento (abril)
+SEGUROS_AUTO = [("SEGURO AUTO PROTEGE", 120, 280), ("SEGURO AUTO TRANQUILO", 100, 250)]
+IPVA = "IPVA 2026 DETRAN"
+LICENCIAMENTO = "LICENCIAMENTO 2026 DETRAN"
+
+# Impostos, contribuições e tarifas
+DAS_MEI = ("DAS MEI SIMPLES NACIONAL", 70, 82)
+IPTU = "IPTU 2026 PREFEITURA"
+DARF_IRPF = "DARF IRPF 2026"
+TARIFAS = [("TARIFA PACOTE SERVICOS", 15, 45), ("TARIFA CESTA DE SERVICOS", 20, 40)]
+JUROS_CHEQUE_ESPECIAL = "JUROS CHEQUE ESPECIAL"
+
+# Saques e aplicações
+SAQUES = ["SAQUE 24H BANCO", "SAQUE CAIXA ELETRONICO", "SAQUE BANCO 24 HORAS"]
+APLICACOES = ["APLICACAO RESERVA CDB", "APLICACAO POUPANCA PROGRAMADA"]
 
 # Dívidas pagas por boleto: (nome, parcela mínima, parcela máxima, total de parcelas)
 DIVIDAS = [

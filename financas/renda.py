@@ -83,6 +83,8 @@ def _decidir(linha, sobrenome_usuario, fonte, varias_fontes, eh_par):
     """Devolve (categoria, confiança, explicação) para uma entrada."""
     contraparte = linha["contraparte"]
 
+    if linha["regra"] == "aplicacao_propria":
+        return "guardar_investir", linha["confianca"], "Aplicação ou resgate de investimento seu: dinheiro guardado, não é renda."
     if linha["regra"] in REGRAS_INTERNAS:
         return "transferencia_interna", linha["confianca"], linha["explicacao"]
     if linha["regra"] == "rendimento":

@@ -23,6 +23,8 @@ from financas.regras import parece_pessoa
 MINIMO_DE_CONFIRMACOES = 2  # sessões diferentes que precisam concordar antes de valer para todos
 ORIGENS = ("fatura", "ficticio")  # fatura real enviada / usuário fictício da aba Perguntas
 GRUPOS_APRENDIVEIS = ("essencial", "prioritario", "discricionario")  # só gastos em lojas
+# Dinheiro para a família é sempre para pessoas: nunca vai para o aprendizado coletivo
+CATEGORIAS_NAO_APRENDIVEIS = ("transferencia_familiar",)
 
 
 def eh_pix_para_pessoa(descricao, contraparte):
@@ -40,6 +42,7 @@ def pode_aprender(contraparte, categoria, descricao=""):
         bool(chave_de_loja(nome))
         and not eh_pix_para_pessoa(descricao, nome)
         and CATEGORIAS.get(categoria) in GRUPOS_APRENDIVEIS
+        and categoria not in CATEGORIAS_NAO_APRENDIVEIS
     )
 
 

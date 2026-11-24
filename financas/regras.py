@@ -48,14 +48,32 @@ REGRAS = [
     Regra("rendimento", ("RENDIMENTO", "RENDIMENTOS"), "renda_eventual", 0.90, "entrada"),
     Regra("reembolso", ("REEMBOLSO", "ESTORNO", "DEVOLUCAO"), "renda_eventual", 0.85, "entrada"),
     # Dinheiro guardado: aplicação e resgate de investimento/poupança do próprio usuário
-    Regra("aplicacao_propria", ("APLICACAO", "RESGATE", "POUPANCA"), "transferencia_interna", 0.90, "qualquer"),
+    Regra("aplicacao_propria", ("APLICACAO", "RESGATE", "POUPANCA"), "guardar_investir", 0.90, "qualquer"),
+    Regra("saque", ("SAQUE",), "saque", 0.95),
+    # Impostos: cada um vai para onde pertence (IPTU é moradia, IPVA é veículo); o resto é imposto/contribuição
+    Regra("iptu", ("IPTU", "TAXA DE LIXO", "TAXA LIXO"), "moradia", 0.95),
+    Regra("documentos_veiculo", ("IPVA", "LICENCIAMENTO", "DETRAN", "MULTA TRANSITO", "MULTA DE TRANSITO"), "veiculos", 0.95),
+    Regra("impostos", (
+        "DARF", "DAS MEI", "DAS SIMPLES", "SIMPLES NACIONAL", "IMPOSTO DE RENDA", "IRPF", "INSS", "RECEITA FEDERAL",
+        "ITBI", "ITCMD",
+    ), "impostos_contribuicoes", 0.90),
+    Regra("tarifas", (
+        "TARIFA", "IOF", "JUROS", "ENCARGOS", "CESTA DE SERVICOS", "PACOTE SERVICOS", "ANUIDADE", "CHEQUE ESPECIAL",
+    ), "tarifas_bancarias", 0.90),
+    Regra("mesada", ("MESADA",), "transferencia_familiar", 0.85),
     # Essenciais
     Regra("aluguel", ("IMOBILIARIA", "ALUGUEL", "CONDOMINIO"), "moradia", 0.95),
     Regra("energia", ("ENERGIA ELETRICA", "ENERGIA"), "energia", 0.95),
     Regra("agua", ("SANEAMENTO", "AGUAS", "AGUA"), "agua", 0.90),
     Regra("telecom", ("TELECOM", "OPERADORA", "INTERNET", "TELEFONIA"), "telecom", 0.90),
     Regra("mercado", ("SUPERMERCADO", "MERCADINHO", "MERCADO", "ATACADAO", "HORTIFRUTI", "PADARIA", "ACOUGUE"), "alimentacao_basica", 0.90),
-    Regra("transporte", ("COMBUSTIVEL", "POSTO", "CORRIDA", "BILHETE", "ESTACIONAMENTO"), "transporte", 0.85),
+    # Veículo próprio (combustível, manutenção, seguro); kit de limpeza e acessórios ficam em compras
+    Regra("veiculos", (
+        "COMBUSTIVEL", "POSTO", "AUTOPOSTO", "ESTACIONAMENTO", "PEDAGIO", "OFICINA", "MECANICA", "AUTOPECAS",
+        "AUTO PECAS", "PNEUS", "BORRACHARIA", "SEGURO AUTO", "LAVA JATO",
+    ), "veiculos", 0.85),
+    # Transporte: ônibus, metrô, trem e corridas por aplicativo
+    Regra("transporte", ("CORRIDA", "BILHETE", "METRO", "ONIBUS", "UBER"), "transporte", 0.85),
     # Prioritários
     Regra("dividas", ("EMPRESTIMO", "FINANCIAMENTO", "RENEGOCIACAO", "ACORDO"), "pagamento_dividas", 0.95),
     Regra("plano_saude", ("PLANO SAUDE",), "saude", 0.95),
@@ -137,4 +155,15 @@ def classificar_por_regras(extrato_normalizado, usuarios):
     ]
     tabela = pd.concat([extrato_normalizado.reset_index(drop=True), pd.DataFrame(resultados)], axis=1)
     tabela["perguntar_usuario"] = tabela["confianca"] < CONFIANCA_MINIMA
+    tabela["mesmo_sobrenome"] = [
+        _pix_para_parente(linha["operacao"], linha["contraparte"], nomes.get(linha["id_usuario"], ""))
+        for linha in tabela[["operacao", "contraparte", "id_usuario"]].to_dict("records")
+    ]
     return tabela
+
+
+def _pix_para_parente(operacao, contraparte, nome_usuario):
+    """PIX enviado para outra pessoa com o mesmo sobrenome do usuário: pista (não certeza) de família."""
+    if operacao != "pix_enviado" or not nome_usuario or contraparte == nome_usuario or not parece_pessoa(contraparte):
+        return False
+    return contraparte.split()[-1] == nome_usuario.split()[-1]

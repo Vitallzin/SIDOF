@@ -219,7 +219,7 @@ def test_aplicacao_conta_como_reserva_e_nao_como_gasto(modelo):
     assert linha["poupanca_por_mes"] == pytest.approx(100)  # 200 em 2 meses
     saidas = Sistema(extrato, usuarios, modelo).saidas()
     aplicacao = saidas[(saidas["descricao"] == "APLICACAO RESERVA CDB") & (saidas["conta"] == "corrente")].iloc[0]
-    assert aplicacao["categoria_final"] == "transferencia_interna"
+    assert aplicacao["categoria_final"] == "guardar_investir"
 
 
 # ---------- Comparação com o banco ----------
@@ -228,9 +228,9 @@ def test_comparacao_com_a_categoria_do_banco(modelo):
     extrato, usuarios, _ = extrato_de_documentos([_extrato("colunas")], "CARLOS")
     comparacao = comparar_com_banco(Sistema(extrato, usuarios, modelo).saidas())
     assert comparacao is not None
-    # Posto, mercado (2x), aluguel, aplicação e pagamento da fatura têm equivalente; impostos não
-    assert comparacao["comparaveis"] + comparacao["pendentes"] == 6
-    assert "Impostos" in comparacao["categorias_sem_equivalente"]
+    # Posto, mercado (2x), aluguel, aplicação, pagamento da fatura e IPVA ("Impostos" no banco) têm equivalente
+    assert comparacao["comparaveis"] + comparacao["pendentes"] == 7
+    assert comparacao["categorias_sem_equivalente"] == []
     assert comparacao["concordam"] == comparacao["comparaveis"]  # todas resolvidas por regras claras
     assert comparacao["taxa"] == 1.0
 

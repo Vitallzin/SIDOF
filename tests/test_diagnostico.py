@@ -77,7 +77,7 @@ def test_fatura_e_transferencia_interna_nao_contam_duas_vezes():
     assert linha["gastos_total"] == 2500.0
     assert linha["sobra_media"] == 500.0
     assert linha["poupanca_por_mes"] == 300.0
-    assert "R$ 300,00 por mês foram para a poupança" in textos["U01"]
+    assert "R$ 300,00 por mês foram guardados" in textos["U01"]
 
 
 def test_bloco_de_cada_categoria():
