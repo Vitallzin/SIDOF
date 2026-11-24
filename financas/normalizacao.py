@@ -16,6 +16,7 @@ from financas.gerador import PASTA_PADRAO
 PREFIXOS_OPERACAO = [
     ("COMPRA DEBITO ", "compra_debito"),
     ("PIX ENVIADO ", "pix_enviado"),
+    ("PIX ENVIADO-", "pix_enviado"),
     ("PIX RECEBIDO ", "pix_recebido"),
     ("PAGTO BOLETO ", "pagto_boleto"),
     ("CREDITO SALARIO ", "credito_salario"),
@@ -46,7 +47,8 @@ def separar_operacao(descricao):
     """Separa o prefixo do banco da contraparte (quem recebeu ou pagou)."""
     for prefixo, operacao in PREFIXOS_OPERACAO:
         if descricao.startswith(prefixo):
-            return operacao, descricao[len(prefixo):]
+            # "PIX ENVIADO - MARIA SOUZA" -> contraparte "MARIA SOUZA"
+            return operacao, descricao[len(prefixo):].lstrip("- ").strip()
     return "outra", descricao
 
 

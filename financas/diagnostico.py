@@ -14,7 +14,7 @@ import pandas as pd
 from financas.categorias import CATEGORIAS
 from financas.formatacao import mes_por_extenso, reais
 from financas.parcelas import comprometimento_da_renda, compromissos_futuros, identificar_parcelamentos
-from financas.regras import CONFIANCA_MINIMA
+from financas.regras import CONFIANCA_MINIMA, REGRAS_INTERNAS
 from financas.renda import CATEGORIAS_RENDA_EFETIVA, classificar_entradas, perfil_de_renda, transferencias_por_par
 
 # Blocos do diagnóstico, na ordem em que aparecem: (nome, rótulo para o usuário)
@@ -73,7 +73,7 @@ def renda_por_mes(entradas, meses, usuarios=None):
 
 def movimentos_da_poupanca(classificado):
     """Transferências entre contas próprias do lado da poupança (+ entrou, - saiu)."""
-    internas = classificado["regra"].isin(["transferencia_propria", "pix_proprio_nome"]) | classificado["id_transacao"].isin(
+    internas = classificado["regra"].isin(REGRAS_INTERNAS) | classificado["id_transacao"].isin(
         transferencias_por_par(classificado)
     )
     return classificado[internas & (classificado["conta"] == "poupanca")]

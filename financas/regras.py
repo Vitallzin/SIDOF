@@ -35,12 +35,20 @@ class Regra:
         return None
 
 
+# Regras que indicam dinheiro do próprio usuário mudando de lugar (não é gasto nem renda)
+REGRAS_INTERNAS = ("transferencia_propria", "pix_proprio_nome", "aplicacao_propria")
+
 # Ordem importa: regras mais específicas primeiro.
 REGRAS = [
     # Movimentações que não são gasto nem renda
-    Regra("fatura_cartao", ("FATURA CARTAO",), "pagamento_fatura", 0.99),
+    Regra("fatura_cartao", ("FATURA CARTAO", "PAGAMENTO FATURA", "PAGTO FATURA", "PAG FATURA", "FATURA DO CARTAO"), "pagamento_fatura", 0.99),
     Regra("transferencia_propria", ("TRANSF ENTRE CONTAS PROPRIAS",), "transferencia_interna", 0.99, "qualquer"),
     Regra("salario", ("SALARIO",), "renda_fixa", 0.95, "entrada"),
+    # Entradas que não são renda do trabalho (rendimento vem antes de "poupança")
+    Regra("rendimento", ("RENDIMENTO", "RENDIMENTOS"), "renda_eventual", 0.90, "entrada"),
+    Regra("reembolso", ("REEMBOLSO", "ESTORNO", "DEVOLUCAO"), "renda_eventual", 0.85, "entrada"),
+    # Dinheiro guardado: aplicação e resgate de investimento/poupança do próprio usuário
+    Regra("aplicacao_propria", ("APLICACAO", "RESGATE", "POUPANCA"), "transferencia_interna", 0.90, "qualquer"),
     # Essenciais
     Regra("aluguel", ("IMOBILIARIA", "ALUGUEL", "CONDOMINIO"), "moradia", 0.95),
     Regra("energia", ("ENERGIA ELETRICA", "ENERGIA"), "energia", 0.95),

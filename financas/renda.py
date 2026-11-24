@@ -15,7 +15,7 @@ import pandas as pd
 
 from financas.formatacao import mes_por_extenso, reais
 from financas.normalizacao import normalizar_texto
-from financas.regras import CONFIANCA_MINIMA, MARCAS_DE_EMPRESA
+from financas.regras import CONFIANCA_MINIMA, MARCAS_DE_EMPRESA, REGRAS_INTERNAS
 
 # Palavras comuns em nomes de empresas (além de LTDA, ME, SA...)
 PALAVRAS_DE_EMPRESA = set(MARCAS_DE_EMPRESA) | {
@@ -83,8 +83,12 @@ def _decidir(linha, sobrenome_usuario, fonte, varias_fontes, eh_par):
     """Devolve (categoria, confiança, explicação) para uma entrada."""
     contraparte = linha["contraparte"]
 
-    if linha["regra"] in ("transferencia_propria", "pix_proprio_nome"):
+    if linha["regra"] in REGRAS_INTERNAS:
         return "transferencia_interna", linha["confianca"], linha["explicacao"]
+    if linha["regra"] == "rendimento":
+        return "renda_eventual", 0.90, "Rendimento de aplicação: entra dinheiro, mas não é renda do trabalho."
+    if linha["regra"] == "reembolso":
+        return "renda_eventual", 0.85, "Reembolso ou estorno: devolve um gasto, não é renda do trabalho."
     if eh_par:
         return "transferencia_interna", 0.85, "Saiu o mesmo valor de outra conta sua no mesmo dia: transferência entre contas."
     if linha["regra"] == "salario":
@@ -117,7 +121,7 @@ def classificar_entradas(classificado, usuarios):
     pares = transferencias_por_par(classificado)
     entradas = classificado[classificado["direcao"] == "entrada"].copy()
 
-    internas = entradas["regra"].isin(["transferencia_propria", "pix_proprio_nome"]) | entradas["id_transacao"].isin(pares)
+    internas = entradas["regra"].isin(REGRAS_INTERNAS) | entradas["id_transacao"].isin(pares)
     fontes = _resumo_das_fontes(entradas[~internas])
     # Quem tem salário (com ou sem a palavra) não é tratado como autônomo
     salario_sem_palavra = {

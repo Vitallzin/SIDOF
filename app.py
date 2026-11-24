@@ -3,8 +3,8 @@
 Mostra o diagnóstico, as perguntas do sistema, as notificações do mês, as parcelas e uma meta.
 A barra lateral escolhe de quem é o diagnóstico:
 - Usuário de simulação: um dos usuários fictícios, com um seletor que simula os meses chegando.
-- Minha fatura: uma ou mais faturas de cartão em PDF enviadas pela pessoa (lidas só em memória),
-  com a renda mensal opcional. Todas as abas passam a mostrar os dados dessas faturas.
+- Minha fatura: faturas de cartão e extratos de conta (PDF ou CSV) enviados pela pessoa (lidos só em
+  memória), com a renda mensal opcional. Todas as abas passam a mostrar os dados desses documentos.
 Usa só o sistema em uso (financas/sistema.py): nada aqui lê a verdade dos usuários.
 """
 
@@ -33,10 +33,7 @@ from financas.formatacao import mes_por_extenso, reais
 from financas.faturas_pdf import (
     ID_FATURA,
     compras_no_cartao,
-    extrair_texto,
-    extrato_de_faturas,
     gerar_fatura_pdf,
-    ler_linhas,
 )
 from financas.gerador import gerar_dados
 from financas.metas import Meta, acompanhar, aportes_por_mes, plano_da_meta, previsao
@@ -44,7 +41,10 @@ from financas.monitoramento import extrato_ate, notificacoes_do_mes
 from financas.parcelas import comprometimento_da_renda, compromissos_futuros, identificar_parcelamentos
 from financas.renda import classificar_entradas, perfil_de_renda
 from financas.normalizacao import normalizar_texto
-from financas.sistema import Sistema, classificar_fatura, treinar_modelo_da_base
+from financas.sistema import Sistema, treinar_modelo_da_base
+from financas.comparacao_banco import comparar_com_banco
+from financas.documentos import extrato_de_documentos
+from financas.extratos import EXTRATO, FATURA, ler_documento
 
 st.set_page_config(page_title="SIDOF · Diagnóstico financeiro", layout="wide")
 
@@ -295,26 +295,40 @@ def calcular(chave_fonte, mes, respostas, conhecimento_itens, lojas_no_modelo, _
     }
 
 
-@st.cache_data(max_entries=20, show_spinner="Lendo a fatura...")
-def ler_fatura(conteudo):
-    """Lê a fatura só em memória; nada é gravado em disco. Devolve (compras, linhas ignoradas, é fictícia?)."""
-    texto = extrair_texto(conteudo)
-    compras, ignoradas = ler_linhas(texto)
-    # As faturas de exemplo do SIDOF trazem "(FICTÍCIA)" no título: o voto delas não conta como fatura real
-    return compras, ignoradas, "(FICTICIA)" in normalizar_texto(texto)
+@st.cache_data(max_entries=20, show_spinner="Lendo o arquivo...")
+def ler_arquivo(conteudo, nome_arquivo):
+    """Lê a fatura ou o extrato só em memória; nada é gravado em disco.
+
+    Os exemplos do SIDOF trazem "fictícia/fictício" no título ou no nome: o voto deles não conta como dado real.
+    """
+    return ler_documento(conteudo, nome_arquivo)
+
+
+def _extrato_csv_de_exemplo(dono, meses_exemplo):
+    """Extrato fictício da conta corrente em CSV (as compras no cartão ficam nas faturas)."""
+    conta = extrato_simulado[
+        (extrato_simulado["id_usuario"] == dono) & (extrato_simulado["conta"] == "corrente")
+        & extrato_simulado["data"].str[:7].isin(meses_exemplo)
+    ].sort_values("data", kind="stable")
+    linhas = ["Data;Descrição;Valor"] + [
+        f"{pd.Timestamp(m.data):%d/%m/%Y};{m.descricao};{m.valor:.2f}".replace(".", ",") for m in conta.itertuples()
+    ]
+    return "\n".join(linhas).encode("utf-8")
 
 
 @st.cache_data(show_spinner=False)
-def faturas_de_exemplo():
-    """Três faturas fictícias seguidas de um usuário de simulação, num .zip, para testar o modo Minha fatura."""
+def documentos_de_exemplo():
+    """Três faturas fictícias seguidas e o extrato da conta dos mesmos meses, num .zip, para testar o modo Minha fatura."""
     no_cartao = extrato_simulado[extrato_simulado["meio"] == "cartao_credito"]
     dono = no_cartao["id_usuario"].value_counts().idxmax()  # quem mais usa o cartão
     nome = usuarios_simulados.set_index("id_usuario")["nome"][dono]
+    meses_exemplo = meses_simulados[-3:]
     pacote = io.BytesIO()
     with zipfile.ZipFile(pacote, "w") as arquivo_zip:
-        for mes_exemplo in meses_simulados[-3:]:
+        for mes_exemplo in meses_exemplo:
             pdf = gerar_fatura_pdf(compras_no_cartao(extrato_simulado, dono, mes_exemplo), f"{nome} (FICTICIA)", mes_exemplo)
             arquivo_zip.writestr(f"fatura_ficticia_{mes_exemplo}.pdf", pdf)
+        arquivo_zip.writestr("extrato_ficticio_conta.csv", _extrato_csv_de_exemplo(dono, meses_exemplo))
     return pacote.getvalue()
 
 
@@ -324,7 +338,7 @@ if "respostas" not in st.session_state:
 # ---------- Barra lateral ----------
 SIMULACAO, MINHA_FATURA = "Usuário de simulação", "Minha fatura"
 nomes_simulados = usuarios_simulados.set_index("id_usuario")["nome"]
-faturas = {}  # assinatura do arquivo -> (nome do arquivo, compras, linhas ignoradas, é fictícia?)
+documentos = {}  # assinatura do arquivo -> Documento (fatura ou extrato já lido)
 with st.sidebar:
     st.title("SIDOF")
     st.caption("Sistema Inteligente de Diagnóstico e Orientação Financeira")
@@ -343,26 +357,29 @@ with st.sidebar:
             "Renda mensal (opcional)", min_value=0.0, value=0.0, step=100.0, format="%.2f",
             help="Com a renda aparecem a sobra, as porcentagens e a comparação com as metas. Deixe 0 para não informar.",
         )
-        arquivos = st.file_uploader("Faturas em PDF (uma por mês)", type="pdf", accept_multiple_files=True)
+        arquivos = st.file_uploader(
+            "Faturas ou extratos (PDF ou CSV)", type=["pdf", "csv"], accept_multiple_files=True,
+            help="Faturas do cartão (uma por mês) e/ou extratos da conta. O sistema descobre sozinho qual é qual.",
+        )
         st.download_button(
-            "Baixar faturas de exemplo (3 meses)", data=faturas_de_exemplo(), file_name="faturas_ficticias_sidof.zip",
+            "Baixar exemplos (3 faturas + extrato)", data=documentos_de_exemplo(), file_name="exemplos_ficticios_sidof.zip",
             mime="application/zip", use_container_width=True,
         )
-        st.caption("Descompacte e envie os 3 PDFs. As faturas são lidas só em memória e nunca são salvas.")
+        st.caption("Descompacte e envie os arquivos. Eles são lidos só em memória e nunca são salvos.")
         for arquivo in arquivos or []:
             conteudo = arquivo.getvalue()
             # O mesmo arquivo enviado duas vezes conta uma vez só
-            faturas.setdefault(hashlib.sha256(conteudo).hexdigest(), (arquivo.name, *ler_fatura(conteudo)))
-        com_compras = {chave: item for chave, item in faturas.items() if not item[1].empty}
+            documentos.setdefault(hashlib.sha256(conteudo).hexdigest(), ler_arquivo(conteudo, arquivo.name))
+        com_compras = {chave: doc for chave, doc in documentos.items() if not doc.vazio}
         if com_compras:
-            extrato, usuarios = extrato_de_faturas(
-                [item[1] for item in com_compras.values()], normalizar_texto(nome_titular), renda_informada
+            extrato, usuarios, avisos = extrato_de_documentos(
+                list(com_compras.values()), normalizar_texto(nome_titular), renda_informada
             )
             meses = sorted(extrato["data"].str[:7].unique())
             if len(meses) > 1:
                 mes = st.select_slider(
                     "Mês da fatura", options=meses, value=meses[-1], format_func=mes_por_extenso,
-                    help="O diagnóstico olha as faturas até este mês.",
+                    help="O diagnóstico olha os documentos até este mês.",
                 )
             else:
                 mes = meses[0]
@@ -377,33 +394,35 @@ CORES = PALETAS["escuro" if escuro else "claro"]
 aplicar_tema(CORES)
 
 if modo_fatura:
-    ilegiveis = [item[0] for item in faturas.values() if item[1].empty]
+    ilegiveis = [doc.nome for doc in documentos.values() if doc.vazio]
     if ilegiveis:
         st.warning(
-            "Não encontrei compras no formato 'data, descrição, valor' em: " + ", ".join(ilegiveis) + ". "
-            "Faturas escaneadas (imagem) ou com layout muito diferente não são lidas por este protótipo."
+            "Não encontrei movimentações em: " + ", ".join(ilegiveis) + ". "
+            "Arquivos escaneados (imagem) ou com layout muito diferente não são lidos por este protótipo."
         )
     if not com_compras:
         st.header("Diagnóstico da sua fatura", anchor=False)
         st.markdown(
-            "Envie **uma ou mais faturas de cartão em PDF** na barra lateral (uma por mês). "
-            "Todo o diagnóstico, as perguntas, as parcelas e as metas passam a ser dessas faturas."
+            "Envie **faturas do cartão e/ou extratos da conta** (PDF ou CSV) na barra lateral. "
+            "Todo o diagnóstico, as perguntas, as parcelas e as metas passam a ser desses documentos."
         )
         st.caption(
-            "Funciona com faturas fictícias ou reais no formato comum 'data, descrição, parcela, valor'. "
-            "O arquivo não é salvo. Sem fatura à mão? Baixe as faturas de exemplo na barra lateral."
+            "Funciona com documentos fictícios ou reais. Na fatura, valores positivos são compras; no extrato, o sistema "
+            "descobre o que entrou e o que saiu (pelas colunas Entrada/Saída, pelo sinal, pelo saldo ou pelas palavras). "
+            "O arquivo não é salvo. Sem documento à mão? Baixe os exemplos na barra lateral."
         )
         st.stop()
     chave_fonte = "fatura|" + "|".join(sorted(com_compras)) + f"|{renda_informada}|{normalizar_texto(nome_titular)}"
     # Voto de fatura real só quando há alguma fatura que não é de exemplo
-    origem_voto = "ficticio" if all(item[3] for item in com_compras.values()) else "fatura"
+    origem_voto = "ficticio" if all(doc.ficticio for doc in com_compras.values()) else "fatura"
     primeiro_nome = nome_titular.strip().split()[0].title() if nome_titular.strip() else ""
-    # Métrica do aprendizado: quantas compras de cada fatura nova viraram pergunta (só números)
+    # Métrica do aprendizado: quantas saídas de cada documento novo viraram pergunta (só números)
     registradas = st.session_state.setdefault("faturas_registradas", set())
-    for assinatura, (_, compras, _, _) in com_compras.items():
+    for assinatura, doc in com_compras.items():
         if assinatura not in registradas:
             registradas.add(assinatura)
-            classificadas = classificar_fatura(compras, modelo, normalizar_texto(nome_titular), None, conhecimento)
+            extrato_do_doc, usuarios_do_doc, _ = extrato_de_documentos([doc], normalizar_texto(nome_titular))
+            classificadas = Sistema(extrato_do_doc, usuarios_do_doc, modelo, conhecimento).saidas()
             try:
                 registrar_uso_fatura(
                     armazenamento, len(classificadas), classificadas["perguntar_usuario"].sum(),
@@ -430,8 +449,14 @@ sem_renda = indicador["renda_media"] <= 0
 # ---------- Cabeçalho ----------
 st.header(f"Olá, {primeiro_nome}" if primeiro_nome else "Diagnóstico da sua fatura", anchor=False)
 if modo_fatura:
-    quantas = f"{len(com_compras)} fatura" + ("s" if len(com_compras) > 1 else "")
-    st.markdown(f"**Diagnóstico de {quantas} até {mes_por_extenso(mes)}**")
+    contagem = pd.Series([doc.tipo for doc in com_compras.values()]).value_counts()
+    partes = [
+        f"{contagem[tipo]} {nome}{'s' if contagem[tipo] > 1 else ''}"
+        for tipo, nome in ((FATURA, "fatura"), (EXTRATO, "extrato")) if tipo in contagem
+    ]
+    st.markdown(f"**Diagnóstico de {' e '.join(partes)} até {mes_por_extenso(mes)}**")
+    for aviso in avisos:
+        st.info(md(aviso))
 else:
     st.markdown(f"**Seu diagnóstico até {mes_por_extenso(mes)}**")
 st.caption(md(secoes["renda"]))
@@ -469,7 +494,7 @@ nomes_abas = {
     "metas": "Metas",
 }
 if modo_fatura:
-    nomes_abas["compras"] = "Compras das faturas"
+    nomes_abas["compras"] = "Movimentações"
 nomes_abas["aprendizado"] = "Aprendizado"
 abas = dict(zip(nomes_abas, st.tabs(list(nomes_abas.values()))))
 
@@ -747,50 +772,88 @@ with abas["metas"]:
         else:
             st.caption(f"O acompanhamento usa o que foi transferido para a poupança desde {mes_por_extenso(meses[0])}.")
 
-# ---------- Compras das faturas (só no modo Minha fatura) ----------
+# ---------- Movimentações (só no modo Minha fatura) ----------
+FORA_DOS_GASTOS_NA_TABELA = ("transferencia_interna", "pagamento_fatura")
 if modo_fatura:
     with abas["compras"]:
-        compras_vistas = resultado["saidas"]
-        compras_vistas = compras_vistas[compras_vistas["id_usuario"] == usuario]
-        automaticas = (~compras_vistas["perguntar_usuario"]).mean() if len(compras_vistas) else 0.0
-        pelo_coletivo = int((compras_vistas["origem"] == "coletivo").sum())
-        ignoradas = sum(item[2] for item in com_compras.values())
-        st.markdown(f'<div class="secao">Compras lidas até {mes_por_extenso(mes)}</div>', unsafe_allow_html=True)
+        saidas_vistas = resultado["saidas"]
+        saidas_vistas = saidas_vistas[(saidas_vistas["id_usuario"] == usuario) & (saidas_vistas["conta"] != "poupanca")]
+        gastos_vistos = saidas_vistas[~saidas_vistas["categoria_final"].isin(FORA_DOS_GASTOS_NA_TABELA)]
+        automaticas = (~saidas_vistas["perguntar_usuario"]).mean() if len(saidas_vistas) else 0.0
+        pelo_coletivo = int((saidas_vistas["origem"] == "coletivo").sum())
+        ignoradas = sum(doc.ignoradas for doc in com_compras.values())
+        st.markdown(f'<div class="secao">Saídas lidas até {mes_por_extenso(mes)}</div>', unsafe_allow_html=True)
         st.caption(
             "Cada fatura conta como um mês (compras do fim do mês anterior entram no mês da fatura). "
-            "Pagamentos, créditos e estornos da fatura são ignorados."
+            "Aplicações, transferências entre suas contas e pagamentos de fatura aparecem na tabela, mas não contam como gasto."
         )
         colunas = st.columns(4)
-        colunas[0].markdown(cartao("Compras lidas", str(len(compras_vistas)), f"{ignoradas} linha(s) ignorada(s)"), unsafe_allow_html=True)
-        colunas[1].markdown(cartao("Total das compras", reais_curto(-compras_vistas["valor"].sum())), unsafe_allow_html=True)
+        colunas[0].markdown(cartao("Saídas lidas", str(len(saidas_vistas)), f"{ignoradas} linha(s) ignorada(s)"), unsafe_allow_html=True)
+        colunas[1].markdown(cartao("Total dos gastos", reais_curto(-gastos_vistos["valor"].sum())), unsafe_allow_html=True)
         colunas[2].markdown(cartao("Classificadas sozinho", f"{automaticas:.0%}", "o resto vira pergunta"), unsafe_allow_html=True)
         colunas[3].markdown(cartao("Aprendidas com outros", str(pelo_coletivo), "lojas que usuários já ensinaram"), unsafe_allow_html=True)
         st.write("")
 
         por_categoria = (
-            compras_vistas.assign(categoria=compras_vistas["categoria_final"].map(nome_exibicao), valor=-compras_vistas["valor"])
+            gastos_vistos.assign(categoria=gastos_vistos["categoria_final"].map(nome_exibicao), valor=-gastos_vistos["valor"])
             .groupby("categoria", as_index=False)["valor"].sum()
         )
         barras = alt.Chart(por_categoria).mark_bar(cornerRadius=4, color="#0F766E").encode(
             x=alt.X("valor:Q", title="R$"),
-            y=alt.Y("categoria:N", title=None, sort="-x"),
+            y=alt.Y("categoria:N", title=None, sort="-x", axis=alt.Axis(labelOverlap=False, labelLimit=220)),
             tooltip=[alt.Tooltip("categoria:N", title="Categoria"), alt.Tooltip("valor:Q", title="R$", format=",.2f")],
         ).properties(height=max(140, 32 * len(por_categoria)))
         st.markdown('<div class="secao">Gastos por categoria</div>', unsafe_allow_html=True)
         st.altair_chart(estilo_grafico(barras), use_container_width=True)
 
-        tabela = compras_vistas.sort_values("data").assign(
-            Data=compras_vistas["data"].dt.strftime("%d/%m/%Y"),
-            Valor=(-compras_vistas["valor"]).map(reais),
-            Categoria=compras_vistas["categoria_final"].map(nome_exibicao),
-            Confiança=compras_vistas["confianca_final"].map(lambda valor: f"{valor:.0%}"),
-        ).rename(columns={"descricao": "Descrição", "parcela": "Parcela", "explicacao_final": "Por quê"})
-        st.dataframe(
-            tabela[["Data", "Descrição", "Parcela", "Valor", "Categoria", "Confiança", "Por quê"]],
-            hide_index=True, use_container_width=True,
-        )
+        comparacao = comparar_com_banco(saidas_vistas)
+        if comparacao:
+            st.markdown('<div class="secao">O SIDOF concorda com o banco?</div>', unsafe_allow_html=True)
+            st.caption(
+                "O extrato traz a categoria que o próprio banco deu a cada saída. O SIDOF não usa essa coluna para "
+                "classificar: ele classifica sozinho e só depois compara. Categorias do banco sem equivalente no SIDOF "
+                "ficam de fora" + (f" ({', '.join(comparacao['categorias_sem_equivalente'])})." if comparacao["categorias_sem_equivalente"] else ".")
+            )
+            colunas = st.columns(3)
+            colunas[0].markdown(
+                cartao("Concordância", f"{comparacao['taxa']:.0%}", f"{comparacao['concordam']} de {comparacao['comparaveis']} saídas"),
+                unsafe_allow_html=True,
+            )
+            colunas[1].markdown(cartao("Ainda a confirmar", str(comparacao["pendentes"]), "o SIDOF vai perguntar"), unsafe_allow_html=True)
+            colunas[2].markdown(cartao("Sem equivalente", str(comparacao["sem_equivalente"]), "fora da comparação"), unsafe_allow_html=True)
+            st.write("")
+            por_banco = comparacao["por_categoria"]
+            barras_banco = alt.Chart(por_banco).mark_bar(cornerRadius=4, color="#3B82F6").encode(
+                x=alt.X("taxa:Q", title="Concordância", axis=alt.Axis(format="%"), scale=alt.Scale(domain=[0, 1])),
+                y=alt.Y("categoria_banco:N", title=None, sort="-x", axis=alt.Axis(labelOverlap=False, labelLimit=220)),
+                tooltip=[
+                    alt.Tooltip("categoria_banco:N", title="Categoria do banco"),
+                    alt.Tooltip("transacoes:Q", title="Saídas comparadas"),
+                    alt.Tooltip("concordam:Q", title="Concordam"),
+                ],
+            ).properties(height=max(140, 30 * len(por_banco)))
+            st.altair_chart(estilo_grafico(barras_banco), use_container_width=True)
+            if len(comparacao["discordancias"]):
+                with st.expander(f"Onde o SIDOF e o banco discordam ({len(comparacao['discordancias'])})"):
+                    st.dataframe(
+                        comparacao["discordancias"].rename(columns={"descricao": "Descrição", "categoria_banco": "Banco", "sidof": "SIDOF"}),
+                        hide_index=True, use_container_width=True,
+                    )
+                    st.caption("Discordar não quer dizer que o SIDOF errou: academia, por exemplo, pode ser saúde ou assinatura.")
+
+        tabela = saidas_vistas.sort_values("data").assign(
+            Data=saidas_vistas["data"].dt.strftime("%d/%m/%Y"),
+            Valor=(-saidas_vistas["valor"]).map(reais),
+            Categoria=saidas_vistas["categoria_final"].map(nome_exibicao),
+            Confiança=saidas_vistas["confianca_final"].map(lambda valor: f"{valor:.0%}"),
+        ).rename(columns={"descricao": "Descrição", "parcela": "Parcela", "explicacao_final": "Por quê", "categoria_banco": "Banco"})
+        mostrar = ["Data", "Descrição", "Parcela", "Valor", "Categoria", "Confiança", "Por quê"]
+        if comparacao:
+            mostrar.insert(5, "Banco")
+        st.markdown('<div class="secao">Todas as saídas</div>', unsafe_allow_html=True)
+        st.dataframe(tabela[mostrar], hide_index=True, use_container_width=True)
         if len(perguntas_usuario):
-            st.caption(f"{len(perguntas_usuario)} compra(s) com confiança baixa estão na aba Perguntas, esperando sua confirmação.")
+            st.caption(f"{len(perguntas_usuario)} saída(s) com confiança baixa estão na aba Perguntas, esperando sua confirmação.")
 
 # ---------- Aprendizado ----------
 with abas["aprendizado"]:

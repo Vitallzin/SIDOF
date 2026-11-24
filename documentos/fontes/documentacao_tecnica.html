@@ -39,7 +39,7 @@
     <div><b>9</b> Diagnóstico financeiro</div>
     <div><b>10</b> Metas financeiras</div>
     <div><b>11</b> Detecção de anomalias</div>
-    <div><b>12</b> Faturas em PDF</div>
+    <div><b>12</b> Faturas e extratos</div>
     <div><b>13</b> Sistema em uso e interface</div>
     <div><b>14</b> Avaliação final e testes</div>
     <div><b>15</b> Ética, privacidade e limitações</div>
@@ -96,7 +96,7 @@
     <div class="cartao"><div class="rotulo">Pessoas inadimplentes</div><div class="valor">80,6 mi</div><div class="detalhe">recorde histórico (Serasa, nov. 2025)</div></div>
   </div>
   <p>O cartão de crédito concentra a maior parte das dívidas, e é justamente onde parcelas se acumulam sem que a pessoa
-    perceba o total comprometido. Por isso o sistema dá atenção especial a parcelamentos e aceita faturas de cartão em PDF.</p>
+    perceba o total comprometido. Por isso o sistema dá atenção especial a parcelamentos e aceita faturas de cartão e extratos de conta, em PDF ou CSV.</p>
 
   <h2>Por que só regras não bastam</h2>
   <p>Um extrato real é bagunçado: "SUPERMERCADO BOM PRECO" aparece como "SUPE BOM PRECO", "LV*SUPERMERCADOBOMPRECO" ou
@@ -402,11 +402,21 @@
 
 <!-- ===================== 12. FATURAS ===================== -->
 <section class="capitulo">
-  <h1><span class="numero">12</span>Faturas em PDF</h1>
+  <h1><span class="numero">12</span>Faturas e extratos</h1>
   <p>O sistema aceita faturas de cartão em PDF de qualquer origem. O leitor é genérico: procura linhas no formato mais comum
     das faturas brasileiras — <code>data · descrição · [parcela] · valor</code> — e entende variações como
     <code>06/03/2026 LOJA X PARC 02 DE 05 R$ 89,90</code>. O ano vem da data de vencimento, inclusive na virada de ano.
     Pagamentos, totais, estornos e créditos são ignorados.</p>
+  <h2>Extratos de conta (PDF ou CSV)</h2>
+  <p>Fatura e extrato usam o sinal ao contrário (na fatura, positivo é compra; no extrato, negativo é saída), então o
+    sistema primeiro descobre o tipo do documento. No extrato, decide entrada ou saída do jeito mais seguro para o mais
+    fraco: coluna <em>Entrada/Saída</em> pela posição do número na página, sinal escrito (<code>-92,79</code>,
+    <code>92,79 D</code>), variação do <em>saldo</em> e, por último, palavras como "PIX RECEBIDO". Três formatos do mesmo
+    extrato fictício de 6 meses (com sinal, com colunas, com saldo) deram o mesmo resultado: 251 linhas, nenhuma ignorada,
+    e os totais de entradas e saídas iguais aos impressos no próprio extrato. Para não duplicar: a renda do extrato vale mais
+    que a digitada, o pagamento da fatura no extrato não é gasto e o mesmo documento em dois formatos conta uma vez.
+    A categoria que o banco põe no extrato não é usada para classificar, só para comparar depois: nesse extrato, o SIDOF
+    concordou com o banco em 82% das saídas comparáveis (as demais ainda viram pergunta).</p>
   <h2>Teste interno de ida e volta</h2>
   <p>O sistema gera uma fatura fictícia em PDF de cada usuário em cada mês, lê de volta e confere com a verdade.
     O modelo também treina com as compras escritas como aparecem nessas faturas.</p>
@@ -438,7 +448,7 @@
   <h2>Interface (Streamlit)</h2>
   <p>Na barra lateral, escolhe-se de quem é o diagnóstico. Em <strong>Usuário de simulação</strong>, um dos usuários fictícios
     e o <strong>mês atual</strong>, que simula os meses chegando (o sistema só enxerga o extrato até ele). Em
-    <strong>Minha fatura</strong>, a pessoa envia uma ou mais faturas de cartão em PDF (uma por mês, lidas só em memória),
+    <strong>Minha fatura</strong>, a pessoa envia faturas de cartão e/ou extratos de conta em PDF ou CSV (lidos só em memória),
     com o nome e a renda mensal opcionais; cada fatura conta como um mês e todas as abas passam a mostrar esses dados.
     Sem a renda, o diagnóstico mostra só os gastos (sobra e porcentagens aparecem como "—"). Há tema claro e escuro.</p>
   <table>
@@ -448,7 +458,7 @@
     <tr><td>Perguntas</td><td>O que o sistema não sabe, com a sugestão do modelo; cada resposta vale para pagamentos parecidos.</td></tr>
     <tr><td>Parcelas</td><td>Valor reservado nos próximos 12 meses e cada parcelamento com barra de progresso.</td></tr>
     <tr><td>Metas</td><td>Anel de progresso, marcos de 25% a 100%, próximo passo e gráfico guardado × necessário.</td></tr>
-    <tr><td>Compras das faturas</td><td>Só no modo Minha fatura: compras lidas, classificadas sozinho, gráfico por categoria e tabela com o porquê.</td></tr>
+    <tr><td>Movimentações</td><td>Só no modo Minha fatura: saídas lidas, classificadas sozinho, gráfico por categoria, tabela com o porquê e a concordância com a categoria do banco.</td></tr>
     <tr><td>Aprendizado</td><td>Lojas aprendidas com os usuários, origem dos votos e gráfico de perguntas por fatura ao longo do tempo.</td></tr>
   </table>
   <h2>Aprendizado contínuo</h2>

@@ -3,7 +3,7 @@
 Protótipo de estudo de **educação financeira**. A partir do histórico de transações de uma pessoa (PIX, boletos,
 cartão de débito e crédito, transferências), o sistema classifica cada gasto com um nível de confiança, entende a
 renda, projeta as parcelas futuras, monta um diagnóstico em linguagem neutra, acompanha metas e aponta gastos fora
-do padrão. Também aceita faturas de cartão em PDF.
+do padrão. Também aceita faturas de cartão e extratos de conta, em PDF ou CSV.
 
 > **Todos os dados de desenvolvimento são fictícios.** Eles mostram que o sistema funciona e é coerente, mas não
 > provam o desempenho com extratos reais (veja [Limitações](#limitações)).
@@ -59,10 +59,10 @@ Na barra lateral, escolha de quem é o diagnóstico:
 
 - **Usuário de simulação**: um dos 12 usuários fictícios e o "mês atual", que simula os meses chegando (o sistema só
   enxerga o extrato até ele).
-- **Minha fatura**: envie uma ou mais faturas de cartão em PDF (uma por mês), com seu nome e a renda mensal (ambos
-  opcionais). Todas as abas passam a mostrar o diagnóstico dessas faturas. Sem a renda, aparecem só os gastos; com ela,
-  aparecem também a sobra, as porcentagens e a comparação com as metas. Há um botão para baixar 3 faturas fictícias
-  de exemplo.
+- **Minha fatura**: envie faturas do cartão e/ou extratos da conta, em PDF ou CSV, com seu nome e a renda mensal
+  (ambos opcionais). Todas as abas passam a mostrar o diagnóstico desses documentos. Sem renda (nem no extrato, nem
+  digitada), aparecem só os gastos; com ela, aparecem também a sobra, as porcentagens e a comparação com as metas.
+  Há um botão para baixar exemplos fictícios (3 faturas em PDF e o extrato da conta em CSV).
 
 Também há o tema claro ou escuro. Abas:
 
@@ -71,7 +71,8 @@ Também há o tema claro ou escuro. Abas:
 - **Perguntas**: o que o sistema não sabe; cada resposta vale também para pagamentos parecidos.
 - **Parcelas**: valor já reservado nos próximos 12 meses e cada parcelamento com barra de progresso.
 - **Metas**: quanto reservar por mês, progresso, marcos e próximo passo.
-- **Compras das faturas** (só no modo Minha fatura): cada compra lida, com categoria, confiança e o porquê.
+- **Movimentações** (só no modo Minha fatura): cada saída lida, com categoria, confiança e o porquê; quando o extrato
+  traz a categoria do banco, mostra também quanto o SIDOF concorda com ela.
 - **Aprendizado**: o que o SIDOF já aprendeu com os usuários e o gráfico de perguntas por fatura ao longo do tempo.
 
 **Rodar os testes:**
@@ -80,11 +81,27 @@ Também há o tema claro ou escuro. Abas:
 .venv\Scripts\python -m pytest
 ```
 
-### Faturas em PDF e privacidade
+### Faturas, extratos e privacidade
 
-O leitor é genérico e entende linhas no formato "data, descrição, parcela, valor". O arquivo da fatura **nunca é
-salvo**: não fica no servidor nem vai para o repositório (`*.pdf` está no `.gitignore`, exceto os PDFs de
-`documentos/`). Faturas escaneadas (imagem) ou com layout muito diferente não são lidas.
+Fatura e extrato usam o sinal ao contrário: na fatura, valor positivo é compra; no extrato, negativo é saída. Por isso
+o sistema primeiro descobre o tipo do documento (título "Extrato"/"Fatura", colunas Entrada/Saída/Saldo). No extrato,
+decide se cada linha entrou ou saiu, do jeito mais seguro para o mais fraco: coluna Entrada/Saída (pela posição na
+página), sinal escrito ("-92,79", "92,79 D"), variação do saldo e, por último, palavras ("PIX RECEBIDO", "SALÁRIO").
+O CSV aceita `;` ou `,`, vírgula ou ponto decimal, acentos em UTF-8 ou Latin-1 e reconhece as colunas pelo nome.
+
+Para não contar nada duas vezes:
+
+- **Renda:** se o extrato já mostra salário num mês, vale o do extrato; a renda digitada entra só nos meses sem renda.
+- **Fatura + extrato:** o pagamento da fatura no extrato não é gasto (as compras já estão na fatura). Sem a fatura,
+  a tela avisa que as compras do cartão não aparecem em detalhe.
+- **Mesmo documento em dois formatos** (ex.: PDF e CSV): cada movimentação conta uma vez.
+
+Aplicações e resgates (CDB, poupança) contam como dinheiro guardado; rendimentos e reembolsos entram, mas não são
+renda do trabalho. Quando o extrato traz a categoria do banco, o SIDOF **não a usa para classificar**: classifica
+sozinho e depois compara. Num extrato fictício de 6 meses, concordou com o banco em 82% das saídas comparáveis.
+
+O arquivo **nunca é salvo**: não fica no servidor nem vai para o repositório (`*.pdf` está no `.gitignore`, exceto os
+PDFs de `documentos/`). Documentos escaneados (imagem) ou com layout muito diferente não são lidos.
 
 ### Aprendizado contínuo (Firebase)
 

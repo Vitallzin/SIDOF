@@ -27,7 +27,7 @@ Contexto completo:
   - Lembre que os dados são sintéticos: resultados não provam desempenho no mundo real.
 - **Anomalias:** o modelo é não supervisionado. Os rótulos das anomalias plantadas servem **só para avaliar**, nunca para treinar.
 - **Dados:** os dados do projeto (gerador, testes, treino, avaliação) são sempre fictícios. Nunca colocar chaves de API ou credenciais no código.
-- **Faturas em PDF (decisão do maestro):** a interface aceita faturas enviadas pelos testadores, inclusive reais. O arquivo nunca é salvo (nem em disco, nem no Git: `*.pdf` está no .gitignore).
+- **Faturas e extratos (decisão do maestro):** a interface aceita faturas de cartão e extratos de conta (PDF ou CSV) enviados pelos testadores, inclusive reais. O arquivo nunca é salvo (nem em disco, nem no Git: `*.pdf` está no .gitignore). Sem duplicar: a renda do extrato vale mais que a digitada; o pagamento da fatura no extrato não é gasto; o mesmo documento em dois formatos conta uma vez. A categoria que o banco põe no extrato nunca é usada para classificar, só para comparar.
 - **Aprendizado contínuo (decisão do maestro):** só o par loja → categoria que o usuário confirma (aba Perguntas, com usuários de simulação ou no modo Minha fatura) vai para o aprendizado coletivo (Firebase, chave só nos Secrets do Streamlit), com a origem do voto e um código aleatório de sessão. Nunca guardar valores, datas, o arquivo, PIX para pessoas, renda ou transferências. Uma loja vale para todos com 2 confirmações de sessões diferentes e entra no re-treino do modelo.
 - **Código:** simples e legível, funções pequenas, sem otimização prematura.
 
