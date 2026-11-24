@@ -21,7 +21,7 @@ from financas.renda import classificar_entradas, perfil_de_renda
 from financas.normalizacao import normalizar_texto
 from financas.sistema import Sistema, classificar_fatura, treinar_modelo_da_base
 
-st.set_page_config(page_title="Diagnóstico financeiro (protótipo)", layout="wide")
+st.set_page_config(page_title="SIDOF · Diagnóstico financeiro", layout="wide")
 
 # ---------- Visual ----------
 
@@ -220,7 +220,8 @@ if "respostas" not in st.session_state:
 # ---------- Barra lateral ----------
 nomes = usuarios.set_index("id_usuario")["nome"]
 with st.sidebar:
-    st.title("Diagnóstico financeiro")
+    st.title("SIDOF")
+    st.caption("Sistema Inteligente de Diagnóstico e Orientação Financeira")
     usuario = st.selectbox("Usuário", list(nomes.index), format_func=lambda u: f"{u} · {nomes[u].title()}")
     mes = st.select_slider(
         "Mês atual (simulação)", options=meses[2:], value=meses[-1], format_func=mes_por_extenso,

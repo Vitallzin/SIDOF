@@ -1,0 +1,94 @@
+/* Estilo comum dos documentos em PDF (impressos pelo Microsoft Edge a partir do HTML) */
+@page { size: A4; margin: 18mm 17mm 20mm 17mm; }
+@page capa { margin: 0; }
+
+:root {
+  --verde: #0F766E;
+  --verde-claro: #E6F2F0;
+  --verde-medio: #99CBC4;
+  --texto: #1F2937;
+  --suave: #6B7280;
+  --linha: #E5ECEA;
+  --roxo: #8B5CF6;
+  --azul: #3B82F6;
+  --laranja: #F59E0B;
+  --cinza: #9CA3AF;
+  --vermelho: #B91C1C;
+}
+
+* { box-sizing: border-box; }
+html { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+body { font-family: "Segoe UI", Calibri, Arial, sans-serif; color: var(--texto); font-size: 10.5pt; line-height: 1.55; margin: 0; }
+
+h1, h2, h3, h4 { font-family: "Segoe UI Semibold", "Segoe UI", Arial, sans-serif; color: #0B3B37; line-height: 1.25; }
+h1 { font-size: 21pt; margin: 0 0 4mm 0; padding-bottom: 2.5mm; border-bottom: 3px solid var(--verde); break-after: avoid; }
+h1 .numero { color: var(--verde); margin-right: 3mm; }
+h2 { font-size: 13.5pt; margin: 6mm 0 2mm 0; color: var(--verde); break-after: avoid; }
+h3 { font-size: 11pt; margin: 4mm 0 1.5mm 0; break-after: avoid; }
+p { margin: 0 0 2.6mm 0; text-align: justify; }
+ul, ol { margin: 0 0 3mm 0; padding-left: 6mm; }
+li { margin-bottom: 1.2mm; }
+strong { color: #0B3B37; }
+code { font-family: Consolas, "Courier New", monospace; font-size: 9pt; background: #F1F5F4; padding: .3mm 1.2mm; border-radius: 1mm; }
+pre { font-family: Consolas, monospace; font-size: 8.8pt; background: #F6F8F7; border: 1px solid var(--linha); border-left: 4px solid var(--verde);
+      padding: 3mm 4mm; border-radius: 2mm; white-space: pre-wrap; margin: 0 0 3mm 0; break-inside: avoid; }
+
+.capitulo { break-before: page; }
+.continua { margin-top: 10mm; }
+.sem-quebra { break-inside: avoid; }
+
+/* Capa */
+.capa { page: capa; width: 210mm; height: 296mm; display: flex; flex-direction: column; justify-content: space-between;
+        background: linear-gradient(160deg, #0B3B37 0%, #0F766E 60%, #14B8A6 100%); color: #FFFFFF;
+        margin: 0; padding: 34mm 24mm 22mm 24mm; overflow: hidden; }
+.capa .selo { display: inline-block; border: 1px solid rgba(255,255,255,.6); border-radius: 999px; padding: 1.5mm 5mm;
+              font-size: 9pt; letter-spacing: .08em; text-transform: uppercase; }
+.capa h1 { color: #FFFFFF; border: none; font-size: 30pt; margin: 14mm 0 6mm 0; line-height: 1.15; }
+.capa .subtitulo { font-size: 13pt; opacity: .92; max-width: 140mm; line-height: 1.5; }
+.capa .rodape { font-size: 10pt; opacity: .9; border-top: 1px solid rgba(255,255,255,.35); padding-top: 5mm; display: flex; justify-content: space-between; }
+.capa .numeros { display: flex; gap: 6mm; margin-top: 14mm; }
+.capa .numeros div { background: rgba(255,255,255,.12); border-radius: 3mm; padding: 4mm 5mm; flex: 1; }
+.capa .numeros b { display: block; font-size: 18pt; }
+.capa .numeros span { font-size: 8.5pt; opacity: .9; }
+
+/* Sumário */
+.sumario { columns: 2; column-gap: 10mm; font-size: 10.5pt; }
+.sumario div { padding: 1.4mm 0; border-bottom: 1px dotted var(--linha); break-inside: avoid; }
+.sumario b { color: var(--verde); display: inline-block; width: 8mm; }
+
+/* Caixas e cartões */
+.caixa { background: var(--verde-claro); border-left: 4px solid var(--verde); border-radius: 2mm; padding: 3mm 4.5mm; margin: 0 0 3.5mm 0; break-inside: avoid; }
+.caixa.aviso { background: #FEF7E6; border-left-color: var(--laranja); }
+.caixa.alerta { background: #FDECEC; border-left-color: var(--vermelho); }
+.caixa p:last-child { margin-bottom: 0; }
+.caixa .titulo { font-weight: 600; color: #0B3B37; margin-bottom: 1mm; }
+
+.grade { display: grid; grid-template-columns: repeat(3, 1fr); gap: 3.5mm; margin: 0 0 4mm 0; }
+.grade.duas { grid-template-columns: repeat(2, 1fr); }
+.grade.quatro { grid-template-columns: repeat(4, 1fr); }
+.cartao { border: 1px solid var(--linha); border-radius: 2.5mm; padding: 3.5mm 4mm; background: #FFFFFF; break-inside: avoid; }
+.cartao .rotulo { font-size: 8pt; text-transform: uppercase; letter-spacing: .05em; color: var(--suave); }
+.cartao .valor { font-size: 17pt; font-weight: 700; color: var(--verde); line-height: 1.2; }
+.cartao .detalhe { font-size: 8.5pt; color: var(--suave); }
+.cartao h3 { margin-top: 0; }
+.cartao p, .caixa p { text-align: left; }
+
+/* Tabelas */
+table { width: 100%; border-collapse: collapse; margin: 0 0 4mm 0; font-size: 9.3pt; break-inside: avoid; }
+th { background: var(--verde); color: #FFFFFF; text-align: left; font-weight: 600; padding: 2mm 2.5mm; }
+td { padding: 1.8mm 2.5mm; border-bottom: 1px solid var(--linha); vertical-align: top; }
+tr:nth-child(even) td { background: #F7FAF9; }
+td.num, th.num { text-align: right; white-space: nowrap; }
+.legenda { font-size: 8.5pt; color: var(--suave); margin: -2mm 0 4mm 0; }
+
+.etiqueta { display: inline-block; font-size: 8pt; padding: .4mm 2mm; border-radius: 999px; background: var(--verde-claro); color: var(--verde); font-weight: 600; }
+.etiqueta.laranja { background: #FEF3C7; color: #92400E; }
+.etiqueta.vermelha { background: #FDECEC; color: var(--vermelho); }
+
+figure { margin: 0 0 4mm 0; break-inside: avoid; }
+figcaption { font-size: 8.5pt; color: var(--suave); text-align: center; margin-top: 1mm; }
+svg text { font-family: "Segoe UI", Arial, sans-serif; }
+
+.referencias p { text-align: left; padding-left: 0; margin-bottom: 3mm; }
+
+.capa p { text-align: left; }

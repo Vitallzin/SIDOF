@@ -21,6 +21,7 @@ from financas.avaliacao import (
     relatorio_sistema,
     relatorio_renda,
 )
+from financas.avaliacao_final import indicadores_por_usuario, relatorio_final
 from financas.anomalias import detectar_estatistico, detectar_isolation_forest
 from financas.diagnostico import diagnosticar
 from financas.faturas_pdf import compras_no_cartao, gerar_fatura_pdf, ler_faturas_do_conjunto
@@ -139,6 +140,17 @@ def executar():
     }
     texto = relatorio_faturas(avaliar_faturas(ler_faturas_do_conjunto(extrato, usuarios), extrato, verdade, modelos))
     (PASTA_PADRAO / "relatorio_faturas.txt").write_text(texto, encoding="utf-8")
+    print(texto)
+    print()
+
+    # Fase 10: indicadores da seção 19 da proposta
+    por_usuario = indicadores_por_usuario(
+        indicadores, compromissos, aportes_por_mes(classificado, sorted(classificado["mes"].unique())),
+        carregar_usuarios_verdade(pasta),
+    )
+    por_usuario.to_csv(PASTA_PADRAO / "indicadores_finais.csv", index=False)
+    texto = relatorio_final(atendido.saidas(), verdade, por_usuario, resultados["estatístico"])
+    (PASTA_PADRAO / "relatorio_final.txt").write_text(texto, encoding="utf-8")
     print(texto)
 
 

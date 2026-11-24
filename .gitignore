@@ -9,3 +9,6 @@ dados_gerados/*
 
 # Faturas em PDF (podem ser reais): nunca vão para o repositório
 *.pdf
+# ...exceto a documentação do projeto
+!documentos/*.pdf
+.claude

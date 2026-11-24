@@ -1,0 +1,549 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>SIDOF · Documentação Técnica</title>
+<link rel="stylesheet" href="estilo.css">
+</head>
+<body>
+
+<!-- ===================== CAPA ===================== -->
+<section class="capa">
+  <div>
+    <span class="selo">Documentação técnica · Protótipo de estudo</span>
+    <h1>SIDOF</h1>
+    <p class="subtitulo" style="font-size:16pt;margin-bottom:6mm">Sistema Inteligente de Diagnóstico e Orientação Financeira</p>
+    <p class="subtitulo">Como o sistema funciona por dentro: dados, regras, aprendizado de máquina, renda, parcelas,
+      diagnóstico, metas, detecção de anomalias, leitura de faturas em PDF e a avaliação honesta de cada parte.</p>
+    <div class="numeros">
+      <div><b>2.536</b><span>transações fictícias analisadas</span></div>
+      <div><b>89,7%</b><span>das saídas classificadas sozinho, com 99,8% de acerto</span></div>
+      <div><b>168</b><span>testes automáticos passando</span></div>
+    </div>
+  </div>
+  <div class="rodape"><span>Python · pandas · scikit-learn · Streamlit</span><span>Novembro de 2026</span></div>
+</section>
+
+<!-- ===================== SUMÁRIO ===================== -->
+<section class="capitulo">
+  <h1>Sumário</h1>
+  <div class="sumario">
+    <div><b>1</b> Visão geral</div>
+    <div><b>2</b> O problema e o contexto</div>
+    <div><b>3</b> Arquitetura e fluxo de dados</div>
+    <div><b>4</b> Dados sintéticos</div>
+    <div><b>5</b> Normalização e regras</div>
+    <div><b>6</b> Modelo de aprendizado de máquina</div>
+    <div><b>7</b> Renda e transferências internas</div>
+    <div><b>8</b> Parcelas e compromissos futuros</div>
+    <div><b>9</b> Diagnóstico financeiro</div>
+    <div><b>10</b> Metas financeiras</div>
+    <div><b>11</b> Detecção de anomalias</div>
+    <div><b>12</b> Faturas em PDF</div>
+    <div><b>13</b> Sistema em uso e interface</div>
+    <div><b>14</b> Avaliação final e testes</div>
+    <div><b>15</b> Ética, privacidade e limitações</div>
+    <div><b>16</b> Como executar</div>
+    <div><b>&nbsp;</b> Referências</div>
+  </div>
+
+  <div class="caixa aviso" style="margin-top:8mm">
+    <div class="titulo">Leia antes</div>
+    <p>Todos os números deste documento vêm de <strong>dados fictícios</strong> gerados pelo próprio projeto, com semente
+      aleatória fixa (os mesmos dados a cada execução). Eles mostram que o funcionamento está correto e coerente, mas
+      <strong>não provam</strong> o desempenho com extratos reais. As limitações estão detalhadas no capítulo 15.</p>
+  </div>
+</section>
+
+<!-- ===================== 1. VISÃO GERAL ===================== -->
+<section class="capitulo">
+  <h1><span class="numero">1</span>Visão geral</h1>
+  <p>O projeto é um protótipo de <strong>educação financeira</strong>. A partir do histórico de transações de uma pessoa
+    (PIX, boletos, cartão de débito e crédito, transferências), ele monta um retrato da vida financeira dela e explica,
+    em linguagem neutra, para onde o dinheiro está indo. O objetivo não é dizer quanto a pessoa gastou, mas
+    <strong>compreender o comportamento financeiro</strong> e ajudar a organizar o dinheiro, formar reserva e atingir objetivos.</p>
+
+  <h2>O que o sistema faz</h2>
+  <div class="grade">
+    <div class="cartao"><h3>Classifica</h3><p>Cada gasto recebe uma categoria (mercado, aluguel, lazer…) e um nível de confiança. Sem certeza, pergunta ao usuário.</p></div>
+    <div class="cartao"><h3>Entende a renda</h3><p>Separa salário, renda de autônomo, ajuda da família, renda não identificada e transferências entre contas próprias.</p></div>
+    <div class="cartao"><h3>Projeta parcelas</h3><p>Junta as parcelas de cada compra e mostra quanto da renda futura já está comprometido.</p></div>
+    <div class="cartao"><h3>Diagnostica</h3><p>Mostra essenciais, prioritários, discricionários, parcelas e a sobra do mês, com a evolução no tempo.</p></div>
+    <div class="cartao"><h3>Acompanha metas</h3><p>Calcula quanto reservar por mês para um objetivo e avisa quando o ritmo está abaixo do necessário.</p></div>
+    <div class="cartao"><h3>Detecta anomalias</h3><p>Aponta cobranças duplicadas, compras altas em lugares novos, picos de gasto e rajadas de compras.</p></div>
+  </div>
+
+  <h2>Princípios que guiam o produto</h2>
+  <ul>
+    <li><strong>Nunca rotular a pessoa</strong> ("gastador", "irresponsável"). Só termos factuais: "aumento dos gastos", "alto comprometimento da renda".</li>
+    <li><strong>Nunca recomendar investimentos específicos.</strong> O foco é organização e reserva.</li>
+    <li><strong>Nunca acusar de irregularidade fiscal.</strong> Entrada sem origem conhecida é "renda não identificada".</li>
+    <li><strong>Confiança baixa vira pergunta</strong>, não chute. Toda classificação e todo alerta têm uma explicação curta.</li>
+    <li><strong>Avaliação honesta</strong>: todo modelo é comparado com um método simples, e treino e teste são separados por usuário.</li>
+  </ul>
+</section>
+
+<!-- ===================== 2. PROBLEMA ===================== -->
+<section class="capitulo">
+  <h1><span class="numero">2</span>O problema e o contexto</h1>
+  <p>Aplicativos de banco mostram uma lista de transações, mas raramente respondem perguntas como "quanto da minha
+    renda já está comprometido com parcelas?" ou "essa entrada de dinheiro é renda de verdade ou uma ajuda pontual?".
+    Sem essa leitura, fica difícil montar uma reserva e evitar o endividamento.</p>
+
+  <div class="grade">
+    <div class="cartao"><div class="rotulo">Famílias endividadas</div><div class="valor">79,5%</div><div class="detalhe">CNC, Peic, janeiro de 2026</div></div>
+    <div class="cartao"><div class="rotulo">Dívidas no cartão de crédito</div><div class="valor">85,4%</div><div class="detalhe">das dívidas a vencer das famílias (CNC, jan. 2026)</div></div>
+    <div class="cartao"><div class="rotulo">Pessoas inadimplentes</div><div class="valor">80,6 mi</div><div class="detalhe">recorde histórico (Serasa, nov. 2025)</div></div>
+  </div>
+  <p>O cartão de crédito concentra a maior parte das dívidas, e é justamente onde parcelas se acumulam sem que a pessoa
+    perceba o total comprometido. Por isso o sistema dá atenção especial a parcelamentos e aceita faturas de cartão em PDF.</p>
+
+  <h2>Por que só regras não bastam</h2>
+  <p>Um extrato real é bagunçado: "SUPERMERCADO BOM PRECO" aparece como "SUPE BOM PRECO", "LV*SUPERMERCADOBOMPRECO" ou
+    "PGTO*SUPERMERCADOBOMPR BELO HORIZONT". Regras de palavra-chave reconhecem só a forma prevista. Nos dados do projeto,
+    as regras reconhecem <strong>49,4%</strong> das transações; com o modelo de aprendizado de máquina e as respostas do
+    usuário, o sistema passa a decidir sozinho cerca de <strong>94%</strong> delas mantendo 99,9% de acerto (capítulo 6).
+    Além disso, cada pessoa é diferente: o sistema aprende com as respostas de cada usuário.</p>
+</section>
+
+<!-- ===================== 3. ARQUITETURA ===================== -->
+<section class="capitulo">
+  <h1><span class="numero">3</span>Arquitetura e fluxo de dados</h1>
+  <p>O sistema é uma sequência de etapas. Cada etapa é um módulo Python pequeno e testado, e a interface Streamlit
+    usa o "sistema em uso" (<code>financas/sistema.py</code>), que nunca lê as respostas verdadeiras dos dados de teste.</p>
+
+  <figure>
+    <svg viewBox="0 0 730 420" width="100%">
+      <defs><marker id="seta" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#0F766E"/></marker></defs>
+      <g font-size="12">
+        <rect x="20" y="15" width="200" height="54" rx="9" fill="#0B3B37"/><text x="120" y="38" fill="#fff" text-anchor="middle" font-weight="600">Entrada</text><text x="120" y="56" fill="#CFE8E4" text-anchor="middle" font-size="10.5">extrato (CSV) ou fatura (PDF)</text>
+        <rect x="250" y="15" width="200" height="54" rx="9" fill="#0F766E"/><text x="350" y="38" fill="#fff" text-anchor="middle" font-weight="600">Normalização</text><text x="350" y="56" fill="#CFE8E4" text-anchor="middle" font-size="10.5">limpa texto, separa operação e parcela</text>
+        <rect x="480" y="15" width="200" height="54" rx="9" fill="#0F766E"/><text x="580" y="38" fill="#fff" text-anchor="middle" font-weight="600">Classificação híbrida</text><text x="580" y="56" fill="#CFE8E4" text-anchor="middle" font-size="10.5">regras → memória → modelo</text>
+
+        <rect x="480" y="115" width="200" height="54" rx="9" fill="#E6F2F0" stroke="#0F766E"/><text x="580" y="138" fill="#0B3B37" text-anchor="middle" font-weight="600">Pergunta ao usuário</text><text x="580" y="156" fill="#374151" text-anchor="middle" font-size="10.5">confiança &lt; 0,70</text>
+        <rect x="250" y="115" width="200" height="54" rx="9" fill="#14B8A6"/><text x="350" y="138" fill="#fff" text-anchor="middle" font-weight="600">Renda e transferências</text><text x="350" y="156" fill="#ECFDF9" text-anchor="middle" font-size="10.5">salário, autônomo, ajuda, interna</text>
+        <rect x="20" y="115" width="200" height="54" rx="9" fill="#14B8A6"/><text x="120" y="138" fill="#fff" text-anchor="middle" font-weight="600">Parcelas</text><text x="120" y="156" fill="#ECFDF9" text-anchor="middle" font-size="10.5">total, restante, compromisso</text>
+
+        <rect x="20" y="215" width="200" height="54" rx="9" fill="#3B82F6"/><text x="120" y="238" fill="#fff" text-anchor="middle" font-weight="600">Diagnóstico</text><text x="120" y="256" fill="#E0ECFF" text-anchor="middle" font-size="10.5">blocos, sobra, evolução</text>
+        <rect x="250" y="215" width="200" height="54" rx="9" fill="#8B5CF6"/><text x="350" y="238" fill="#fff" text-anchor="middle" font-weight="600">Metas</text><text x="350" y="256" fill="#EDE7FF" text-anchor="middle" font-weight="400" font-size="10.5">quanto reservar, previsão</text>
+        <rect x="480" y="215" width="200" height="54" rx="9" fill="#F59E0B"/><text x="580" y="238" fill="#fff" text-anchor="middle" font-weight="600">Anomalias</text><text x="580" y="256" fill="#FFF4DC" text-anchor="middle" font-size="10.5">estatística + IsolationForest</text>
+
+        <rect x="135" y="320" width="430" height="70" rx="11" fill="#0B3B37"/><text x="350" y="347" fill="#fff" text-anchor="middle" font-weight="600" font-size="13">Interface Streamlit</text><text x="350" y="368" fill="#CFE8E4" text-anchor="middle" font-size="10.5">diagnóstico · notificações do mês · perguntas · parcelas · metas · importar fatura</text>
+      </g>
+      <g stroke="#0F766E" stroke-width="2" fill="none" marker-end="url(#seta)">
+        <path d="M220 42 H246"/><path d="M450 42 H476"/>
+        <path d="M580 69 V111"/><path d="M480 142 H454"/><path d="M250 142 H224"/>
+        <path d="M120 169 V211"/><path d="M220 242 H246"/><path d="M450 242 H476"/>
+        <path d="M350 269 V316"/>
+      </g>
+      <path d="M680 142 C 700 142, 700 42, 684 42" stroke="#99CBC4" stroke-width="2" fill="none" stroke-dasharray="5 4" marker-end="url(#seta)"/>
+      <text x="716" y="92" font-size="9.5" fill="#6B7280" text-anchor="middle" transform="rotate(90 716 92)">resposta vira memória</text>
+    </svg>
+    <figcaption>Figura 1 · Fluxo do sistema. As respostas do usuário voltam para a classificação e passam a valer para pagamentos parecidos.</figcaption>
+  </figure>
+
+  <h2>Módulos do código</h2>
+  <table>
+    <tr><th>Módulo</th><th>Responsabilidade</th></tr>
+    <tr><td><code>gerador.py</code>, <code>catalogo.py</code></td><td>Cria os dados fictícios: 12 usuários, 6 meses, 4 perfis, ruído realista e anomalias plantadas.</td></tr>
+    <tr><td><code>normalizacao.py</code></td><td>Limpa o texto, separa o prefixo do banco ("PIX ENVIADO", "COMPRA DEBITO"), a contraparte e a parcela "k/n".</td></tr>
+    <tr><td><code>regras.py</code></td><td>19 regras de palavra-chave, cada uma com confiança e explicação.</td></tr>
+    <tr><td><code>modelo.py</code>, <code>experimento.py</code></td><td>Modelo TF-IDF + regressão logística, classificação híbrida, memória do usuário e o experimento de avaliação.</td></tr>
+    <tr><td><code>renda.py</code></td><td>Origem das entradas, perfil de renda e troca de emprego.</td></tr>
+    <tr><td><code>parcelas.py</code></td><td>Parcelamentos, compromissos dos próximos 12 meses e comprometimento da renda.</td></tr>
+    <tr><td><code>diagnostico.py</code>, <code>metas.py</code></td><td>Indicadores, texto do diagnóstico, metas e previsões.</td></tr>
+    <tr><td><code>anomalias.py</code></td><td>Quatro detectores estatísticos e o IsolationForest.</td></tr>
+    <tr><td><code>faturas_pdf.py</code></td><td>Gera faturas fictícias em PDF e lê faturas de qualquer origem.</td></tr>
+    <tr><td><code>sistema.py</code>, <code>monitoramento.py</code>, <code>app.py</code></td><td>Sistema em uso, notificações de cada novo mês e interface.</td></tr>
+    <tr><td><code>avaliacao.py</code>, <code>avaliacao_final.py</code></td><td>Únicos módulos que leem a "verdade", só para medir o desempenho.</td></tr>
+  </table>
+</section>
+
+<!-- ===================== 4. DADOS ===================== -->
+<section class="capitulo">
+  <h1><span class="numero">4</span>Dados sintéticos</h1>
+  <p>Nenhum dado financeiro real é usado no desenvolvimento. O gerador cria 12 usuários (3 por perfil), de janeiro a
+    junho de 2026, com semente fixa 42. São produzidos dois tipos de arquivo: o <strong>extrato</strong>, que o sistema vê,
+    e a <strong>verdade</strong> (categoria real, anomalias, perfil), usada <em>somente</em> para avaliar.</p>
+
+  <table>
+    <tr><th>Perfil</th><th>Renda</th><th>Características</th><th>Sobra média</th></tr>
+    <tr><td>Renda fixa, poucos compromissos</td><td>R$ 5.500–7.500</td><td>Salário, poupança mensal, poucas parcelas</td><td class="num">+13%</td></tr>
+    <tr><td>Autônomo (renda variável)</td><td>R$ 3.200–5.000</td><td>Vários clientes, meses bons e ruins</td><td class="num">+2%</td></tr>
+    <tr><td>Renda fixa com dívidas</td><td>R$ 3.800–5.000</td><td>Empréstimos e 4 a 6 compras parceladas</td><td class="num">−7%</td></tr>
+    <tr><td>Renda baixa, pouca margem</td><td>R$ 1.600–2.100</td><td>Orçamento apertado, ajuda da família</td><td class="num">−11%</td></tr>
+  </table>
+  <p class="legenda">Sobra média = (renda efetiva − gastos) / renda efetiva, já incluindo as anomalias plantadas.</p>
+
+  <h2>Realismo embutido no gerador</h2>
+  <ul>
+    <li><strong>Ruído nas descrições:</strong> nomes abreviados, prefixos de maquininha ("LV*", "CRD*"), nome cortado em 22 letras, cidade e código do terminal.</li>
+    <li><strong>Lojas sem palavra-chave óbvia</strong> ("SUSHI KAZU", "EMPORIO DONA ROSA") e PIX para pessoas, cuja finalidade não aparece no texto.</li>
+    <li><strong>Salário em 5 formatos</strong>, só 2 com a palavra "SALARIO"; o 3º usuário de cada perfil com salário <strong>troca de emprego</strong> (um mês sem salário, com bicos).</li>
+    <li><strong>Transferências entre contas próprias</strong> por TED ou por PIX para o próprio nome.</li>
+    <li><strong>Orçamento por perfil:</strong> os gastos do dia a dia se ajustam a uma faixa de sobra, para os números serem plausíveis.</li>
+    <li><strong>Anomalias plantadas:</strong> 4 tipos previstos e 3 tipos <em>não previstos</em> (capítulo 11).</li>
+  </ul>
+
+  <div class="caixa">
+    <div class="titulo">Exemplo de linhas do extrato (o que o sistema vê)</div>
+<pre>2026-03-05  CREDITO SALARIO COMERCIAL BETA S.A.          +4.921,82  ted
+2026-03-05  PIX ENVIADO BEATRIZ RIBEIRO                  -1.187,27  pix            (aluguel, mas o texto não diz)
+2026-03-11  CLINICA ODONTO SORRIR                          -188,83  cartão  2/5
+2026-03-16  PIX ENVIADO PGTO*SUPERMERCADOBOMPR             -196,34  pix</pre>
+  </div>
+</section>
+
+<!-- ===================== 5. REGRAS ===================== -->
+<section class="capitulo">
+  <h1><span class="numero">5</span>Normalização e regras</h1>
+  <p>A normalização deixa o texto em maiúsculas, sem acentos e sem espaços repetidos; separa a <strong>operação</strong>
+    (PIX enviado, compra no débito, boleto…), a <strong>contraparte</strong> (quem recebeu ou pagou) e a parcela "3/12".
+    Linhas repetidas não são removidas, porque podem ser uma cobrança duplicada que o usuário precisa ver.</p>
+  <p>As regras procuram palavras-chave genéricas e devolvem categoria, confiança e explicação. A primeira regra que
+    combina vence. Uma regra especial reconhece PIX para o <strong>próprio nome</strong> como transferência entre contas.</p>
+
+  <table>
+    <tr><th>Descrição</th><th>Regra</th><th>Categoria</th><th class="num">Confiança</th></tr>
+    <tr><td>PAGTO BOLETO CIA ENERGIA ELETRICA</td><td>energia</td><td>Energia</td><td class="num">0,95</td></tr>
+    <tr><td>COMPRA DEBITO SUPERMERCADO BOM PRECO</td><td>mercado</td><td>Alimentação básica</td><td class="num">0,90</td></tr>
+    <tr><td>PIX ENVIADO ANA VIEIRA (feito pela Ana)</td><td>PIX ao próprio nome</td><td>Transferência interna</td><td class="num">0,90</td></tr>
+    <tr><td>PIX ENVIADO RODRIGO RODRIGUES</td><td>nenhuma</td><td>A confirmar</td><td class="num">0,00</td></tr>
+  </table>
+
+  <div class="grade">
+    <div class="cartao"><div class="rotulo">Reconhecidas por regra</div><div class="valor">49,4%</div><div class="detalhe">das 2.536 transações</div></div>
+    <div class="cartao"><div class="rotulo">Acerto quando reconhece</div><div class="valor">99,8%</div><div class="detalhe">regras quase nunca erram…</div></div>
+    <div class="cartao"><div class="rotulo">Viram pergunta</div><div class="valor">50,6%</div><div class="detalhe">…mas reconhecem pouco</div></div>
+  </div>
+  <p>Essas regras são o <strong>baseline</strong> (método simples de comparação) do modelo de aprendizado de máquina.</p>
+</section>
+
+<!-- ===================== 6. MODELO ===================== -->
+<section class="capitulo">
+  <h1><span class="numero">6</span>Modelo de aprendizado de máquina</h1>
+  <h2>Como o modelo funciona</h2>
+  <p>O texto da descrição é transformado em números por um <strong>TF-IDF de pedaços de 2 a 4 letras</strong>
+    (n-gramas de caracteres). Esses pedaços resistem a abreviações e nomes colados: "CRD*CELULARESCONECTADO" ainda contém
+    "CELU" e "CONEC". Em seguida, uma <strong>regressão logística</strong> estima a probabilidade de cada categoria; a maior
+    probabilidade vira a confiança. O parâmetro de regularização <code>C</code> é escolhido por validação cruzada
+    (<code>GroupKFold</code>) usando só os usuários de treino, entre 0,3, 1, 3, 10 e 30.</p>
+
+  <h2>Classificação híbrida</h2>
+  <ol>
+    <li><strong>Regras</strong>: se alguma reconhece, ela decide.</li>
+    <li><strong>Memória do usuário</strong>: se ele já disse o que é aquele pagamento. Para lojas, vale também quando o nome
+      vem escrito de outro jeito ("LV*SUSHIKAZU" ≈ "SUSHI KAZU 1234"); para pessoas, só nome exato.</li>
+    <li><strong>Modelo</strong>: para o restante. Abaixo de 0,70 de confiança, a transação vira pergunta.</li>
+    <li><strong>Trava de segurança</strong>: em PIX para uma pessoa, o palpite do modelo nunca passa de 0,50 — só o
+      usuário sabe a finalidade. Sem essa trava, o modelo decidia sozinho 40 desses PIX e acertava só 25%.</li>
+  </ol>
+
+  <h2>Avaliação honesta</h2>
+  <p>Treino e teste são separados <strong>por usuário</strong>: em 3 rodadas, 1 usuário de cada perfil fica de fora e é testado
+    por um modelo que nunca viu as transações dele. Os resultados abaixo consideram só as saídas de dinheiro.</p>
+  <table>
+    <tr><th>Estratégia</th><th class="num">Decide sozinho</th><th class="num">Acerto quando decide</th><th class="num">Erro silencioso</th><th class="num">Pergunta</th></tr>
+    <tr><td>Só regras (baseline)</td><td class="num">51,5%</td><td class="num">99,8%</td><td class="num">0,1%</td><td class="num">48,5%</td></tr>
+    <tr><td>Regras + modelo</td><td class="num">87,5%</td><td class="num">99,9%</td><td class="num">0,1%</td><td class="num">12,5%</td></tr>
+    <tr><td>Regras + modelo + correções do usuário</td><td class="num"><b>93,9%</b></td><td class="num">99,9%</td><td class="num">0,1%</td><td class="num"><b>6,1%</b></td></tr>
+  </table>
+  <p class="legenda">Erro silencioso: o sistema decide sozinho e erra — o pior tipo de erro, porque ninguém confere.</p>
+  <p>Nas 1.134 saídas que as regras não reconheciam, o primeiro palpite do modelo acerta <strong>87,7%</strong>; chutar
+    sempre a categoria mais comum acerta só 17,7%.</p>
+
+  <h2>Teste duro: lojas que o modelo nunca viu</h2>
+  <p>No experimento acima, os usuários de teste compram nas mesmas lojas dos usuários de treino. Para medir isso,
+    1/3 das lojas de cada categoria também fica fora do treino em cada rodada.</p>
+  <figure>
+    <svg viewBox="0 0 700 150" width="100%" style="max-height:30mm">
+      <g font-size="12">
+        <text x="0" y="40" fill="#374151">Lojas já vistas</text>
+        <rect x="140" y="24" width="512" height="26" rx="5" fill="#0F766E"/><text x="660" y="42" fill="#0B3B37" font-weight="700">93,1%</text>
+        <text x="0" y="95" fill="#374151">Lojas nunca vistas</text>
+        <rect x="140" y="79" width="103" height="26" rx="5" fill="#F59E0B"/><text x="251" y="97" fill="#92400E" font-weight="700">18,8%</text>
+        <line x1="140" y1="125" x2="690" y2="125" stroke="#E5ECEA"/>
+        <text x="140" y="142" font-size="10" fill="#6B7280">0%</text><text x="690" y="142" font-size="10" fill="#6B7280" text-anchor="end">100%</text>
+      </g>
+    </svg>
+    <figcaption>Figura 2 · Acerto do primeiro palpite do modelo nas saídas que as regras não reconhecem.</figcaption>
+  </figure>
+  <div class="caixa aviso">
+    <div class="titulo">O que isso significa</div>
+    <p>O modelo <strong>decorou as lojas</strong> em vez de aprender o significado das palavras: "SUSHI KAZU" vira "compras"
+      porque ele nunca viu a palavra "SUSHI". O sistema continua seguro, porque nessas lojas a confiança é baixa (média 0,33)
+      e ele pergunta. Quem resolve as lojas novas é a <strong>resposta do usuário</strong>: as perguntas em lojas novas caem
+      de 49,7% para 19,4% com as correções.</p>
+  </div>
+</section>
+
+<!-- ===================== 7. RENDA ===================== -->
+<section class="capitulo">
+  <h1><span class="numero">7</span>Renda e transferências internas</h1>
+  <p>Nem toda entrada de dinheiro é renda. Para cada entrada, o sistema decide, nesta ordem:</p>
+  <ol>
+    <li><strong>Transferência entre contas próprias</strong> — regra da descrição ou par "saiu X de uma conta e entrou X na outra no mesmo dia".</li>
+    <li><strong>Salário</strong> — palavra "salário" ou empresa que paga 1 vez por mês, no mesmo período do mês e com valor estável.</li>
+    <li><strong>Pagamento de empresa</strong> — renda de trabalho ou serviço.</li>
+    <li><strong>Pessoa com o mesmo sobrenome</strong> — provável ajuda da família (com pergunta).</li>
+    <li><strong>Pessoa que paga valores variados</strong> a quem não tem salário — provável cliente (com pergunta).</li>
+    <li><strong>O resto</strong> — renda não identificada, com frase neutra: <em>"Se for pagamento por trabalho ou serviço, vale verificar suas obrigações fiscais."</em></li>
+  </ol>
+
+  <h2>Perfil de renda</h2>
+  <p>Com a renda efetiva (salário + trabalho), o sistema calcula média, menor mês, maior mês e variação. Quem recebe
+    salário nunca é classificado como autônomo; troca de emprego (salários de empresas diferentes, um depois do outro) é
+    reconhecida. Para planejar, renda fixa usa a média, autônomo usa o <strong>menor mês</strong> e quem trocou de emprego
+    usa o <strong>salário atual</strong>.</p>
+  <div class="caixa"><p><em>"Renda fixa, com troca de emprego: o salário passou de TECH SOLUCOES DIGITAIS LTDA para COMERCIAL BETA S.A.
+    em abril de 2026, com março de 2026 sem salário (só outras entradas). Para planejar, o sistema usa o salário atual."</em></p></div>
+  <div class="grade">
+    <div class="cartao"><div class="rotulo">Origem correta das entradas</div><div class="valor">98,5%</div><div class="detalhe">só regras: 32,7%</div></div>
+    <div class="cartao"><div class="rotulo">Perfis de renda corretos</div><div class="valor">12 de 12</div><div class="detalhe">inclui as 3 trocas de emprego</div></div>
+    <div class="cartao"><div class="rotulo">Decididas sem perguntar</div><div class="valor">78,6%</div><div class="detalhe">com 100% de acerto</div></div>
+  </div>
+</section>
+
+<!-- ===================== 8. PARCELAS ===================== -->
+<section class="capitulo">
+  <h1><span class="numero">8</span>Parcelas e compromissos futuros</h1>
+  <p>Uma compra parcelada aparece todo mês com o mesmo texto e "3/12" na coluna de parcela. O sistema junta essas linhas e
+    calcula o valor total, quanto foi pago, quanto falta e até quando a parcela ocupa a renda. Empréstimos pagos por boleto
+    entram do mesmo jeito. O exemplo da proposta é reproduzido em teste automático:</p>
+  <div class="caixa"><p><em>"MAGAZINE ELETRO LAR: compra de R$ 1.200,00 em 12x de R$ 100,00. Pagas: 4. Faltam 8 (R$ 800,00), até dezembro de 2026."</em></p></div>
+  <p>Somando as parcelas de cada um dos próximos 12 meses, o sistema mostra o <strong>comprometimento da renda</strong>.
+    A partir de 30% da renda de referência (escolha de projeto; o consignado no Brasil tem limite de 35%), o texto avisa
+    "alto comprometimento da renda".</p>
+  <div class="grade duas">
+    <div class="cartao"><div class="rotulo">Parcelamentos encontrados</div><div class="valor">27 de 27</div><div class="detalhe">contagem exata nos 12 usuários</div></div>
+    <div class="cartao"><div class="rotulo">Perfil mais comprometido</div><div class="valor">29%</div><div class="detalhe">média do perfil "renda fixa com dívidas" no próximo mês</div></div>
+  </div>
+</section>
+
+<!-- ===================== 9. DIAGNÓSTICO ===================== -->
+<section class="capitulo">
+  <h1><span class="numero">9</span>Diagnóstico financeiro</h1>
+  <p>O diagnóstico divide os gastos em blocos e compara com a renda efetiva. Para não contar o mesmo dinheiro duas vezes,
+    transferências entre contas próprias e o pagamento da fatura ficam de fora (as compras do cartão já foram contadas uma a uma),
+    e toda linha com parcela vai para "parcelas e dívidas".</p>
+  <figure>
+    <svg viewBox="0 0 700 190" width="100%">
+      <g font-size="12">
+        <rect x="0" y="20" width="397" height="44" fill="#0F766E"/><text x="198" y="47" fill="#fff" text-anchor="middle" font-weight="600">Essenciais R$ 1.700 (57%)</text>
+        <rect x="397" y="20" width="117" height="44" fill="#F59E0B"/><text x="455" y="47" fill="#fff" text-anchor="middle" font-weight="600">Discric. R$ 500</text>
+        <rect x="514" y="20" width="70" height="44" fill="#8B5CF6"/><text x="549" y="47" fill="#fff" text-anchor="middle" font-weight="600">R$ 300</text>
+        <rect x="584" y="20" width="116" height="44" fill="#15803D"/><text x="642" y="47" fill="#fff" text-anchor="middle" font-weight="600">Sobra R$ 500</text>
+        <text x="0" y="92" fill="#374151">Renda de R$ 3.000 — exemplo da proposta, gerado pelo sistema a partir de um extrato montado para o teste.</text>
+        <circle cx="10" cy="125" r="6" fill="#0F766E"/><text x="22" y="129">Essenciais: moradia, contas, mercado, transporte</text>
+        <circle cx="10" cy="150" r="6" fill="#F59E0B"/><text x="22" y="154">Discricionários: restaurantes, lazer, compras, assinaturas</text>
+        <circle cx="380" cy="125" r="6" fill="#8B5CF6"/><text x="392" y="129">Parcelas e dívidas</text>
+        <circle cx="380" cy="150" r="6" fill="#3B82F6"/><text x="392" y="154">Prioritários: educação, saúde (aqui R$ 0)</text>
+      </g>
+    </svg>
+    <figcaption>Figura 3 · O exemplo da proposta (R$ 3.000 = 1.700 + 500 + 300 + 500), reproduzido em teste automático.</figcaption>
+  </figure>
+  <p>Cada diagnóstico traz ainda a <strong>evolução</strong> (último trimestre contra o anterior), os
+    <strong>compromissos futuros</strong>, a <strong>reserva</strong> transferida para a poupança e os
+    <strong>pontos de atenção</strong>, sempre com termos neutros e a seção "De onde vêm os números".</p>
+  <table>
+    <tr><th>Erro médio por mês contra o diagnóstico com as categorias verdadeiras</th><th class="num">Essenciais</th><th class="num">Discricionários</th><th class="num">A confirmar</th></tr>
+    <tr><td>Sem as respostas do usuário</td><td class="num">R$ 650</td><td class="num">R$ 195</td><td class="num">R$ 982</td></tr>
+    <tr><td>Com as respostas do usuário</td><td class="num">R$ 2</td><td class="num">R$ 2</td><td class="num">R$ 0</td></tr>
+  </table>
+  <p>Ou seja: responder às perguntas é o que torna o diagnóstico confiável. Por isso a interface mostra as perguntas com destaque.</p>
+</section>
+
+<!-- ===================== 10. METAS ===================== -->
+<section class="capitulo">
+  <h1><span class="numero">10</span>Metas financeiras</h1>
+  <p>O usuário informa quanto quer juntar e em quantos meses. O sistema calcula quanto reservar por mês, compara com a
+    sobra média e acompanha mês a mês com o que foi transferido para a poupança (situação: no ritmo, adiantada, atrasada
+    ou concluída, com tolerância de 5%).</p>
+  <div class="grade duas">
+    <div class="cartao"><h3>No ritmo</h3><p>R$ 4.000 em 10 meses = R$ 400 por mês. Guardando R$ 400 todo mês, a meta fica "no ritmo" e é concluída no 10º mês.</p></div>
+    <div class="cartao"><h3>Ritmo menor</h3><p>Guardando R$ 300 por mês: <em>"a meta deve levar cerca de 14 meses, 4 meses a mais que o planejado. Para terminar no prazo, seria preciso guardar R$ 466,67 por mês nos 6 meses restantes."</em></p></div>
+  </div>
+  <p>Para renda variável ou muitas parcelas, o texto lembra a ordem da proposta: primeiro obrigações e uma reserva para meses
+    difíceis (referência educativa de 3 meses de gastos essenciais para renda fixa e 6 para renda variável), depois os
+    outros objetivos. Prazos muito longos aparecem também em anos, com a sugestão neutra de rever valor ou prazo.
+    O sistema <strong>nunca indica onde aplicar o dinheiro</strong> — um teste confere a ausência de termos como "invista", "ações" ou "CDB".</p>
+</section>
+
+<!-- ===================== 11. ANOMALIAS ===================== -->
+<section class="capitulo">
+  <h1><span class="numero">11</span>Detecção de anomalias</h1>
+  <p>Dois métodos <strong>não supervisionados</strong> — nenhum vê os rótulos das anomalias plantadas, que servem só para avaliar
+    (um teste lê o código e confirma isso).</p>
+  <div class="grade duas">
+    <div class="cartao"><h3>Estatístico</h3><p>Quatro verificações contra o histórico do próprio usuário: pico na categoria (média + 3 desvios padrão, com 3 meses de histórico),
+      cobrança duplicada, loja nova com valor alto e muitas compras em 2 dias. Cada evento gera um alerta só.</p></div>
+    <div class="cartao"><h3>IsolationForest</h3><p>Olha 6 características de cada compra ao mesmo tempo (valor relativo, repetições, novidade da loja…).
+      Marca 5% das transações, fração fixada antes de ver o resultado.</p></div>
+  </div>
+  <table>
+    <tr><th>Tipo de anomalia</th><th>Previsto?</th><th class="num">Estatístico</th><th class="num">IsolationForest</th></tr>
+    <tr><td>Cobrança duplicada</td><td>sim</td><td class="num">12/12</td><td class="num">12/12</td></tr>
+    <tr><td>Loja nova com valor alto</td><td>sim</td><td class="num">8/8</td><td class="num">8/8</td></tr>
+    <tr><td>Muitas compras em pouco tempo</td><td>sim</td><td class="num">9/9</td><td class="num">6/9</td></tr>
+    <tr><td>Pico de gasto numa categoria</td><td>sim</td><td class="num">9/11</td><td class="num">3/11</td></tr>
+    <tr><td>Conta fixa disparada</td><td><span class="etiqueta laranja">não</span></td><td class="num">7/7</td><td class="num">0/7</td></tr>
+    <tr><td>PIX alto para desconhecido</td><td><span class="etiqueta laranja">não</span></td><td class="num">6/6</td><td class="num">6/6</td></tr>
+    <tr><td>Nova cobrança recorrente</td><td><span class="etiqueta laranja">não</span></td><td class="num">0/7</td><td class="num">1/7</td></tr>
+    <tr><td><b>Revocação: previstos / não previstos</b></td><td></td><td class="num"><b>95% / 65%</b></td><td class="num"><b>72% / 35%</b></td></tr>
+    <tr><td><b>Alertas que acertam alguma anomalia</b></td><td></td><td class="num"><b>83%</b></td><td class="num"><b>63%</b></td></tr>
+  </table>
+  <p class="legenda">Tipos "não previstos" foram criados sem detector próprio e registrados antes de rodar
+    (<code>docs/03_decisoes_anomalias.md</code>), para medir o que ninguém antecipou.</p>
+  <div class="caixa"><p><em>"Cobrança igual a outra de 17/04 (COMPRA DEBITO AUTOPOSTO TREVO, R$ 310,19): pode ter sido cobrada duas vezes."</em><br>
+    <em>"Primeira compra em ELETRONICOS IMPORTADOS LTDA e no valor de R$ 1.599,76, acima do seu habitual (até R$ 473,33)."</em></p></div>
+  <p>Conclusão: o método estatístico encontra quase tudo o que foi pensado e 65% do que não foi; a nova assinatura
+    recorrente passa despercebida pelos dois métodos — um ponto de melhoria real.</p>
+</section>
+
+<!-- ===================== 12. FATURAS ===================== -->
+<section class="capitulo">
+  <h1><span class="numero">12</span>Faturas em PDF</h1>
+  <p>O sistema aceita faturas de cartão em PDF de qualquer origem. O leitor é genérico: procura linhas no formato mais comum
+    das faturas brasileiras — <code>data · descrição · [parcela] · valor</code> — e entende variações como
+    <code>06/03/2026 LOJA X PARC 02 DE 05 R$ 89,90</code>. O ano vem da data de vencimento, inclusive na virada de ano.
+    Pagamentos, totais, estornos e créditos são ignorados.</p>
+  <h2>Teste interno de ida e volta</h2>
+  <p>O sistema gera uma fatura fictícia em PDF de cada usuário em cada mês, lê de volta e confere com a verdade.
+    O modelo também treina com as compras escritas como aparecem nessas faturas.</p>
+  <div class="grade quatro">
+    <div class="cartao"><div class="rotulo">Faturas lidas</div><div class="valor">72</div></div>
+    <div class="cartao"><div class="rotulo">Compras sem erro</div><div class="valor">907/907</div></div>
+    <div class="cartao"><div class="rotulo">Decididas sozinho</div><div class="valor">93,8%</div></div>
+    <div class="cartao"><div class="rotulo">Acerto</div><div class="valor">99,5%</div></div>
+  </div>
+  <div class="caixa aviso"><p>O teste interno pegou um erro real: a loja "DROGARIA SAUDE <b>TOTAL</b>" era descartada porque o leitor
+    pulava toda linha com "TOTAL". Agora só são ignoradas as linhas que <em>começam</em> com essas palavras.
+    Faturas reais de bancos têm outros layouts e lojas que o modelo nunca viu, então leitor e modelo vão errar mais nelas;
+    faturas escaneadas (imagem) não são lidas.</p></div>
+  <p><strong>Privacidade:</strong> faturas enviadas pela interface são lidas só em memória — nunca salvas em disco, nunca
+    enviadas ao repositório (<code>*.pdf</code> no <code>.gitignore</code>) e nunca usadas para treinar.</p>
+</section>
+
+<!-- ===================== 13. INTERFACE ===================== -->
+<section class="capitulo">
+  <h1><span class="numero">13</span>Sistema em uso e interface</h1>
+  <p>Os experimentos usam a verdade para medir. O <strong>sistema em uso</strong> não: o modelo é treinado numa base separada
+    de usuários fictícios (outra semente), que faz o papel de clientes antigos, e os 12 usuários atendidos nunca entram no treino.</p>
+  <div class="grade">
+    <div class="cartao"><div class="rotulo">Decididas sozinho</div><div class="valor">89,7%</div><div class="detalhe">com 99,8% de acerto</div></div>
+    <div class="cartao"><div class="rotulo">Quem decidiu</div><div class="valor" style="font-size:12pt">regras 52% · modelo 38%</div><div class="detalhe">perguntas 10%</div></div>
+    <div class="cartao"><div class="rotulo">Perguntas por usuário</div><div class="valor">≈ 20</div><div class="detalhe">em 6 meses (de 12 a 35)</div></div>
+  </div>
+  <h2>Interface (Streamlit)</h2>
+  <p>Na barra lateral, escolhe-se o usuário e o <strong>mês atual</strong>, que simula os meses chegando (o sistema só
+    enxerga o extrato até ele). Há tema claro e escuro.</p>
+  <table>
+    <tr><th>Aba</th><th>O que mostra</th></tr>
+    <tr><td>Diagnóstico</td><td>Gráfico de rosca, blocos com variação, faixa da sobra, pontos de atenção, evolução, compromissos e reserva.</td></tr>
+    <tr><td>Notificações</td><td>O que mudou no mês: queda de renda, nova parcela, cobrança duplicada, compra alta em lugar novo, picos e rajadas.</td></tr>
+    <tr><td>Perguntas</td><td>O que o sistema não sabe, com a sugestão do modelo; cada resposta vale para pagamentos parecidos.</td></tr>
+    <tr><td>Parcelas</td><td>Valor reservado nos próximos 12 meses e cada parcelamento com barra de progresso.</td></tr>
+    <tr><td>Metas</td><td>Anel de progresso, marcos de 25% a 100%, próximo passo e gráfico guardado × necessário.</td></tr>
+    <tr><td>Importar fatura</td><td>Envio de PDF, compras classificadas, gráfico por categoria e perguntas; fatura de exemplo para download.</td></tr>
+  </table>
+  <p>Um teste confere que as notificações de abril não mudam por causa de maio e junho — o sistema não "vê o futuro".</p>
+</section>
+
+<!-- ===================== 14. AVALIAÇÃO FINAL ===================== -->
+<section class="capitulo">
+  <h1><span class="numero">14</span>Avaliação final e testes</h1>
+  <p>A seção 19 da proposta sugere avaliar a eficácia por seis indicadores. Com dados sintéticos é possível medir o que o
+    sistema mostra e se ele acerta, por perfil:</p>
+  <table>
+    <tr><th>Perfil</th><th class="num">Sobra</th><th class="num">Poupança/mês</th><th class="num">Parcelas agora</th><th class="num">Parcelas em 6 meses</th><th class="num">Meta R$ 4.000 (6 meses)</th></tr>
+    <tr><td>Renda fixa, poucos compromissos</td><td class="num">13%</td><td class="num">R$ 620</td><td class="num">2%</td><td class="num">1%</td><td class="num">93%</td></tr>
+    <tr><td>Autônomo</td><td class="num">2%</td><td class="num">R$ 41</td><td class="num">0%</td><td class="num">0%</td><td class="num">6%</td></tr>
+    <tr><td>Renda fixa com dívidas</td><td class="num">−7%</td><td class="num">R$ 60</td><td class="num">29%</td><td class="num">12%</td><td class="num">9%</td></tr>
+    <tr><td>Renda baixa, pouca margem</td><td class="num">−11%</td><td class="num">R$ 31</td><td class="num">16%</td><td class="num">7%</td><td class="num">5%</td></tr>
+  </table>
+  <ul>
+    <li><strong>Transações corretamente classificadas:</strong> 89,7% decididas sozinho, com 99,8% de acerto e 0,2% de erros silenciosos.</li>
+    <li><strong>Gastos inesperados:</strong> 38 de 40 anomalias previstas e 13 de 20 não previstas encontradas.</li>
+    <li><strong>Comprometimento futuro:</strong> o sistema projeta a queda natural conforme as parcelas terminam (29% → 12% no perfil com dívidas).</li>
+    <li><strong>Metas:</strong> após 6 meses, 3 usuários adiantados e 9 atrasados — o perfil determina o resultado, como esperado.</li>
+  </ul>
+  <div class="caixa aviso"><p><strong>O que não dá para medir aqui:</strong> se as pessoas passam a poupar mais ou a reduzir dívidas
+    <em>por causa</em> do sistema. Isso exige usuários reais acompanhados ao longo do tempo, de preferência comparados com
+    quem não usa.</p></div>
+
+  <h2>Testes automáticos</h2>
+  <p>São <strong>168 testes</strong> (pytest), todos passando: gerador, normalização, regras, modelo e experimento,
+    renda, parcelas, diagnóstico, metas, anomalias, sistema em uso, faturas em PDF, avaliação final e a própria interface
+    (abre, troca usuário, mês e tema). Vários testes garantem regras de produto, como a ausência de rótulos negativos,
+    de recomendação de investimentos e de leitura da verdade pelo sistema em uso.</p>
+</section>
+
+<!-- ===================== 15. ÉTICA E LIMITAÇÕES ===================== -->
+<section class="capitulo">
+  <h1><span class="numero">15</span>Ética, privacidade e limitações</h1>
+  <h2>Cuidados de ética e privacidade</h2>
+  <ul>
+    <li>Linguagem neutra em todos os textos, verificada por testes; o sistema informa, a decisão é sempre do usuário.</li>
+    <li>Entradas de origem desconhecida nunca são tratadas como irregularidade.</li>
+    <li>Dados de desenvolvimento 100% fictícios; faturas reais enviadas só são processadas em memória.</li>
+    <li>PIX para pessoas nunca é decidido pelo modelo sozinho (trava de segurança).</li>
+  </ul>
+  <h2>Limitações conhecidas</h2>
+  <ol>
+    <li><strong>Dados sintéticos:</strong> o mesmo autor escreveu o gerador, as regras e os detectores; os números são otimistas.</li>
+    <li><strong>Lojas novas:</strong> o modelo de texto acerta 18,8% em lojas que nunca viu; quem ajuda são as regras e as respostas do usuário.</li>
+    <li><strong>Nomes curtos de loja</strong> ("EMPORIO DONA ROSA") podem ser tratados como pessoa e virar pergunta.</li>
+    <li><strong>Nova assinatura recorrente</strong> não é detectada como anomalia.</li>
+    <li><strong>Limites escolhidos pelo projeto</strong> (0,70 de confiança, 30% de comprometimento, 3 desvios, reserva de 3/6 meses) nunca foram validados com dados reais.</li>
+    <li><strong>Fatura de janeiro estimada</strong> (não há dezembro) e "guardado para a meta" = tudo o que foi para a poupança.</li>
+    <li><strong>Faturas reais</strong> com layouts diferentes ou escaneadas podem não ser lidas.</li>
+  </ol>
+  <h2>Próximos passos sugeridos</h2>
+  <ul>
+    <li>Testar com voluntários (com consentimento e LGPD) para medir o efeito real no comportamento.</li>
+    <li>Usar um modelo que já conheça o português (embeddings pré-treinados) para lojas novas.</li>
+    <li>Detector de "nova cobrança recorrente" e leitores específicos para os principais bancos.</li>
+  </ul>
+</section>
+
+<!-- ===================== 16. COMO EXECUTAR ===================== -->
+<section class="capitulo">
+  <h1><span class="numero">16</span>Como executar</h1>
+  <p>Na pasta do projeto, no Windows:</p>
+<pre>python -m venv .venv
+.venv\Scripts\python -m pip install -r requirements.txt
+
+.venv\Scripts\python -m financas        # gera os dados, roda todas as fases e os relatórios (~1,5 min)
+.venv\Scripts\python -m pytest          # roda os 168 testes
+.venv\Scripts\streamlit run app.py      # abre a interface no navegador</pre>
+  <p>Os relatórios ficam em <code>dados_gerados/</code>: <code>relatorio_regras.txt</code>, <code>relatorio_modelo.txt</code>,
+    <code>relatorio_teste_duro.txt</code>, <code>relatorio_renda.txt</code>, <code>relatorio_parcelas.txt</code>,
+    <code>relatorio_diagnostico.txt</code>, <code>relatorio_metas.txt</code>, <code>relatorio_anomalias.txt</code>,
+    <code>relatorio_sistema.txt</code>, <code>relatorio_faturas.txt</code> e <code>relatorio_final.txt</code>.</p>
+
+  <h2>Tecnologias</h2>
+  <table>
+    <tr><th>Biblioteca</th><th>Uso</th></tr>
+    <tr><td>Python 3.12, pandas, NumPy</td><td>Dados e cálculos</td></tr>
+    <tr><td>scikit-learn</td><td>TF-IDF, regressão logística, validação cruzada, IsolationForest</td></tr>
+    <tr><td>Streamlit, Altair</td><td>Interface e gráficos</td></tr>
+    <tr><td>pdfplumber, fpdf2</td><td>Ler e gerar faturas em PDF</td></tr>
+    <tr><td>pytest</td><td>Testes automáticos</td></tr>
+  </table>
+
+</section>
+
+<section class="capitulo">
+  <h1>Referências</h1>
+  <div class="referencias">
+    <p>BRASIL. Lei nº 13.709, de 14 de agosto de 2018. Lei Geral de Proteção de Dados Pessoais (LGPD). Brasília, DF: Presidência da República, 2018. Disponível em: http://www.planalto.gov.br/ccivil_03/_ato2015-2018/2018/lei/l13709.htm. Acesso em: 11 nov. 2026.</p>
+    <p>INFOMONEY. Endividamento das famílias atinge 79,5% em janeiro e iguala recorde, diz CNC. 6 fev. 2026. Disponível em: https://www.infomoney.com.br/economia/endividamento-das-familias-atinge-795-em-janeiro-e-iguala-recorde-diz-cnc/. Acesso em: 11 nov. 2026.</p>
+    <p>LIU, Fei Tony; TING, Kai Ming; ZHOU, Zhi-Hua. Isolation Forest. In: IEEE INTERNATIONAL CONFERENCE ON DATA MINING, 8., 2008, Pisa. Proceedings [...]. Pisa: IEEE, 2008. p. 413-422.</p>
+    <p>PEDREGOSA, Fabian et al. Scikit-learn: machine learning in Python. Journal of Machine Learning Research, v. 12, p. 2825-2830, 2011.</p>
+    <p>SERASA. Inadimplência ultrapassa 80,6 milhões na virada do ano e dívidas impedem a realização de sonhos, mostra Serasa. dez. 2025. Disponível em: https://www.serasa.com.br/imprensa/inadimplencia-ultrapassa-806-milhoes-virada-ano-dividas-impedem-sonhos-serasa/. Acesso em: 11 nov. 2026.</p>
+    <p>STREAMLIT. Streamlit documentation. Version 1.66. Disponível em: https://docs.streamlit.io/. Acesso em: 11 nov. 2026.</p>
+  </div>
+</section>
+
+</body>
+</html>

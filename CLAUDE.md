@@ -1,4 +1,4 @@
-# Sistema Inteligente de Diagnóstico e Orientação Financeira (protótipo)
+# SIDOF — Sistema Inteligente de Diagnóstico e Orientação Financeira (protótipo)
 
 Protótipo de estudo de um sistema de educação financeira que analisa o histórico de transações de um usuário, classifica movimentações, identifica renda, parcelas e anomalias, e gera diagnóstico, alertas e metas. Usa dados fictícios.
 
@@ -46,3 +46,4 @@ Rodar a partir da pasta do projeto (Windows):
 - Rodar: `.venv\Scripts\python -m financas`
 - Testar: `.venv\Scripts\python -m pytest`
 - Interface: `.venv\Scripts\streamlit run app.py`
+- Documentos em PDF: `.venv\Scripts\python documentos\fontes\gerar_pdfs.py`
