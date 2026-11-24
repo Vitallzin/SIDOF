@@ -23,18 +23,14 @@ from financas.normalizacao import normalizar, normalizar_texto
 from financas.regras import classificar_por_regras
 
 SEMENTE_BASE = SEMENTE + 1000  # base de "clientes antigos", diferente dos usuários atendidos
+REPETICOES_APRENDIDOS = 3
 C_DO_MODELO = 10  # valor escolhido pela validação cruzada em todas as rodadas da Fase 3
 COLUNAS_ANOMALIAS = ["id_transacao", "id_usuario", "data", "mes", "descricao", "contraparte", "valor", "parcela", "categoria_final"]
 
 
 @lru_cache(maxsize=4)
-def treinar_modelo_da_base(semente=SEMENTE_BASE, incluir_faturas=True):
-    """Treina o modelo com as saídas confirmadas de uma base separada de usuários.
-
-    Com incluir_faturas, as compras no cartão também entram como aparecem numa fatura em PDF
-    (nome cortado, sem prefixo do banco), para o modelo reconhecer faturas importadas.
-    O resultado fica guardado: treinar de novo com os mesmos parâmetros devolve o mesmo modelo.
-    """
+def _exemplos_da_base(semente, incluir_faturas):
+    """Textos e categorias confirmados da base separada de usuários (calculado uma vez só)."""
     base = gerar_dados(semente)
     classificado = classificar_por_regras(normalizar(base["extrato"]), base["usuarios"])
     saidas = classificado[classificado["direcao"] == "saida"].merge(
@@ -46,22 +42,41 @@ def treinar_modelo_da_base(semente=SEMENTE_BASE, incluir_faturas=True):
         rotulos = base["verdade"].set_index("id_transacao")["categoria"]
         textos += [normalizar_texto(texto) for texto in lidas["descricao"]]
         categorias += list(rotulos[lidas["id_origem"]])
+    return tuple(textos), tuple(categorias)
+
+
+@lru_cache(maxsize=8)
+def treinar_modelo_da_base(semente=SEMENTE_BASE, incluir_faturas=True, exemplos_extra=()):
+    """Treina o modelo com as saídas confirmadas de uma base separada de usuários.
+
+    Com incluir_faturas, as compras no cartão também entram como aparecem numa fatura em PDF
+    (nome cortado, sem prefixo do banco), para o modelo reconhecer faturas importadas.
+    exemplos_extra: pares (texto, categoria) aprendidos com os usuários (aprendizado contínuo).
+    Cada um entra REPETICOES_APRENDIDOS vezes, para pesar diante de milhares de exemplos da base.
+    O resultado fica guardado: treinar de novo com os mesmos parâmetros devolve o mesmo modelo.
+    """
+    textos, categorias = _exemplos_da_base(semente, incluir_faturas)
+    textos, categorias = list(textos), list(categorias)
+    for texto, categoria in exemplos_extra:
+        textos += [normalizar_texto(texto)] * REPETICOES_APRENDIDOS
+        categorias += [categoria] * REPETICOES_APRENDIDOS
     return treinar(textos, categorias, C_DO_MODELO)
 
 
 class Sistema:
     """Atende um grupo de usuários a partir do extrato e dos nomes (nunca da verdade)."""
 
-    def __init__(self, extrato, usuarios, modelo):
+    def __init__(self, extrato, usuarios, modelo, conhecimento=None):
         self.usuarios = usuarios
         self.modelo = modelo
+        self.conhecimento = conhecimento or {}  # lojas aprendidas com todos os usuários
         self.classificado = classificar_por_regras(normalizar(extrato), usuarios)
         self.memoria = {}
 
     def saidas(self):
         """Saídas classificadas com o que o sistema sabe agora (inclui as respostas já dadas)."""
         saidas = self.classificado[self.classificado["direcao"] == "saida"]
-        return classificar_hibrido(saidas, self.modelo, self.memoria)
+        return classificar_hibrido(saidas, self.modelo, self.memoria, self.conhecimento)
 
     def perguntas(self, id_usuario=None):
         """Transações que o sistema precisa que o usuário confirme."""
@@ -88,9 +103,9 @@ class Sistema:
         return detectar_estatistico(self.saidas()[COLUNAS_ANOMALIAS])
 
 
-def classificar_fatura(compras, modelo, nome_titular="", memoria=None):
+def classificar_fatura(compras, modelo, nome_titular="", memoria=None, conhecimento=None):
     """Classifica as compras lidas de uma fatura em PDF (de qualquer origem), sem guardar nada."""
     extrato = fatura_para_extrato(compras)
     usuarios = pd.DataFrame({"id_usuario": ["PDF"], "nome": [nome_titular or "TITULAR DA FATURA"]})
     classificado = classificar_por_regras(normalizar(extrato), usuarios)
-    return classificar_hibrido(classificado, modelo, memoria)
+    return classificar_hibrido(classificado, modelo, memoria, conhecimento)

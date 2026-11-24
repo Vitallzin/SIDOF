@@ -20,6 +20,7 @@ from financas.normalizacao import chave_de_loja
 from financas.regras import CONFIANCA_MINIMA, parece_pessoa
 
 CONFIANCA_MEMORIA = 0.90
+CONFIANCA_COLETIVO = 0.85  # confirmado por outras pessoas: confiável, mas abaixo da própria resposta
 # Semelhança mínima para reaproveitar a resposta dada para uma loja escrita de outro jeito
 # (decidida antes de medir; é o mesmo limite usado para "loja já vista" nas anomalias)
 SEMELHANCA_MEMORIA = 0.5
@@ -70,24 +71,47 @@ def buscar_na_memoria(memoria, usuario, contraparte):
     candidatos = [nome for (dono, nome) in memoria if dono == usuario]
     if not candidatos:
         return None
-    chaves = [chave_de_loja(nome) for nome in [contraparte] + candidatos]
-    vetores = TfidfVectorizer(analyzer="char", ngram_range=(3, 3)).fit_transform(chaves)
-    semelhancas = cosine_similarity(vetores[0], vetores[1:])[0]
-    melhor = semelhancas.argmax()
-    if semelhancas[melhor] < SEMELHANCA_MEMORIA:
+    parecido = _nome_mais_parecido(chave_de_loja(contraparte), [chave_de_loja(nome) for nome in candidatos])
+    if parecido is None:
         return None
-    return memoria[(usuario, candidatos[melhor])], candidatos[melhor]
+    return memoria[(usuario, candidatos[parecido])], candidatos[parecido]
+
+
+def _nome_mais_parecido(chave, chaves_candidatas):
+    """Posição da chave de loja mais parecida (pedaços de 3 letras), ou None se nenhuma for parecida o bastante."""
+    if not chave or not chaves_candidatas:
+        return None
+    vetores = TfidfVectorizer(analyzer="char", ngram_range=(3, 3)).fit_transform([chave] + list(chaves_candidatas))
+    semelhancas = cosine_similarity(vetores[0], vetores[1:])[0]
+    melhor = int(semelhancas.argmax())
+    return melhor if semelhancas[melhor] >= SEMELHANCA_MEMORIA else None
+
+
+def buscar_no_coletivo(conhecimento, contraparte, pix_para_pessoa=False):
+    """Procura a loja no que os usuários já ensinaram. Devolve (categoria, votos, nome) ou None.
+
+    PIX para pessoas nunca entra (PIX para "CARLOS LOPES" é assunto de cada um).
+    """
+    if not conhecimento or pix_para_pessoa:
+        return None
+    chave = chave_de_loja(contraparte)
+    if chave in conhecimento:
+        return conhecimento[chave]
+    chaves = list(conhecimento)
+    parecido = _nome_mais_parecido(chave, chaves)
+    return conhecimento[chaves[parecido]] if parecido is not None else None
 
 
 def _nome_categoria(categoria):
     return categoria.replace("_", " ")
 
 
-def classificar_hibrido(classificado, modelo, memoria=None):
-    """Combina regras, memória do usuário e modelo.
+def classificar_hibrido(classificado, modelo, memoria=None, conhecimento=None):
+    """Combina regras, memória do usuário, conhecimento coletivo e modelo.
 
     classificado: saída de classificar_por_regras.
     memoria: dicionário {(id_usuario, contraparte): categoria} com respostas do usuário.
+    conhecimento: lojas aprendidas com outros usuários {chave: (categoria, votos, nome)}.
     """
     memoria = memoria or {}
     tabela = classificado.copy().reset_index(drop=True)
@@ -115,7 +139,20 @@ def classificar_hibrido(classificado, modelo, memoria=None):
             texto += f' "{tabela.loc[i, "contraparte"]}" parece ser o mesmo lugar.'
         tabela.loc[i, "explicacao_final"] = texto
 
-    # Modelo: só para o que as regras e a memória não resolveram
+    # Conhecimento coletivo: lojas que outros usuários já confirmaram
+    for i in tabela.index[sem_regra & ~lembrado]:
+        pix_para_pessoa = tabela.loc[i, "operacao"] == "pix_enviado" and parece_pessoa(tabela.loc[i, "contraparte"])
+        achado = buscar_no_coletivo(conhecimento, tabela.loc[i, "contraparte"], pix_para_pessoa)
+        if achado is None:
+            continue
+        categoria, votos, nome = achado
+        lembrado[i] = True
+        tabela.loc[i, ["categoria_final", "confianca_final", "origem"]] = [categoria, CONFIANCA_COLETIVO, "coletivo"]
+        tabela.loc[i, "explicacao_final"] = (
+            f'Aprendido com confirmações de outros usuários: "{nome}" é {_nome_categoria(categoria)} ({votos} votos).'
+        )
+
+    # Modelo: só para o que as regras, a memória e o conhecimento coletivo não resolveram
     para_modelo = sem_regra & ~lembrado
     if para_modelo.any():
         categorias, confiancas = prever(modelo, tabela.loc[para_modelo, "descricao"])

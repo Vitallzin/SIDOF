@@ -138,7 +138,8 @@ def classificar_entradas(classificado, usuarios):
         )
         resultados.append({"categoria_renda": categoria, "confianca_renda": confianca, "explicacao_renda": explicacao})
 
-    entradas = pd.concat([entradas.reset_index(drop=True), pd.DataFrame(resultados)], axis=1)
+    colunas = ["categoria_renda", "confianca_renda", "explicacao_renda"]
+    entradas = pd.concat([entradas.reset_index(drop=True), pd.DataFrame(resultados, columns=colunas)], axis=1)
     entradas["perguntar_usuario"] = entradas["confianca_renda"] < CONFIANCA_MINIMA
     return entradas
 
@@ -172,6 +173,11 @@ def _troca_de_emprego(salarios, meses):
 
 
 def _explicar_perfil(perfil):
+    if perfil["tipo_renda"] == "nao_informada":
+        return (
+            "Renda não informada: não há entradas de salário ou trabalho nestes dados (uma fatura de cartão só mostra gastos). "
+            "Informe a renda mensal para ver a sobra e as porcentagens."
+        )
     if perfil["troca_emprego"]:
         texto = (
             f"Renda fixa, com troca de emprego: o salário passou de {perfil['empresa_anterior']} "
@@ -200,11 +206,16 @@ def _explicar_perfil(perfil):
     return texto
 
 
-def perfil_de_renda(entradas, meses):
-    """Uma linha por usuário com o perfil da renda efetiva (fixa + variável)."""
+def perfil_de_renda(entradas, meses, usuarios=None):
+    """Uma linha por usuário com o perfil da renda efetiva (fixa + variável).
+
+    usuarios: lista de todos os usuários. Quem não tem nenhuma entrada (ex.: só uma fatura de cartão,
+    sem renda informada) aparece com renda "não informada".
+    """
+    usuarios = list(usuarios) if usuarios is not None else list(entradas["id_usuario"].unique())
     efetiva = entradas[entradas["categoria_renda"].isin(CATEGORIAS_RENDA_EFETIVA)]
     por_mes = efetiva.pivot_table(index="id_usuario", columns="mes", values="valor", aggfunc="sum", fill_value=0)
-    por_mes = por_mes.reindex(columns=meses, fill_value=0).reindex(entradas["id_usuario"].unique(), fill_value=0)
+    por_mes = por_mes.reindex(columns=meses, fill_value=0).reindex(usuarios, fill_value=0)
 
     linhas = []
     for usuario, valores in por_mes.iterrows():
@@ -215,7 +226,7 @@ def perfil_de_renda(entradas, meses):
         fontes = do_usuario.loc[do_usuario["categoria_renda"].isin(CATEGORIAS_RENDA_EFETIVA), "contraparte"].nunique()
         media = valores.mean()
         variacao = valores.std() / media if media > 0 else 0.0
-        tipo = _tipo_de_renda(tem_salario, troca is not None, fontes, variacao)
+        tipo = _tipo_de_renda(tem_salario, troca is not None, fontes, variacao) if media > 0 else "nao_informada"
         if troca:
             referencia = salarios.loc[salarios["contraparte"] == troca["empresa_atual"], "valor"].mean()
         else:

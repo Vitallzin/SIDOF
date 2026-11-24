@@ -185,3 +185,52 @@ def ler_faturas_do_conjunto(extrato, usuarios):
                 id_origem=compras["id_transacao"].values if mesma_quantidade else None,
             ))
     return pd.concat(partes, ignore_index=True)
+
+
+# ---------- "Minha fatura": várias faturas viram o extrato de uma pessoa ----------
+
+ID_FATURA = "FATURA"
+# A palavra SALARIO faz a regra de salário reconhecer a renda informada como renda fixa
+DESCRICAO_RENDA_INFORMADA = "CREDITO SALARIO RENDA INFORMADA"
+DIA_RENDA_INFORMADA = 5
+
+
+def mes_da_fatura(compras):
+    """O mês com mais compras na fatura (algumas compras do fim do mês anterior também aparecem nela)."""
+    return compras["data"].str[:7].value_counts().sort_index().idxmax()
+
+
+def _no_mes_da_fatura(compras):
+    """Cada fatura conta como um mês: compras de outro mês passam para o dia 1 do mês da fatura."""
+    mes = mes_da_fatura(compras)
+    fora = compras["data"].str[:7] != mes
+    return compras.assign(data=compras["data"].where(~fora, f"{mes}-01"))
+
+
+def extrato_de_faturas(faturas, nome, renda_mensal=0.0):
+    """Junta as compras de várias faturas (uma tabela por PDF) num extrato de uma pessoa só.
+
+    renda_mensal: renda informada pela pessoa (0 = não informada). Entra como um crédito de
+    salário por mês, para o diagnóstico calcular sobra, porcentagens e metas.
+    Devolve (extrato, usuarios), no mesmo formato dos dados fictícios.
+    """
+    faturas = [compras for compras in faturas if len(compras)]
+    if not faturas:
+        raise ValueError("Nenhuma compra encontrada nas faturas.")
+    compras = pd.concat([_no_mes_da_fatura(compras) for compras in faturas], ignore_index=True)
+    extrato = fatura_para_extrato(compras.sort_values("data", kind="stable"), ID_FATURA)
+    if renda_mensal > 0:
+        meses = sorted(extrato["data"].str[:7].unique())
+        renda = pd.DataFrame({
+            "id_transacao": [f"R{i:03d}" for i in range(1, len(meses) + 1)],
+            "id_usuario": ID_FATURA,
+            "data": [f"{mes}-{DIA_RENDA_INFORMADA:02d}" for mes in meses],
+            "descricao": DESCRICAO_RENDA_INFORMADA,
+            "valor": float(renda_mensal),
+            "meio": "ted",
+            "conta": "corrente",
+            "parcela": "",
+        })
+        extrato = pd.concat([extrato, renda], ignore_index=True).sort_values("data", kind="stable", ignore_index=True)
+    usuarios = pd.DataFrame({"id_usuario": [ID_FATURA], "nome": [nome.strip() or "TITULAR DA FATURA"]})
+    return extrato, usuarios

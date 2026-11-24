@@ -52,11 +52,13 @@ class Meta:
 
 
 def plano_da_meta(meta, sobra_media, alto_comprometimento=False, tipo_renda="fixa"):
-    """Texto com o valor mensal e a comparação com a sobra média do usuário."""
+    """Texto com o valor mensal e a comparação com a sobra média do usuário (None = renda não informada)."""
     texto = (
         f'Meta "{meta.nome}": juntar {reais(meta.valor_alvo)} até {mes_por_extenso(meta.mes_final)} '
         f"({meta.prazo_meses} meses). É preciso reservar cerca de {reais(meta.valor_mensal)} por mês."
     )
+    if sobra_media is None:  # renda não informada (ex.: só a fatura do cartão)
+        return texto + " Informe a renda mensal para comparar com a sua sobra média."
     if sobra_media <= 0:
         texto += (
             " Hoje, em média, não sobra dinheiro no fim do mês; para a meta caber, seria preciso "

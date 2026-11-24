@@ -61,7 +61,9 @@ def _queda_de_renda(sistema, mes):
     anteriores = [m for m in meses if m < mes]
     if len(anteriores) < MESES_MINIMOS_RENDA:
         return []
-    renda = renda_por_mes(classificar_entradas(sistema.classificado, sistema.usuarios), meses)
+    renda = renda_por_mes(
+        classificar_entradas(sistema.classificado, sistema.usuarios), meses, sorted(sistema.classificado["id_usuario"].unique())
+    )
     notificacoes = []
     for usuario, valores in renda.iterrows():
         media = valores[anteriores].mean()

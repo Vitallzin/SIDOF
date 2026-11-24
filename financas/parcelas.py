@@ -125,9 +125,9 @@ def comprometimento_da_renda(parcelamentos, compromissos, perfis):
 def _explicar_comprometimento(linha, proximo_mes):
     if linha["parcelamentos_ativos"] == 0:
         return "Nenhuma parcela em aberto: a renda futura não está comprometida com parcelamentos."
+    parte_da_renda = f" ({linha['percentual_da_renda']:.0%} da renda de referência)" if linha["renda_referencia"] > 0 else ""
     texto = (
-        f"Em {mes_por_extenso(proximo_mes)}, {reais(linha['comprometido_proximo_mes'])} "
-        f"({linha['percentual_da_renda']:.0%} da renda de referência) já estão comprometidos com "
+        f"Em {mes_por_extenso(proximo_mes)}, {reais(linha['comprometido_proximo_mes'])}{parte_da_renda} já estão comprometidos com "
         f"{linha['parcelamentos_ativos']} parcelamento(s). No total faltam {reais(linha['total_restante'])}; "
         f"a última parcela é em {mes_por_extenso(linha['ultimo_mes_com_parcela'])}."
     )

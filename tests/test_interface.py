@@ -80,3 +80,11 @@ def test_interface_sem_emojis():
 
     codigo = (Path(__file__).parent.parent / "app.py").read_text(encoding="utf-8")
     assert not re.findall(r"[\U0001F300-\U0001FAFF☀-➿]", codigo)
+
+
+def test_modo_minha_fatura_sem_arquivo_mostra_instrucoes():
+    app = AppTest.from_file("../app.py", default_timeout=180).run()
+    app.sidebar.radio[0].set_value("Minha fatura").run()
+    assert not app.exception
+    assert "Diagnóstico da sua fatura" in app.header[0].value
+    assert "Envie" in _textos(app)

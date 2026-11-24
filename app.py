@@ -1,18 +1,43 @@
 """Interface do protótipo (Fase 9). Rodar com: .venv\\Scripts\\streamlit run app.py
 
-Mostra, para cada usuário fictício, o diagnóstico, as perguntas do sistema, as notificações
-do mês, as parcelas e uma meta. Um seletor simula os meses chegando um a um.
+Mostra o diagnóstico, as perguntas do sistema, as notificações do mês, as parcelas e uma meta.
+A barra lateral escolhe de quem é o diagnóstico:
+- Usuário de simulação: um dos usuários fictícios, com um seletor que simula os meses chegando.
+- Minha fatura: uma ou mais faturas de cartão em PDF enviadas pela pessoa (lidas só em memória),
+  com a renda mensal opcional. Todas as abas passam a mostrar os dados dessas faturas.
 Usa só o sistema em uso (financas/sistema.py): nada aqui lê a verdade dos usuários.
 """
+
+import hashlib
+import io
+import time
+import uuid
+import zipfile
 
 import altair as alt
 import pandas as pd
 import streamlit as st
 
+from financas.aprendizado import (
+    MINIMO_DE_CONFIRMACOES,
+    conhecimento_coletivo,
+    criar_armazenamento,
+    exemplos_de_treino,
+    registrar_confirmacao,
+    registrar_uso_fatura,
+)
+from financas.aprendizado import resumo as resumo_do_aprendizado
 from financas.categorias import CATEGORIAS, nome_exibicao
 from financas.diagnostico import BLOCOS
 from financas.formatacao import mes_por_extenso, reais
-from financas.faturas_pdf import compras_no_cartao, gerar_fatura_pdf, ler_fatura_pdf
+from financas.faturas_pdf import (
+    ID_FATURA,
+    compras_no_cartao,
+    extrair_texto,
+    extrato_de_faturas,
+    gerar_fatura_pdf,
+    ler_linhas,
+)
 from financas.gerador import gerar_dados
 from financas.metas import Meta, acompanhar, aportes_por_mes, plano_da_meta, previsao
 from financas.monitoramento import extrato_ate, notificacoes_do_mes
@@ -180,31 +205,87 @@ def seta(variacao):
 
 # ---------- Dados ----------
 
-@st.cache_resource(show_spinner="Gerando dados fictícios e treinando o modelo...")
+@st.cache_resource(show_spinner="Gerando dados fictícios...")
 def carregar():
-    """Dados fictícios dos usuários atendidos e modelo treinado na base separada."""
-    return gerar_dados(), treinar_modelo_da_base()
+    """Dados fictícios dos usuários atendidos."""
+    return gerar_dados()
 
 
-dados, modelo = carregar()
-extrato, usuarios = dados["extrato"], dados["usuarios"]
-meses = sorted(extrato["data"].str[:7].unique())
+def credenciais_firebase():
+    """Chave do Firebase guardada nos Secrets do Streamlit (nunca no código). Sem ela, usa memória local."""
+    try:
+        return dict(st.secrets["firebase"])
+    except Exception:
+        return None
 
 
-@st.cache_data(show_spinner="Calculando...")
-def calcular(mes, respostas):
-    """Tudo o que a tela mostra, olhando só o extrato até o mês escolhido."""
-    sistema = Sistema(extrato_ate(extrato, mes), usuarios, modelo)
+@st.cache_resource(show_spinner=False)
+def abrir_armazenamento():
+    return criar_armazenamento(credenciais_firebase())
+
+
+@st.cache_data(show_spinner=False)
+def ler_conhecimento(_armazenamento, janela):
+    """Lojas aprendidas por todos. A mesma leitura vale para todas as sessões dentro da janela de 15 s."""
+    return conhecimento_coletivo(_armazenamento)
+
+
+@st.cache_resource(ttl=3600, show_spinner="Treinando o modelo com o que os usuários ensinaram...")
+def modelo_atual():
+    """Re-treina a cada 1 hora (ou pelo botão da aba Aprendizado) com as lojas aprendidas."""
+    exemplos = exemplos_de_treino(conhecimento_coletivo(abrir_armazenamento()))
+    return treinar_modelo_da_base(exemplos_extra=exemplos), len(exemplos)
+
+
+dados = carregar()
+extrato_simulado, usuarios_simulados = dados["extrato"], dados["usuarios"]
+meses_simulados = sorted(extrato_simulado["data"].str[:7].unique())
+armazenamento = abrir_armazenamento()
+modelo, lojas_no_modelo = modelo_atual()
+
+if "sessao" not in st.session_state:
+    st.session_state.sessao = uuid.uuid4().hex[:12]  # código aleatório: separa votos sem identificar ninguém
+JANELA_DE_LEITURA = 15  # segundos: o que outras pessoas ensinam aparece aqui em até 15 s
+conhecimento = ler_conhecimento(armazenamento, int(time.time() // JANELA_DE_LEITURA))
+
+
+def aprender(contraparte, categoria, origem, descricao):
+    """Manda a resposta para o aprendizado coletivo (só lojas; PIX para pessoas e renda ficam de fora)."""
+    try:
+        guardou = registrar_confirmacao(armazenamento, contraparte, categoria, st.session_state.sessao, origem, descricao)
+    except Exception:
+        st.session_state.aviso = "Não foi possível salvar no aprendizado coletivo agora; sua resposta vale nesta sessão."
+        return
+    if guardou:
+        ler_conhecimento.clear()  # a própria resposta aparece na hora para todos
+        # Mostrado depois do recarregamento da página (um aviso feito antes do st.rerun some na hora)
+        st.session_state.aviso = f"Obrigado! \"{contraparte}\" entrou no aprendizado coletivo."
+
+
+if "aviso" in st.session_state:
+    st.toast(st.session_state.pop("aviso"))
+
+
+@st.cache_data(show_spinner="Calculando...", max_entries=20)
+def calcular(chave_fonte, mes, respostas, conhecimento_itens, lojas_no_modelo, _modelo, _extrato, _usuarios):
+    """Tudo o que a tela mostra, olhando só o extrato até o mês escolhido.
+
+    chave_fonte identifica os dados (simulação ou o conjunto de faturas enviado): o resultado
+    guardado só é reaproveitado para os mesmos dados.
+    """
+    modelo, extrato, usuarios = _modelo, _extrato, _usuarios
+    sistema = Sistema(extrato_ate(extrato, mes), usuarios, modelo, dict(conhecimento_itens))
     sistema.memoria = dict(respostas)
     meses_vistos = sorted(sistema.classificado["mes"].unique())
     indicadores, textos = sistema.diagnosticar()
     entradas = classificar_entradas(sistema.classificado, usuarios)
-    perfis = perfil_de_renda(entradas, meses_vistos)
+    perfis = perfil_de_renda(entradas, meses_vistos, sorted(usuarios["id_usuario"]))
     parcelamentos = identificar_parcelamentos(sistema.classificado)
     compromissos = compromissos_futuros(parcelamentos, sorted(usuarios["id_usuario"]), mes)
     return {
         "indicadores": indicadores,
         "textos": textos,
+        "saidas": sistema.saidas(),
         "perguntas": sistema.perguntas(),
         "parcelamentos": parcelamentos,
         "comprometimento": comprometimento_da_renda(parcelamentos, compromissos, perfis),
@@ -214,64 +295,186 @@ def calcular(mes, respostas):
     }
 
 
+@st.cache_data(max_entries=20, show_spinner="Lendo a fatura...")
+def ler_fatura(conteudo):
+    """Lê a fatura só em memória; nada é gravado em disco. Devolve (compras, linhas ignoradas, é fictícia?)."""
+    texto = extrair_texto(conteudo)
+    compras, ignoradas = ler_linhas(texto)
+    # As faturas de exemplo do SIDOF trazem "(FICTÍCIA)" no título: o voto delas não conta como fatura real
+    return compras, ignoradas, "(FICTICIA)" in normalizar_texto(texto)
+
+
+@st.cache_data(show_spinner=False)
+def faturas_de_exemplo():
+    """Três faturas fictícias seguidas de um usuário de simulação, num .zip, para testar o modo Minha fatura."""
+    no_cartao = extrato_simulado[extrato_simulado["meio"] == "cartao_credito"]
+    dono = no_cartao["id_usuario"].value_counts().idxmax()  # quem mais usa o cartão
+    nome = usuarios_simulados.set_index("id_usuario")["nome"][dono]
+    pacote = io.BytesIO()
+    with zipfile.ZipFile(pacote, "w") as arquivo_zip:
+        for mes_exemplo in meses_simulados[-3:]:
+            pdf = gerar_fatura_pdf(compras_no_cartao(extrato_simulado, dono, mes_exemplo), f"{nome} (FICTICIA)", mes_exemplo)
+            arquivo_zip.writestr(f"fatura_ficticia_{mes_exemplo}.pdf", pdf)
+    return pacote.getvalue()
+
+
 if "respostas" not in st.session_state:
     st.session_state.respostas = {}
 
 # ---------- Barra lateral ----------
-nomes = usuarios.set_index("id_usuario")["nome"]
+SIMULACAO, MINHA_FATURA = "Usuário de simulação", "Minha fatura"
+nomes_simulados = usuarios_simulados.set_index("id_usuario")["nome"]
+faturas = {}  # assinatura do arquivo -> (nome do arquivo, compras, linhas ignoradas, é fictícia?)
 with st.sidebar:
     st.title("SIDOF")
     st.caption("Sistema Inteligente de Diagnóstico e Orientação Financeira")
-    usuario = st.selectbox("Usuário", list(nomes.index), format_func=lambda u: f"{u} · {nomes[u].title()}")
-    mes = st.select_slider(
-        "Mês atual (simulação)", options=meses[2:], value=meses[-1], format_func=mes_por_extenso,
-        help="Simula os meses chegando: o sistema só enxerga o extrato até este mês.",
-    )
+    fonte = st.radio("De quem é o diagnóstico?", [SIMULACAO, MINHA_FATURA], key="fonte")
+    modo_fatura = fonte == MINHA_FATURA
+    if not modo_fatura:
+        usuario = st.selectbox("Usuário", list(nomes_simulados.index), format_func=lambda u: f"{u} · {nomes_simulados[u].title()}")
+        mes = st.select_slider(
+            "Mês atual (simulação)", options=meses_simulados[2:], value=meses_simulados[-1], format_func=mes_por_extenso,
+            help="Simula os meses chegando: o sistema só enxerga o extrato até este mês.",
+        )
+    else:
+        usuario = ID_FATURA
+        nome_titular = st.text_input("Seu nome (opcional)", help="Aparece no cabeçalho e ajuda a reconhecer transferências para você mesmo.")
+        renda_informada = st.number_input(
+            "Renda mensal (opcional)", min_value=0.0, value=0.0, step=100.0, format="%.2f",
+            help="Com a renda aparecem a sobra, as porcentagens e a comparação com as metas. Deixe 0 para não informar.",
+        )
+        arquivos = st.file_uploader("Faturas em PDF (uma por mês)", type="pdf", accept_multiple_files=True)
+        st.download_button(
+            "Baixar faturas de exemplo (3 meses)", data=faturas_de_exemplo(), file_name="faturas_ficticias_sidof.zip",
+            mime="application/zip", use_container_width=True,
+        )
+        st.caption("Descompacte e envie os 3 PDFs. As faturas são lidas só em memória e nunca são salvas.")
+        for arquivo in arquivos or []:
+            conteudo = arquivo.getvalue()
+            # O mesmo arquivo enviado duas vezes conta uma vez só
+            faturas.setdefault(hashlib.sha256(conteudo).hexdigest(), (arquivo.name, *ler_fatura(conteudo)))
+        com_compras = {chave: item for chave, item in faturas.items() if not item[1].empty}
+        if com_compras:
+            extrato, usuarios = extrato_de_faturas(
+                [item[1] for item in com_compras.values()], normalizar_texto(nome_titular), renda_informada
+            )
+            meses = sorted(extrato["data"].str[:7].unique())
+            if len(meses) > 1:
+                mes = st.select_slider(
+                    "Mês da fatura", options=meses, value=meses[-1], format_func=mes_por_extenso,
+                    help="O diagnóstico olha as faturas até este mês.",
+                )
+            else:
+                mes = meses[0]
     escuro = st.toggle("Tema escuro", key="tema_escuro")
     st.divider()
-    st.caption("Protótipo de estudo. **Todos os dados são fictícios.** O sistema não recomenda investimentos.")
+    if modo_fatura:
+        st.caption("Protótipo de estudo. Só o nome da loja e a categoria que você confirmar entram no aprendizado coletivo. O sistema não recomenda investimentos.")
+    else:
+        st.caption("Protótipo de estudo. **Todos os dados são fictícios.** O sistema não recomenda investimentos.")
 
 CORES = PALETAS["escuro" if escuro else "claro"]
 aplicar_tema(CORES)
 
-resultado = calcular(mes, tuple(sorted(st.session_state.respostas.items())))
+if modo_fatura:
+    ilegiveis = [item[0] for item in faturas.values() if item[1].empty]
+    if ilegiveis:
+        st.warning(
+            "Não encontrei compras no formato 'data, descrição, valor' em: " + ", ".join(ilegiveis) + ". "
+            "Faturas escaneadas (imagem) ou com layout muito diferente não são lidas por este protótipo."
+        )
+    if not com_compras:
+        st.header("Diagnóstico da sua fatura", anchor=False)
+        st.markdown(
+            "Envie **uma ou mais faturas de cartão em PDF** na barra lateral (uma por mês). "
+            "Todo o diagnóstico, as perguntas, as parcelas e as metas passam a ser dessas faturas."
+        )
+        st.caption(
+            "Funciona com faturas fictícias ou reais no formato comum 'data, descrição, parcela, valor'. "
+            "O arquivo não é salvo. Sem fatura à mão? Baixe as faturas de exemplo na barra lateral."
+        )
+        st.stop()
+    chave_fonte = "fatura|" + "|".join(sorted(com_compras)) + f"|{renda_informada}|{normalizar_texto(nome_titular)}"
+    # Voto de fatura real só quando há alguma fatura que não é de exemplo
+    origem_voto = "ficticio" if all(item[3] for item in com_compras.values()) else "fatura"
+    primeiro_nome = nome_titular.strip().split()[0].title() if nome_titular.strip() else ""
+    # Métrica do aprendizado: quantas compras de cada fatura nova viraram pergunta (só números)
+    registradas = st.session_state.setdefault("faturas_registradas", set())
+    for assinatura, (_, compras, _, _) in com_compras.items():
+        if assinatura not in registradas:
+            registradas.add(assinatura)
+            classificadas = classificar_fatura(compras, modelo, normalizar_texto(nome_titular), None, conhecimento)
+            try:
+                registrar_uso_fatura(
+                    armazenamento, len(classificadas), classificadas["perguntar_usuario"].sum(),
+                    int((classificadas["origem"] == "coletivo").sum()),
+                )
+            except Exception:
+                pass  # métrica opcional: não atrapalha o diagnóstico
+else:
+    extrato, usuarios, meses = extrato_simulado, usuarios_simulados, meses_simulados
+    chave_fonte, origem_voto = "simulacao", "ficticio"
+    primeiro_nome = nomes_simulados[usuario].title().split()[0]
+
+meses_vistos = [m for m in meses if m <= mes]
+resultado = calcular(
+    chave_fonte, mes, tuple(sorted(st.session_state.respostas.items())), tuple(sorted(conhecimento.items())),
+    lojas_no_modelo, modelo, extrato, usuarios,
+)
 indicador = resultado["indicadores"].set_index("id_usuario").loc[usuario]
 secoes = indicador["secoes"]
 perguntas_usuario = resultado["perguntas"][resultado["perguntas"]["id_usuario"] == usuario]
 notificacoes_usuario = resultado["notificacoes"][resultado["notificacoes"]["id_usuario"] == usuario]
+sem_renda = indicador["renda_media"] <= 0
 
 # ---------- Cabeçalho ----------
-st.header(f"Olá, {nomes[usuario].title().split()[0]}", anchor=False)
-st.markdown(f"**Seu diagnóstico até {mes_por_extenso(mes)}**")
+st.header(f"Olá, {primeiro_nome}" if primeiro_nome else "Diagnóstico da sua fatura", anchor=False)
+if modo_fatura:
+    quantas = f"{len(com_compras)} fatura" + ("s" if len(com_compras) > 1 else "")
+    st.markdown(f"**Diagnóstico de {quantas} até {mes_por_extenso(mes)}**")
+else:
+    st.markdown(f"**Seu diagnóstico até {mes_por_extenso(mes)}**")
 st.caption(md(secoes["renda"]))
 
 taxa = indicador["taxa_de_sobra"]
 colunas = st.columns(4)
-colunas[0].markdown(cartao("Renda efetiva média", reais_curto(indicador["renda_media"]), "por mês"), unsafe_allow_html=True)
+if sem_renda:
+    colunas[0].markdown(
+        cartao("Renda efetiva média", "—", "não informada" if modo_fatura else "nenhuma renda identificada", "var(--suave)"),
+        unsafe_allow_html=True,
+    )
+else:
+    colunas[0].markdown(cartao("Renda efetiva média", reais_curto(indicador["renda_media"]), "por mês"), unsafe_allow_html=True)
 colunas[1].markdown(cartao("Gastos médios", reais_curto(indicador["gastos_total"]), "por mês"), unsafe_allow_html=True)
-colunas[2].markdown(
-    cartao("Sobra média", reais_curto(indicador["sobra_media"]), f"{taxa:.0%} da renda", cor_da_sobra(taxa)),
-    unsafe_allow_html=True,
-)
+if sem_renda:
+    colunas[2].markdown(cartao("Sobra média", "—", "precisa da renda", "var(--suave)"), unsafe_allow_html=True)
+else:
+    colunas[2].markdown(
+        cartao("Sobra média", reais_curto(indicador["sobra_media"]), f"{taxa:.0%} da renda", cor_da_sobra(taxa)),
+        unsafe_allow_html=True,
+    )
 colunas[3].markdown(
     cartao("Parcelas no próximo mês", reais_curto(indicador["comprometido_proximo_mes"]),
-           f"{indicador['percentual_comprometido']:.0%} da renda",
+           "por mês" if sem_renda else f"{indicador['percentual_comprometido']:.0%} da renda",
            "var(--vermelho)" if indicador["alto_comprometimento"] else "var(--texto)"),
     unsafe_allow_html=True,
 )
 st.write("")
 
-abas = st.tabs([
-    "Diagnóstico",
-    f"Notificações ({len(notificacoes_usuario)})",
-    f"Perguntas ({len(perguntas_usuario)})",
-    "Parcelas",
-    "Metas",
-    "Importar fatura",
-])
+nomes_abas = {
+    "diagnostico": "Diagnóstico",
+    "notificacoes": f"Notificações ({len(notificacoes_usuario)})",
+    "perguntas": f"Perguntas ({len(perguntas_usuario)})",
+    "parcelas": "Parcelas",
+    "metas": "Metas",
+}
+if modo_fatura:
+    nomes_abas["compras"] = "Compras das faturas"
+nomes_abas["aprendizado"] = "Aprendizado"
+abas = dict(zip(nomes_abas, st.tabs(list(nomes_abas.values()))))
 
 # ---------- Diagnóstico ----------
-with abas[0]:
+with abas["diagnostico"]:
     blocos = pd.DataFrame({
         "bloco": [rotulo.split(" (")[0] for _, rotulo in BLOCOS],
         "nome": [nome for nome, _ in BLOCOS],
@@ -296,10 +499,11 @@ with abas[0]:
         st.altair_chart(estilo_grafico((rosca + centro).properties(height=260)), use_container_width=True)
         st.caption("Gasto médio por mês no centro. Passe o mouse para ver cada bloco.")
     with direita:
-        base = indicador["renda_media"] if indicador["renda_media"] > 0 else 1
+        compara_meses = len(meses_vistos) >= 2  # com um mês só não há evolução para mostrar
         linhas = []
         for nome, rotulo in BLOCOS:
-            variacao = seta(indicador[f"variacao_{nome}"]) if nome != "a_confirmar" else ""
+            variacao = seta(indicador[f"variacao_{nome}"]) if nome != "a_confirmar" and compara_meses else ""
+            parte_da_renda = "" if sem_renda else f"{indicador[nome] / indicador['renda_media']:.0%} da renda "
             titulo, _, detalhe = rotulo.partition(" (")
             detalhe = detalhe.rstrip(")")
             # Duas linhas: nome e valor em cima; detalhe, % da renda e variação embaixo
@@ -307,18 +511,26 @@ with abas[0]:
                 f'<div class="bloco"><span class="bolinha" style="background:{CORES_BLOCOS[nome]}"></span>'
                 f'<div class="corpo"><div class="topo"><span class="nome">{titulo}</span>'
                 f'<span class="quanto">{reais(indicador[nome])}</span></div>'
-                f'<div class="base"><span>{detalhe}</span><span>{indicador[nome] / base:.0%} da renda {variacao}</span></div>'
+                f'<div class="base"><span>{detalhe}</span><span>{parte_da_renda}{variacao}</span></div>'
                 f'</div></div>'
             )
         st.markdown(html(f'<div class="cartao">{"".join(linhas)}</div>'), unsafe_allow_html=True)
-        st.caption("% da renda efetiva · setas comparam o último trimestre com o anterior")
-        st.markdown(
-            html(
+        legenda = [] if sem_renda else ["% da renda efetiva"]
+        if compara_meses:
+            legenda.append("setas comparam a segunda metade do período com a primeira")
+        if legenda:
+            st.caption(" · ".join(legenda))
+        if sem_renda:
+            faixa = (
+                f'<div class="faixa" style="background:#6B7280">Sobra média por mês'
+                f'<div class="grande">Informe sua renda mensal na barra lateral para ver a sobra</div></div>'
+            )
+        else:
+            faixa = (
                 f'<div class="faixa" style="background:{cor_da_sobra(taxa, para_texto=False)}">Sobra média por mês'
                 f'<div class="grande">{reais(indicador["sobra_media"])} · {taxa:.0%} da renda</div></div>'
-            ),
-            unsafe_allow_html=True,
-        )
+            )
+        st.markdown(html(faixa), unsafe_allow_html=True)
         if secoes["outras_entradas"]:
             st.caption(md(secoes["outras_entradas"]))
 
@@ -343,7 +555,7 @@ with abas[0]:
         st.text(resultado["textos"][usuario])
 
 # ---------- Notificações ----------
-with abas[1]:
+with abas["notificacoes"]:
     st.markdown(f'<div class="secao">O que mudou em {mes_por_extenso(mes)}</div>', unsafe_allow_html=True)
     if notificacoes_usuario.empty:
         st.markdown('<span class="etiqueta ok">Nenhuma notificação neste mês</span>', unsafe_allow_html=True)
@@ -353,10 +565,15 @@ with abas[1]:
             html(f'<div class="aviso" style="border-left-color:{cor}"><div class="titulo" style="color:{cor}">{linha.tipo}</div>{linha.mensagem}</div>'),
             unsafe_allow_html=True,
         )
-    st.caption("Mude o mês na barra lateral para simular a chegada de um novo mês.")
+    if not modo_fatura:
+        st.caption("Mude o mês na barra lateral para simular a chegada de um novo mês.")
+    elif len(meses) > 1:
+        st.caption("Mude o mês da fatura na barra lateral para ver o que mudou em cada mês.")
+    else:
+        st.caption("Com mais faturas (meses seguidos), aparecem avisos de queda de renda, novas parcelas e aumentos de gasto.")
 
 # ---------- Perguntas ----------
-with abas[2]:
+with abas["perguntas"]:
     respondidas = sum(1 for (dono, _) in st.session_state.respostas if dono == usuario)
     st.markdown(f'<div class="secao">O sistema precisa da sua ajuda em {len(perguntas_usuario)} transações</div>', unsafe_allow_html=True)
     st.caption(
@@ -378,6 +595,7 @@ with abas[2]:
             )
             if botao.button("Confirmar", key=f"ok_{linha.id_transacao}", type="primary", use_container_width=True):
                 st.session_state.respostas[(usuario, linha.contraparte)] = categoria
+                aprender(linha.contraparte, categoria, origem_voto, linha.descricao)
                 st.rerun()
     if len(perguntas_usuario) > 10:
         st.caption(f"Mostrando 10 de {len(perguntas_usuario)}.")
@@ -401,7 +619,7 @@ def cartao_parcelamento(item):
     )
 
 
-with abas[3]:
+with abas["parcelas"]:
     comprometimento = resultado["comprometimento"].set_index("id_usuario").loc[usuario]
     parcelas = resultado["parcelamentos"]
     parcelas = parcelas[parcelas["id_usuario"] == usuario].sort_values("parcelas_restantes", ascending=False)
@@ -473,7 +691,7 @@ def proximo_passo(meta, resumo):
     return f"Reservar {reais(meta.valor_mensal)} por mês leva à meta no prazo."
 
 
-with abas[4]:
+with abas["metas"]:
     st.markdown('<div class="secao">Simular uma meta</div>', unsafe_allow_html=True)
     coluna_nome, coluna_valor, coluna_prazo = st.columns([2, 1, 1])
     nome_meta = coluna_nome.text_input("Objetivo", "Computador novo")
@@ -521,88 +739,129 @@ with abas[4]:
     ).properties(height=260)
     st.altair_chart(estilo_grafico(linhas), use_container_width=True)
     with st.expander("Detalhes da meta"):
-        st.write(md(plano_da_meta(meta, indicador["sobra_media"], indicador["alto_comprometimento"], indicador["tipo_renda"])))
+        sobra_para_meta = None if sem_renda else indicador["sobra_media"]
+        st.write(md(plano_da_meta(meta, sobra_para_meta, indicador["alto_comprometimento"], indicador["tipo_renda"])))
         st.write(md(resumo["explicacao"]))
-        st.caption("O acompanhamento usa o que foi transferido para a poupança desde janeiro.")
-
-# ---------- Importar fatura ----------
-@st.cache_data(max_entries=5, show_spinner="Lendo a fatura...")
-def ler_fatura(conteudo):
-    """Lê a fatura só em memória; nada é gravado em disco."""
-    return ler_fatura_pdf(conteudo)
-
-
-with abas[5]:
-    st.markdown('<div class="secao">Importar uma fatura de cartão em PDF</div>', unsafe_allow_html=True)
-    st.caption(
-        "Funciona com faturas fictícias ou reais no formato comum 'data, descrição, parcela, valor'. "
-        "O arquivo é lido só na memória desta sessão: não é salvo, não vai para o repositório e não é usado para treinar."
-    )
-    envio, exemplo = st.columns([3, 1], vertical_alignment="bottom")
-    arquivo = envio.file_uploader("Fatura em PDF", type="pdf")
-    exemplo.download_button(
-        "Fatura de exemplo",
-        data=gerar_fatura_pdf(compras_no_cartao(extrato, usuario, mes), f"{nomes[usuario]} (FICTICIA)", mes),
-        file_name=f"fatura_ficticia_{usuario}_{mes}.pdf",
-        mime="application/pdf",
-        use_container_width=True,
-    )
-    titular = st.text_input("Nome do titular (opcional)", help="Ajuda a reconhecer transferências para você mesmo.")
-
-    if arquivo is not None:
-        compras, ignoradas = ler_fatura(arquivo.getvalue())
-        if compras.empty:
-            st.warning(
-                "Não encontrei compras no formato 'data, descrição, valor'. Faturas escaneadas (imagem) "
-                "ou com layout muito diferente não são lidas por este protótipo."
-            )
+        if modo_fatura:
+            st.caption("A fatura do cartão não mostra o que foi guardado na poupança: o acompanhamento começa do zero.")
         else:
-            if "respostas_fatura" not in st.session_state:
-                st.session_state.respostas_fatura = {}
-            classificadas = classificar_fatura(compras, modelo, normalizar_texto(titular), st.session_state.respostas_fatura)
-            automaticas = (~classificadas["perguntar_usuario"]).mean()
-            colunas = st.columns(4)
-            colunas[0].markdown(cartao("Compras lidas", str(len(compras)), f"{ignoradas} linha(s) ignorada(s)"), unsafe_allow_html=True)
-            colunas[1].markdown(cartao("Total das compras", reais_curto(compras["valor"].sum())), unsafe_allow_html=True)
-            colunas[2].markdown(cartao("Classificadas sozinho", f"{automaticas:.0%}"), unsafe_allow_html=True)
-            colunas[3].markdown(cartao("Parceladas", str((compras["parcela"] != "").sum())), unsafe_allow_html=True)
-            st.write("")
+            st.caption(f"O acompanhamento usa o que foi transferido para a poupança desde {mes_por_extenso(meses[0])}.")
 
-            por_categoria = (
-                classificadas.assign(categoria=classificadas["categoria_final"].map(nome_exibicao), valor=-classificadas["valor"])
-                .groupby("categoria", as_index=False)["valor"].sum()
+# ---------- Compras das faturas (só no modo Minha fatura) ----------
+if modo_fatura:
+    with abas["compras"]:
+        compras_vistas = resultado["saidas"]
+        compras_vistas = compras_vistas[compras_vistas["id_usuario"] == usuario]
+        automaticas = (~compras_vistas["perguntar_usuario"]).mean() if len(compras_vistas) else 0.0
+        pelo_coletivo = int((compras_vistas["origem"] == "coletivo").sum())
+        ignoradas = sum(item[2] for item in com_compras.values())
+        st.markdown(f'<div class="secao">Compras lidas até {mes_por_extenso(mes)}</div>', unsafe_allow_html=True)
+        st.caption(
+            "Cada fatura conta como um mês (compras do fim do mês anterior entram no mês da fatura). "
+            "Pagamentos, créditos e estornos da fatura são ignorados."
+        )
+        colunas = st.columns(4)
+        colunas[0].markdown(cartao("Compras lidas", str(len(compras_vistas)), f"{ignoradas} linha(s) ignorada(s)"), unsafe_allow_html=True)
+        colunas[1].markdown(cartao("Total das compras", reais_curto(-compras_vistas["valor"].sum())), unsafe_allow_html=True)
+        colunas[2].markdown(cartao("Classificadas sozinho", f"{automaticas:.0%}", "o resto vira pergunta"), unsafe_allow_html=True)
+        colunas[3].markdown(cartao("Aprendidas com outros", str(pelo_coletivo), "lojas que usuários já ensinaram"), unsafe_allow_html=True)
+        st.write("")
+
+        por_categoria = (
+            compras_vistas.assign(categoria=compras_vistas["categoria_final"].map(nome_exibicao), valor=-compras_vistas["valor"])
+            .groupby("categoria", as_index=False)["valor"].sum()
+        )
+        barras = alt.Chart(por_categoria).mark_bar(cornerRadius=4, color="#0F766E").encode(
+            x=alt.X("valor:Q", title="R$"),
+            y=alt.Y("categoria:N", title=None, sort="-x"),
+            tooltip=[alt.Tooltip("categoria:N", title="Categoria"), alt.Tooltip("valor:Q", title="R$", format=",.2f")],
+        ).properties(height=max(140, 32 * len(por_categoria)))
+        st.markdown('<div class="secao">Gastos por categoria</div>', unsafe_allow_html=True)
+        st.altair_chart(estilo_grafico(barras), use_container_width=True)
+
+        tabela = compras_vistas.sort_values("data").assign(
+            Data=compras_vistas["data"].dt.strftime("%d/%m/%Y"),
+            Valor=(-compras_vistas["valor"]).map(reais),
+            Categoria=compras_vistas["categoria_final"].map(nome_exibicao),
+            Confiança=compras_vistas["confianca_final"].map(lambda valor: f"{valor:.0%}"),
+        ).rename(columns={"descricao": "Descrição", "parcela": "Parcela", "explicacao_final": "Por quê"})
+        st.dataframe(
+            tabela[["Data", "Descrição", "Parcela", "Valor", "Categoria", "Confiança", "Por quê"]],
+            hide_index=True, use_container_width=True,
+        )
+        if len(perguntas_usuario):
+            st.caption(f"{len(perguntas_usuario)} compra(s) com confiança baixa estão na aba Perguntas, esperando sua confirmação.")
+
+# ---------- Aprendizado ----------
+with abas["aprendizado"]:
+    st.markdown('<div class="secao">O SIDOF aprende com quem usa</div>', unsafe_allow_html=True)
+    st.caption(
+        f"Quando alguém confirma a categoria de uma loja (na aba Perguntas, com usuários de simulação ou com suas faturas), o voto é guardado. "
+        f"Com {MINIMO_DE_CONFIRMACOES} confirmações de sessões diferentes, a loja passa a ser reconhecida para todos "
+        "e entra no re-treino do modelo. PIX para pessoas, valores e datas nunca são guardados."
+    )
+    try:
+        dados_aprendizado = resumo_do_aprendizado(armazenamento)
+    except Exception:
+        dados_aprendizado = None
+        st.warning("Não foi possível ler o aprendizado coletivo agora.")
+
+    if dados_aprendizado:
+        if armazenamento.nome == "Firebase":
+            st.markdown('<span class="etiqueta ok">Guardando no Firebase: o aprendizado é permanente e compartilhado</span>', unsafe_allow_html=True)
+        else:
+            st.markdown(
+                '<span class="etiqueta">Sem Firebase configurado: o aprendizado vale enquanto o app estiver aberto</span>',
+                unsafe_allow_html=True,
             )
-            barras = alt.Chart(por_categoria).mark_bar(cornerRadius=4, color="#0F766E").encode(
-                x=alt.X("valor:Q", title="R$"),
-                y=alt.Y("categoria:N", title=None, sort="-x"),
-                tooltip=[alt.Tooltip("categoria:N", title="Categoria"), alt.Tooltip("valor:Q", title="R$", format=",.2f")],
-            ).properties(height=max(140, 32 * len(por_categoria)))
-            st.markdown('<div class="secao">Gastos da fatura por categoria</div>', unsafe_allow_html=True)
-            st.altair_chart(estilo_grafico(barras), use_container_width=True)
+        colunas = st.columns(4)
+        colunas[0].markdown(cartao("Lojas aprendidas", str(dados_aprendizado["lojas_aprendidas"]), f"com {MINIMO_DE_CONFIRMACOES}+ confirmações"), unsafe_allow_html=True)
+        colunas[1].markdown(cartao("Lojas com votos", str(dados_aprendizado["lojas_com_votos"]), "esperando confirmações"), unsafe_allow_html=True)
+        colunas[2].markdown(cartao("Confirmações", str(dados_aprendizado["confirmacoes"]), f"de {dados_aprendizado['sessoes']} sessões"), unsafe_allow_html=True)
+        colunas[3].markdown(cartao("Faturas analisadas", str(len(dados_aprendizado["usos"]))), unsafe_allow_html=True)
+        origem = dados_aprendizado["aprendidas_por_origem"]
+        st.caption(
+            f"Lojas aprendidas por origem: {origem['fatura']} de faturas reais enviadas · "
+            f"{origem['ficticio']} do ambiente de teste (usuários fictícios). "
+            f"O modelo atual foi treinado com {lojas_no_modelo} loja(s) aprendida(s)."
+        )
+        st.write("")
 
-            tabela = classificadas.assign(
-                Valor=(-classificadas["valor"]).map(reais),
-                Categoria=classificadas["categoria_final"].map(nome_exibicao),
-                Confiança=classificadas["confianca_final"].map(lambda valor: f"{valor:.0%}"),
-            ).rename(columns={"data": "Data", "descricao": "Descrição", "parcela": "Parcela", "explicacao_final": "Por quê"})
+        usos = pd.DataFrame(dados_aprendizado["usos"])
+        st.markdown('<div class="secao">Perguntas por fatura ao longo do tempo</div>', unsafe_allow_html=True)
+        if usos.empty:
+            st.info("Ainda nenhuma fatura analisada. Escolha 'Minha fatura' na barra lateral e envie uma.")
+        else:
+            usos = usos[usos["compras"] > 0].reset_index(drop=True)
+            usos["fatura"] = usos.index + 1
+            usos["perguntas_pct"] = usos["perguntas"] / usos["compras"]
+            linha_tempo = alt.Chart(usos).mark_line(point=True, strokeWidth=3, color="#0F766E").encode(
+                x=alt.X("fatura:O", title="Fatura analisada (em ordem)"),
+                y=alt.Y("perguntas_pct:Q", title="Compras que viraram pergunta", axis=alt.Axis(format="%")),
+                tooltip=[
+                    alt.Tooltip("fatura:O", title="Fatura"),
+                    alt.Tooltip("compras:Q", title="Compras"),
+                    alt.Tooltip("perguntas:Q", title="Perguntas"),
+                    alt.Tooltip("resolvidas_pelo_coletivo:Q", title="Resolvidas pelo aprendizado"),
+                ],
+            ).properties(height=240)
+            st.altair_chart(estilo_grafico(linha_tempo), use_container_width=True)
+            st.caption("Se o sistema aprende, a linha tende a cair: cada fatura nova gera menos perguntas.")
+
+        aprendidas = dados_aprendizado["conhecimento"]
+        if aprendidas:
+            st.markdown('<div class="secao">Últimas lojas aprendidas</div>', unsafe_allow_html=True)
+            ultimas = [chave for _, chave in dados_aprendizado["ultimas"]][:15]
             st.dataframe(
-                tabela[["Data", "Descrição", "Parcela", "Valor", "Categoria", "Confiança", "Por quê"]],
+                pd.DataFrame([
+                    {"Loja": aprendidas[chave][2], "Categoria": nome_exibicao(aprendidas[chave][0]), "Votos": aprendidas[chave][1]}
+                    for chave in ultimas
+                ]),
                 hide_index=True, use_container_width=True,
             )
 
-            pendentes = classificadas[classificadas["perguntar_usuario"]]
-            if len(pendentes):
-                st.markdown(f'<div class="secao">Ajude a classificar ({len(pendentes)})</div>', unsafe_allow_html=True)
-                opcoes = sorted(CATEGORIAS)
-                for linha in pendentes.head(8).itertuples():
-                    with st.container(border=True):
-                        texto, escolha, botao = st.columns([3, 2, 1], vertical_alignment="center")
-                        texto.markdown(md(f"**{linha.descricao}**  \n{reais(-linha.valor)} · {linha.data:%d/%m/%Y}"))
-                        sugestao = linha.sugestao_modelo if linha.sugestao_modelo in opcoes else "nao_identificado"
-                        categoria = escolha.selectbox(
-                            "Categoria", opcoes, index=opcoes.index(sugestao), key=f"fcat_{linha.id_transacao}",
-                            format_func=nome_exibicao, label_visibility="collapsed",
-                        )
-                        if botao.button("Confirmar", key=f"fok_{linha.id_transacao}", type="primary", use_container_width=True):
-                            st.session_state.respostas_fatura[("PDF", linha.contraparte)] = categoria
-                            st.rerun()
+        if st.button("Atualizar aprendizado (re-treinar o modelo agora)"):
+            modelo_atual.clear()
+            ler_conhecimento.clear()
+            calcular.clear()
+            st.rerun()

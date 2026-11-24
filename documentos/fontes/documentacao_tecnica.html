@@ -128,7 +128,7 @@
         <rect x="250" y="215" width="200" height="54" rx="9" fill="#8B5CF6"/><text x="350" y="238" fill="#fff" text-anchor="middle" font-weight="600">Metas</text><text x="350" y="256" fill="#EDE7FF" text-anchor="middle" font-weight="400" font-size="10.5">quanto reservar, previsão</text>
         <rect x="480" y="215" width="200" height="54" rx="9" fill="#F59E0B"/><text x="580" y="238" fill="#fff" text-anchor="middle" font-weight="600">Anomalias</text><text x="580" y="256" fill="#FFF4DC" text-anchor="middle" font-size="10.5">estatística + IsolationForest</text>
 
-        <rect x="135" y="320" width="430" height="70" rx="11" fill="#0B3B37"/><text x="350" y="347" fill="#fff" text-anchor="middle" font-weight="600" font-size="13">Interface Streamlit</text><text x="350" y="368" fill="#CFE8E4" text-anchor="middle" font-size="10.5">diagnóstico · notificações do mês · perguntas · parcelas · metas · importar fatura</text>
+        <rect x="135" y="320" width="430" height="70" rx="11" fill="#0B3B37"/><text x="350" y="347" fill="#fff" text-anchor="middle" font-weight="600" font-size="13">Interface Streamlit</text><text x="350" y="368" fill="#CFE8E4" text-anchor="middle" font-size="10.5">diagnóstico · notificações do mês · perguntas · parcelas · metas · minha fatura</text>
       </g>
       <g stroke="#0F766E" stroke-width="2" fill="none" marker-end="url(#seta)">
         <path d="M220 42 H246"/><path d="M450 42 H476"/>
@@ -420,8 +420,9 @@
     pulava toda linha com "TOTAL". Agora só são ignoradas as linhas que <em>começam</em> com essas palavras.
     Faturas reais de bancos têm outros layouts e lojas que o modelo nunca viu, então leitor e modelo vão errar mais nelas;
     faturas escaneadas (imagem) não são lidas.</p></div>
-  <p><strong>Privacidade:</strong> faturas enviadas pela interface são lidas só em memória — nunca salvas em disco, nunca
-    enviadas ao repositório (<code>*.pdf</code> no <code>.gitignore</code>) e nunca usadas para treinar.</p>
+  <p><strong>Privacidade:</strong> o arquivo da fatura nunca é salvo (nem no servidor, nem no repositório:
+    <code>*.pdf</code> no <code>.gitignore</code>). Só o par loja → categoria que o usuário confirmar entra no
+    aprendizado coletivo (capítulo 13).</p>
 </section>
 
 <!-- ===================== 13. INTERFACE ===================== -->
@@ -435,8 +436,11 @@
     <div class="cartao"><div class="rotulo">Perguntas por usuário</div><div class="valor">≈ 20</div><div class="detalhe">em 6 meses (de 12 a 35)</div></div>
   </div>
   <h2>Interface (Streamlit)</h2>
-  <p>Na barra lateral, escolhe-se o usuário e o <strong>mês atual</strong>, que simula os meses chegando (o sistema só
-    enxerga o extrato até ele). Há tema claro e escuro.</p>
+  <p>Na barra lateral, escolhe-se de quem é o diagnóstico. Em <strong>Usuário de simulação</strong>, um dos usuários fictícios
+    e o <strong>mês atual</strong>, que simula os meses chegando (o sistema só enxerga o extrato até ele). Em
+    <strong>Minha fatura</strong>, a pessoa envia uma ou mais faturas de cartão em PDF (uma por mês, lidas só em memória),
+    com o nome e a renda mensal opcionais; cada fatura conta como um mês e todas as abas passam a mostrar esses dados.
+    Sem a renda, o diagnóstico mostra só os gastos (sobra e porcentagens aparecem como "—"). Há tema claro e escuro.</p>
   <table>
     <tr><th>Aba</th><th>O que mostra</th></tr>
     <tr><td>Diagnóstico</td><td>Gráfico de rosca, blocos com variação, faixa da sobra, pontos de atenção, evolução, compromissos e reserva.</td></tr>
@@ -444,8 +448,17 @@
     <tr><td>Perguntas</td><td>O que o sistema não sabe, com a sugestão do modelo; cada resposta vale para pagamentos parecidos.</td></tr>
     <tr><td>Parcelas</td><td>Valor reservado nos próximos 12 meses e cada parcelamento com barra de progresso.</td></tr>
     <tr><td>Metas</td><td>Anel de progresso, marcos de 25% a 100%, próximo passo e gráfico guardado × necessário.</td></tr>
-    <tr><td>Importar fatura</td><td>Envio de PDF, compras classificadas, gráfico por categoria e perguntas; fatura de exemplo para download.</td></tr>
+    <tr><td>Compras das faturas</td><td>Só no modo Minha fatura: compras lidas, classificadas sozinho, gráfico por categoria e tabela com o porquê.</td></tr>
+    <tr><td>Aprendizado</td><td>Lojas aprendidas com os usuários, origem dos votos e gráfico de perguntas por fatura ao longo do tempo.</td></tr>
   </table>
+  <h2>Aprendizado contínuo</h2>
+  <p>As confirmações dos usuários (aba Perguntas, nos dois modos) vão para um banco compartilhado (Firestore, do Firebase).
+    Com <strong>2 confirmações de sessões diferentes</strong>, a loja passa a valer para todos, com confiança 0,85 e a explicação
+    <em>"aprendido com confirmações de outros usuários"</em>, e entra no <strong>re-treino do modelo</strong> (a cada 1 hora ou por botão),
+    que assim melhora também em lojas parecidas. Ordem de decisão: regras → memória da sessão → conhecimento coletivo → modelo.</p>
+  <p>São guardados apenas o nome da loja, a categoria votada, a origem do voto (fatura real ou usuário fictício) e um código
+    aleatório de sessão; por fatura, só números. Valores, datas, o arquivo, PIX para pessoas, renda e transferências nunca
+    são guardados. A chave do Firebase fica nos Secrets do Streamlit; sem ela, o app usa memória local.</p>
   <p>Um teste confere que as notificações de abril não mudam por causa de maio e junho — o sistema não "vê o futuro".</p>
 </section>
 
@@ -497,6 +510,7 @@
     <li><strong>Limites escolhidos pelo projeto</strong> (0,70 de confiança, 30% de comprometimento, 3 desvios, reserva de 3/6 meses) nunca foram validados com dados reais.</li>
     <li><strong>Fatura de janeiro estimada</strong> (não há dezembro) e "guardado para a meta" = tudo o que foi para a poupança.</li>
     <li><strong>Faturas reais</strong> com layouts diferentes ou escaneadas podem não ser lidas.</li>
+    <li><strong>Aprendizado coletivo</strong> depende da boa-fé dos testadores; 2 confirmações reduzem, mas não eliminam, ensinos errados.</li>
   </ol>
   <h2>Próximos passos sugeridos</h2>
   <ul>

@@ -55,15 +55,24 @@ python -m venv .venv
 .venv\Scripts\streamlit run app.py
 ```
 
-Na barra lateral, escolha o usuário e o "mês atual", que simula os meses chegando (o sistema só enxerga o extrato
-até ele), e o tema claro ou escuro. Abas:
+Na barra lateral, escolha de quem é o diagnóstico:
+
+- **Usuário de simulação**: um dos 12 usuários fictícios e o "mês atual", que simula os meses chegando (o sistema só
+  enxerga o extrato até ele).
+- **Minha fatura**: envie uma ou mais faturas de cartão em PDF (uma por mês), com seu nome e a renda mensal (ambos
+  opcionais). Todas as abas passam a mostrar o diagnóstico dessas faturas. Sem a renda, aparecem só os gastos; com ela,
+  aparecem também a sobra, as porcentagens e a comparação com as metas. Há um botão para baixar 3 faturas fictícias
+  de exemplo.
+
+Também há o tema claro ou escuro. Abas:
 
 - **Diagnóstico**: para onde foi o dinheiro, sobra, evolução, compromissos, reserva e pontos de atenção.
 - **Notificações**: o que mudou no mês (queda de renda, nova parcela, cobrança duplicada, compra alta em lugar novo…).
 - **Perguntas**: o que o sistema não sabe; cada resposta vale também para pagamentos parecidos.
 - **Parcelas**: valor já reservado nos próximos 12 meses e cada parcelamento com barra de progresso.
 - **Metas**: quanto reservar por mês, progresso, marcos e próximo passo.
-- **Importar fatura**: envie uma fatura de cartão em PDF (fictícia ou real) ou baixe uma de exemplo.
+- **Compras das faturas** (só no modo Minha fatura): cada compra lida, com categoria, confiança e o porquê.
+- **Aprendizado**: o que o SIDOF já aprendeu com os usuários e o gráfico de perguntas por fatura ao longo do tempo.
 
 **Rodar os testes:**
 
@@ -73,10 +82,25 @@ até ele), e o tema claro ou escuro. Abas:
 
 ### Faturas em PDF e privacidade
 
-O leitor é genérico e entende linhas no formato "data, descrição, parcela, valor". Faturas enviadas pela interface
-são lidas **só em memória**: não são salvas, não vão para o repositório (`*.pdf` está no `.gitignore`, exceto os
-PDFs de `documentos/`) e não são usadas para treinar. Faturas escaneadas (imagem) ou com layout muito diferente não
-são lidas.
+O leitor é genérico e entende linhas no formato "data, descrição, parcela, valor". O arquivo da fatura **nunca é
+salvo**: não fica no servidor nem vai para o repositório (`*.pdf` está no `.gitignore`, exceto os PDFs de
+`documentos/`). Faturas escaneadas (imagem) ou com layout muito diferente não são lidas.
+
+### Aprendizado contínuo (Firebase)
+
+Quando alguém confirma a categoria de uma loja (aba **Perguntas**, nos dois modos), o voto vai para o
+aprendizado coletivo. Com **2 confirmações de sessões diferentes**, a loja passa a ser reconhecida para todos (com a
+explicação "aprendido com confirmações de outros usuários") e entra no **re-treino do modelo**, feito a cada 1 hora
+ou pelo botão da aba Aprendizado.
+
+- **Guardado:** nome da loja, categoria votada, origem do voto (fatura real ou usuário fictício) e um código aleatório
+  de sessão, que não identifica ninguém. Por fatura, só números (compras, perguntas, resolvidas pelo aprendizado).
+- **Nunca guardado:** valores, datas, o arquivo da fatura, PIX para pessoas, renda e transferências.
+- **Onde:** no Firestore (Firebase). A chave fica nos **Secrets** do Streamlit Cloud, nunca no código. Sem a chave
+  (rodando no seu computador, por exemplo), o app usa a memória local e funciona do mesmo jeito.
+
+Para configurar, crie um projeto no Firebase, ative o Firestore, gere a chave da conta de serviço e cole os campos
+dela nos Secrets do app, numa seção `[firebase]`.
 
 ## Como funciona (resumo)
 
@@ -119,6 +143,7 @@ O comando `python -m financas` grava em `dados_gerados/` (semente fixa 42, sempr
 |---|---|
 | `financas/` | Código do sistema (`sistema.py` é o sistema em uso; os outros módulos são as fases) |
 | `app.py`, `.streamlit/` | Interface Streamlit e tema |
+| `financas/aprendizado.py` | Aprendizado contínuo (memória local ou Firebase) |
 | `tests/` | 168 testes automáticos (pytest) |
 | `documentos/` | Documentação em PDF e Word, e os HTMLs que geram os PDFs |
 | `docs/` | Proposta, plano e decisões registradas |
@@ -138,10 +163,13 @@ O comando `python -m financas` grava em `dados_gerados/` (semente fixa 42, sempr
 - **Efeito no comportamento** (poupar mais, reduzir dívidas) não pode ser medido com dados sintéticos; exige usuários
   reais acompanhados ao longo do tempo.
 - A fatura de janeiro é estimada (não há dezembro) e "guardado para a meta" é tudo o que foi para a poupança.
+- **Aprendizado coletivo** depende da boa-fé dos testadores: a regra de 2 confirmações reduz, mas não elimina, o
+  risco de alguém ensinar uma categoria errada. PIX para lojas de nome curto não entra no aprendizado (por segurança,
+  é tratado como possível pessoa).
 
 ## Tecnologias
 
-Python 3.12 · pandas · NumPy · scikit-learn · Streamlit · Altair · pdfplumber · fpdf2 · pytest
+Python 3.12 · pandas · NumPy · scikit-learn · Streamlit · Altair · pdfplumber · fpdf2 · Firebase (firebase-admin) · pytest
 
 ## Situação
 

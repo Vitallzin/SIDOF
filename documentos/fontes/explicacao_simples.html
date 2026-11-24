@@ -105,6 +105,9 @@
     <div class="cartao"><div class="rotulo">Com a IA</div><div class="valor">~88%</div><div class="detalhe">reconhecidos sozinho</div></div>
     <div class="cartao"><div class="rotulo">Com as suas respostas</div><div class="valor">~94%</div><div class="detalhe">e quase sem erros</div></div>
   </div>
+  <div class="caixa"><p><strong>Aprende com todo mundo:</strong> quando você confirma que "Sushi Kazu" é restaurante, o SIDOF
+    guarda isso. Depois que duas pessoas diferentes confirmarem, a loja passa a ser reconhecida para <strong>qualquer usuário</strong>,
+    e a IA é re-treinada com ela. Quanto mais gente usa, menos perguntas ele faz.</p></div>
   <div class="caixa aviso"><p><strong>Sendo honesto:</strong> em lojas que a IA nunca viu, ela acerta pouco (cerca de 1 em 5).
     Mas nesses casos ela fica "insegura" e pergunta para você — então quase não erra sem avisar. É a sua resposta que ensina o sistema.</p></div>
 
@@ -113,20 +116,20 @@
     <div>Não diz onde investir. O foco é organizar o dinheiro e formar reserva.</div>
     <div>Não julga nem rotula ninguém. Só mostra números e explicações.</div>
     <div>Não acusa de nada. Dinheiro de origem desconhecida é só "renda não identificada".</div>
-    <div>Não guarda a sua fatura. O PDF é lido só na hora e descartado.</div>
+    <div>Não guarda a sua fatura. Do PDF, só fica o "loja → categoria" que você confirmar, sem valores nem datas.</div>
   </div>
 </section>
 
 <section class="capitulo">
   <h1>Quer testar?</h1>
-  <p>O projeto tem uma tela no navegador com abas de <strong>Diagnóstico, Notificações, Perguntas, Parcelas, Metas e Importar fatura</strong>,
+  <p>O projeto tem uma tela no navegador com abas de <strong>Diagnóstico, Notificações, Perguntas, Parcelas e Metas</strong>,
     com tema claro e escuro. Para abrir, na pasta do projeto:</p>
 <pre>python -m venv .venv
 .venv\Scripts\python -m pip install -r requirements.txt
 .venv\Scripts\streamlit run app.py</pre>
   <ul>
     <li>Escolha um usuário fictício na barra lateral e mude o "mês atual" para ver os meses chegando.</li>
-    <li>Na aba <strong>Importar fatura</strong>, use o botão "Fatura de exemplo" ou envie a fatura do seu cartão em PDF (ela não é salva).</li>
+    <li>Ou escolha <strong>Minha fatura</strong> na barra lateral e envie as faturas do seu cartão em PDF (elas não são salvas), com a renda se quiser. Todo o diagnóstico passa a ser das suas faturas. Há também 3 faturas de exemplo para baixar.</li>
     <li>Responda algumas perguntas e veja o diagnóstico ficar mais preciso.</li>
   </ul>
   <div class="caixa" style="margin-top:6mm"><p><strong>Importante:</strong> é um protótipo de estudo. Ele foi construído e testado com
