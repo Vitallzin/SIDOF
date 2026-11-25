@@ -40,6 +40,7 @@ NOMES_DE_COLUNA = {
     "VALOR": "valor", "VALOR (R$)": "valor", "AMOUNT": "valor", "QUANTIA": "valor",
     "SALDO": "saldo", "SALDO (R$)": "saldo",
     "PARCELA": "parcela", "PARCELAS": "parcela", "INSTALLMENT": "parcela",
+    "CPF/CNPJ": "documento", "CPF": "documento", "CNPJ": "documento", "DOCUMENTO": "documento", "CPF CNPJ": "documento",
 }
 COLUNAS_NUMERICAS = ("entrada", "saida", "valor", "saldo")
 COLUNAS_DE_TEXTO = ("data", "descricao", "tipo", "categoria", "parcela")
@@ -348,6 +349,18 @@ def _colunas_do_csv(linha):
     return colunas if "data" in colunas and "descricao" in colunas and tem_valor else None
 
 
+def _com_documento(descricao, documento):
+    """Junta o CPF/CNPJ de uma coluna própria à descrição, no formato que o sistema reconhece."""
+    numeros = re.sub(r"\D", "", documento or "")
+    if len(numeros) == 14:
+        return f"{descricao} - CNPJ {numeros[:2]}.{numeros[2:5]}.{numeros[5:8]}/{numeros[8:12]}-{numeros[12:]}"
+    if len(numeros) == 11:
+        return f"{descricao} - CPF {numeros[:3]}.{numeros[3:6]}.{numeros[6:9]}-{numeros[9:]}"
+    if "*" in (documento or "") and "." in documento:
+        return f"{descricao} - CPF {documento.strip()}"
+    return descricao
+
+
 def eh_texto_de_entrada(descricao):
     """Descrição típica de dinheiro entrando na conta (nunca aparece numa compra de cartão)."""
     return bool(re.search(r"\b(RECEBIDO|RECEBIDA|DEPOSITO|SALARIO|MAQUININHA|VENDAS|TED RECEBIDA|CRED TED)\b", normalizar_texto(descricao)))
@@ -389,7 +402,7 @@ def ler_csv(conteudo, nome_arquivo=""):
             continue
         data = _data(campo(linha, "data"))
         entrada, saida, valor = (numero(campo(linha, papel)) for papel in ("entrada", "saida", "valor"))
-        descricao = campo(linha, "descricao")
+        descricao = _com_documento(campo(linha, "descricao"), campo(linha, "documento"))
         if data is None or not descricao or (entrada is None and saida is None and valor is None):
             ignoradas += 1
             continue

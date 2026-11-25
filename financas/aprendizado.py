@@ -35,12 +35,17 @@ def eh_pix_para_pessoa(descricao, contraparte):
     return normalizar_texto(descricao).startswith("PIX") and parece_pessoa(normalizar_texto(contraparte))
 
 
-def pode_aprender(contraparte, categoria, descricao=""):
-    """Só lojas e só categorias de gasto. PIX para pessoas, renda e transferências ficam de fora."""
+def pode_aprender(contraparte, categoria, descricao="", tipo_documento=""):
+    """Só lojas e só categorias de gasto. PIX para pessoas, renda e transferências ficam de fora.
+
+    tipo_documento: "cnpj" garante que é empresa; "cpf" garante que é pessoa. Sem documento, vale a regra
+    cuidadosa: qualquer PIX com forma de nome de pessoa fica fora (privacidade em primeiro lugar).
+    """
     nome = normalizar_texto(contraparte)
+    pix_pessoa = tipo_documento == "cpf" or (tipo_documento != "cnpj" and eh_pix_para_pessoa(descricao, nome))
     return (
         bool(chave_de_loja(nome))
-        and not eh_pix_para_pessoa(descricao, nome)
+        and not pix_pessoa
         and CATEGORIAS.get(categoria) in GRUPOS_APRENDIVEIS
         and categoria not in CATEGORIAS_NAO_APRENDIVEIS
     )
@@ -111,14 +116,14 @@ def criar_armazenamento(credenciais=None):
     return ArmazenamentoMemoria()
 
 
-def registrar_confirmacao(armazenamento, contraparte, categoria, sessao, origem, descricao=""):
+def registrar_confirmacao(armazenamento, contraparte, categoria, sessao, origem, descricao="", tipo_documento=""):
     """Guarda a confirmação do usuário, se for sobre uma loja. Devolve True se guardou.
 
     descricao: o texto completo da transação (ex.: "PIX ENVIADO CARLOS LOPES"), para saber se foi PIX.
     """
     if origem not in ORIGENS:
         raise ValueError(f"Origem desconhecida: {origem}")
-    if not pode_aprender(contraparte, categoria, descricao):
+    if not pode_aprender(contraparte, categoria, descricao, tipo_documento):
         return False
     nome = normalizar_texto(contraparte)
     armazenamento.salvar_voto(chave_de_loja(nome), nome, sessao, categoria, origem)
@@ -174,7 +179,10 @@ def registrar_uso_fatura(armazenamento, compras, perguntas, resolvidas_pelo_cole
 
 def contagem_do_documento(saidas):
     """Números para registrar_uso_fatura a partir das saídas classificadas de um documento."""
-    pix_pessoa = [eh_pix_para_pessoa(d, c) for d, c in zip(saidas["descricao"], saidas["contraparte"])]
+    if "eh_pessoa" in saidas:
+        pix_pessoa = list((saidas["operacao"] == "pix_enviado") & saidas["eh_pessoa"].astype(bool))
+    else:
+        pix_pessoa = [eh_pix_para_pessoa(d, c) for d, c in zip(saidas["descricao"], saidas["contraparte"])]
     lojas = saidas[[not eh for eh in pix_pessoa]]
     return {
         "compras": len(saidas),

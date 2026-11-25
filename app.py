@@ -259,10 +259,12 @@ JANELA_DE_LEITURA = 15  # segundos: o que outras pessoas ensinam aparece aqui em
 conhecimento = ler_conhecimento(armazenamento, int(time.time() // JANELA_DE_LEITURA))
 
 
-def aprender(contraparte, categoria, origem, descricao):
+def aprender(contraparte, categoria, origem, descricao, tipo_documento=""):
     """Manda a resposta para o aprendizado coletivo (só lojas; PIX para pessoas e renda ficam de fora)."""
     try:
-        guardou = registrar_confirmacao(armazenamento, contraparte, categoria, st.session_state.sessao, origem, descricao)
+        guardou = registrar_confirmacao(
+            armazenamento, contraparte, categoria, st.session_state.sessao, origem, descricao, tipo_documento
+        )
     except Exception:
         st.session_state.aviso = "Não foi possível salvar no aprendizado coletivo agora; sua resposta vale nesta sessão."
         return
@@ -637,7 +639,7 @@ with abas["perguntas"]:
             if botao.button("Confirmar", key=f"ok_{linha.id_transacao}", type="primary", use_container_width=True):
                 with st.spinner("Salvando sua resposta e atualizando o diagnóstico..."):
                     st.session_state.respostas[(usuario, linha.contraparte)] = categoria
-                    aprender(linha.contraparte, categoria, origem_voto, linha.descricao)
+                    aprender(linha.contraparte, categoria, origem_voto, linha.descricao, linha.tipo_documento)
                 st.rerun()
     if len(perguntas_usuario) > 10:
         st.caption(f"Mostrando 10 de {len(perguntas_usuario)}.")

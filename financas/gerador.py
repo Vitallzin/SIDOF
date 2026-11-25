@@ -9,6 +9,7 @@ Arquivos gerados:
 - usuarios_verdade.csv: perfil real de cada usuário (SÓ para avaliação)
 """
 
+import hashlib
 from datetime import date, timedelta
 from pathlib import Path
 
@@ -735,6 +736,38 @@ def _gerar_usuario(id_usuario, perfil, rng, nomes_usados, tem_renda_desconhecida
     return usuario, linhas
 
 
+# Metade dos PIX trazem o CPF (mascarado) ou o CNPJ de quem recebeu/enviou, como em muitos extratos reais.
+# Usa um sorteio separado: o resto dos dados fica idêntico, só a descrição desses PIX muda.
+CHANCE_DOCUMENTO = 0.5
+CHANCE_DOCUMENTO_SEMENTE = 7
+PREFIXOS_PIX = ("PIX ENVIADO ", "PIX RECEBIDO ")
+
+
+def _digitos(texto, quantidade):
+    """Dígitos fictícios e sempre iguais para o mesmo nome (a mesma loja tem sempre o mesmo CNPJ)."""
+    numero = int(hashlib.md5(texto.encode("utf-8")).hexdigest(), 16)
+    return str(numero)[:quantidade].rjust(quantidade, "0")
+
+
+def _documento_ficticio(contraparte, loja):
+    from financas.pessoas import parece_pessoa  # aqui dentro: pessoas.py usa normalizacao.py, que usa este módulo
+
+    if loja or not parece_pessoa(contraparte):
+        d = _digitos(loja or contraparte, 10)
+        return f"CNPJ {d[:2]}.{d[2:5]}.{d[5:8]}/0001-{d[8:10]}"
+    d = _digitos(contraparte, 6)
+    return f"CPF ***.{d[:3]}.{d[3:]}-**"
+
+
+def _documentos_nos_pix(linhas, rng):
+    for linha in linhas:
+        prefixo = next((p for p in PREFIXOS_PIX if linha["descricao"].startswith(p)), None)
+        if prefixo is None or rng.random() >= CHANCE_DOCUMENTO:
+            continue
+        contraparte = linha["descricao"][len(prefixo):]
+        linha["descricao"] = f"{linha['descricao']} - {_documento_ficticio(contraparte, linha['loja'])}"
+
+
 def gerar_dados(semente=SEMENTE):
     """Gera todas as tabelas. A mesma semente sempre produz exatamente os mesmos dados."""
     rng = np.random.default_rng(semente)
@@ -754,6 +787,7 @@ def gerar_dados(semente=SEMENTE):
             linhas += linhas_usuario
             numero += 1
 
+    _documentos_nos_pix(linhas, np.random.default_rng(semente + CHANCE_DOCUMENTO_SEMENTE))
     tabela = pd.DataFrame(linhas).sort_values(["id_usuario", "data"], kind="stable").reset_index(drop=True)
     tabela.insert(0, "id_transacao", [f"T{i:06d}" for i in range(1, len(tabela) + 1)])
     tabela["data"] = tabela["data"].map(date.isoformat)

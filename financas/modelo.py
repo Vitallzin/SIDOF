@@ -55,7 +55,7 @@ def prever(modelo, textos):
     return modelo.classes_[indices], probabilidades.max(axis=1)
 
 
-def buscar_na_memoria(memoria, usuario, contraparte):
+def buscar_na_memoria(memoria, usuario, contraparte, pessoa=None):
     """Procura a resposta do usuário para esta contraparte. Devolve (categoria, nome lembrado) ou None.
 
     - Nome exatamente igual: sempre vale.
@@ -65,7 +65,7 @@ def buscar_na_memoria(memoria, usuario, contraparte):
     """
     if (usuario, contraparte) in memoria:
         return memoria[(usuario, contraparte)], contraparte
-    if parece_pessoa(contraparte):
+    if parece_pessoa(contraparte) if pessoa is None else pessoa:
         return None
     # Nomes curtos de loja ("SUSHI KAZU") podem parecer de pessoa: entram como candidatos mesmo assim
     candidatos = [nome for (dono, nome) in memoria if dono == usuario]
@@ -124,11 +124,13 @@ def classificar_hibrido(classificado, modelo, memoria=None, conhecimento=None):
     tabela["confianca_modelo"] = float("nan")
 
     sem_regra = (tabela["regra"] == "sem_regra") & (tabela["direcao"] == "saida")
+    # Pessoa ou loja (CPF/CNPJ, loja já vista no cartão, nome); sem essa coluna, só pela forma do nome
+    pessoas = tabela["eh_pessoa"] if "eh_pessoa" in tabela else tabela["contraparte"].map(parece_pessoa)
 
     # Memória: respostas que o próprio usuário já deu (iguais ou, para lojas, parecidas)
     lembrado = pd.Series(False, index=tabela.index)
     for i in tabela.index[sem_regra]:
-        achado = buscar_na_memoria(memoria, tabela.loc[i, "id_usuario"], tabela.loc[i, "contraparte"])
+        achado = buscar_na_memoria(memoria, tabela.loc[i, "id_usuario"], tabela.loc[i, "contraparte"], pessoas[i])
         if achado is None:
             continue
         categoria, lembrada = achado
@@ -141,7 +143,7 @@ def classificar_hibrido(classificado, modelo, memoria=None, conhecimento=None):
 
     # Conhecimento coletivo: lojas que outros usuários já confirmaram
     for i in tabela.index[sem_regra & ~lembrado]:
-        pix_para_pessoa = tabela.loc[i, "operacao"] == "pix_enviado" and parece_pessoa(tabela.loc[i, "contraparte"])
+        pix_para_pessoa = tabela.loc[i, "operacao"] == "pix_enviado" and bool(pessoas[i])
         achado = buscar_no_coletivo(conhecimento, tabela.loc[i, "contraparte"], pix_para_pessoa)
         if achado is None:
             continue
@@ -161,7 +163,7 @@ def classificar_hibrido(classificado, modelo, memoria=None, conhecimento=None):
         tabela.loc[para_modelo, "categoria_final"] = categorias
         tabela.loc[para_modelo, "confianca_final"] = confiancas
         tabela.loc[para_modelo, "origem"] = "modelo"
-        pix_pessoa = (tabela["operacao"] == "pix_enviado") & tabela["contraparte"].map(parece_pessoa)
+        pix_pessoa = (tabela["operacao"] == "pix_enviado") & pessoas.astype(bool)
         travado = para_modelo & pix_pessoa
         tabela.loc[travado, "confianca_final"] = tabela.loc[travado, "confianca_final"].clip(upper=CONFIANCA_MAXIMA_PIX_PESSOA)
         for i in tabela.index[para_modelo]:

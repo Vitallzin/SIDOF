@@ -6,6 +6,7 @@ import pytest
 
 from financas import catalogo
 from financas.categorias import CATEGORIAS, CATEGORIAS_DE_RENDA
+from financas.pessoas import extrair_documento
 from financas.gerador import (
     COLUNAS_EXTRATO,
     PERFIS,
@@ -28,6 +29,8 @@ def tabela(dados):
     junto = dados["extrato"].merge(dados["verdade"], on="id_transacao")
     junto = junto.merge(dados["usuarios_verdade"], on="id_usuario")
     junto["mes"] = pd.to_datetime(junto["data"]).dt.month
+    # Metade dos PIX trazem " - CPF ..." ou " - CNPJ ..." no fim; as conferências usam a descrição sem ele
+    junto["descricao"] = junto["descricao"].map(lambda texto: extrair_documento(texto)[0])
     return junto
 
 
@@ -277,3 +280,12 @@ def test_anomalias_nao_previstas(tabela):
     assert len(por_usuario) == 12 and por_usuario.between(1, 2).all()
     assert nao_previstas["mes"].isin([4, 5, 6]).all()
     assert set(tabela.loc[tabela["tipo_anomalia"] != "", "tipo_anomalia"]) <= set(TIPOS_ANOMALIA + TIPOS_NAO_PREVISTOS)
+
+
+def test_metade_dos_pix_traz_cpf_ou_cnpj_e_o_resto_dos_dados_nao_muda(dados):
+    extrato = dados["extrato"]
+    pix = extrato[extrato["descricao"].str.startswith("PIX")]
+    com_documento = pix["descricao"].str.contains(" - CPF | - CNPJ ")
+    assert 0.35 < com_documento.mean() < 0.65
+    # CPF sempre mascarado, como nos extratos reais
+    assert pix.loc[pix["descricao"].str.contains(" - CPF "), "descricao"].str.contains(r"\*\*\*\.\d{3}\.\d{3}-\*\*").all()

@@ -14,6 +14,7 @@ from dataclasses import dataclass
 import pandas as pd
 
 from financas.normalizacao import normalizar_texto
+from financas.pessoas import MARCAS_DE_EMPRESA, marcar_pessoas, parece_pessoa, sem_detalhes  # noqa: F401 (reexportados)
 
 # Abaixo desta confiança o sistema pergunta ao usuário (decisão do plano, ajustável)
 CONFIANCA_MINIMA = 0.70
@@ -87,23 +88,6 @@ REGRAS = [
     Regra("compras", ("MAGAZINE", "MOVEIS", "CELULARES", "CALCADOS", "PAPELARIA", "MKTPLACE", "UTILIDADES", "LOJA"), "compras", 0.75),
 ]
 
-# Indícios de que a contraparte é uma empresa e não uma pessoa
-MARCAS_DE_EMPRESA = ("LTDA", "ME", "SA", "EIRELI", "CIA", "SERVICOS")
-
-
-def parece_pessoa(contraparte):
-    """Duas ou três palavras só com letras e sem indício de empresa, ex.: 'MARIA SOUZA'.
-
-    Nomes de pessoa não têm '*' (prefixo de maquininha) nem números (código do terminal).
-    """
-    palavras = contraparte.split()
-    return (
-        2 <= len(palavras) <= 3
-        and all(palavra.isalpha() for palavra in palavras)
-        and not any(palavra in MARCAS_DE_EMPRESA for palavra in palavras)
-    )
-
-
 def _nome_categoria(categoria):
     return categoria.replace("_", " ")
 
@@ -139,7 +123,7 @@ def classificar_linha(linha, nome_usuario):
             "regra": "sem_regra",
             "explicacao": "Entrada sem origem conhecida: pode ser renda, ajuda ou outra coisa. Perguntar ao usuário.",
         }
-    if eh_pix and parece_pessoa(linha["contraparte"]):
+    if eh_pix and linha.get("eh_pessoa", parece_pessoa(linha["contraparte"])):
         explicacao = "PIX para uma pessoa: a finalidade não aparece no extrato. Perguntar ao usuário."
     else:
         explicacao = "Nenhuma regra reconheceu a descrição. Perguntar ao usuário."
@@ -149,21 +133,23 @@ def classificar_linha(linha, nome_usuario):
 def classificar_por_regras(extrato_normalizado, usuarios):
     """Aplica as regras a todas as transações e indica quais precisam de pergunta ao usuário."""
     nomes = usuarios.set_index("id_usuario")["nome"].map(normalizar_texto)
-    resultados = [
-        classificar_linha(linha, nomes.get(linha["id_usuario"], ""))
-        for linha in extrato_normalizado.to_dict("records")
-    ]
-    tabela = pd.concat([extrato_normalizado.reset_index(drop=True), pd.DataFrame(resultados)], axis=1)
+    tabela = extrato_normalizado.reset_index(drop=True).copy()
+    if "tipo_documento" not in tabela:
+        tabela["tipo_documento"] = ""
+    tabela["eh_pessoa"] = marcar_pessoas(tabela)  # pessoa ou loja: CPF/CNPJ, loja já vista no cartão, nome
+    resultados = [classificar_linha(linha, nomes.get(linha["id_usuario"], "")) for linha in tabela.to_dict("records")]
+    tabela = pd.concat([tabela, pd.DataFrame(resultados)], axis=1)
     tabela["perguntar_usuario"] = tabela["confianca"] < CONFIANCA_MINIMA
     tabela["mesmo_sobrenome"] = [
-        _pix_para_parente(linha["operacao"], linha["contraparte"], nomes.get(linha["id_usuario"], ""))
-        for linha in tabela[["operacao", "contraparte", "id_usuario"]].to_dict("records")
+        _pix_para_parente(linha["operacao"], linha["contraparte"], nomes.get(linha["id_usuario"], ""), linha["eh_pessoa"])
+        for linha in tabela[["operacao", "contraparte", "id_usuario", "eh_pessoa"]].to_dict("records")
     ]
     return tabela
 
 
-def _pix_para_parente(operacao, contraparte, nome_usuario):
+def _pix_para_parente(operacao, contraparte, nome_usuario, pessoa):
     """PIX enviado para outra pessoa com o mesmo sobrenome do usuário: pista (não certeza) de família."""
-    if operacao != "pix_enviado" or not nome_usuario or contraparte == nome_usuario or not parece_pessoa(contraparte):
+    nome = sem_detalhes(contraparte)
+    if operacao != "pix_enviado" or not nome_usuario or nome == nome_usuario or not pessoa:
         return False
-    return contraparte.split()[-1] == nome_usuario.split()[-1]
+    return nome.split()[-1] == nome_usuario.split()[-1]

@@ -63,8 +63,14 @@ def _separar_parcela(parcela):
 
 def normalizar(extrato):
     """Devolve uma cópia do extrato limpa e com colunas auxiliares."""
+    from financas.pessoas import extrair_documento  # aqui dentro: pessoas.py também usa este módulo
+
     tabela = extrato.copy()
     tabela["descricao"] = tabela["descricao"].map(normalizar_texto)
+    # CPF/CNPJ na descrição: vira só "pessoa" ou "empresa" e o número é apagado (nunca é guardado nem mostrado)
+    documentos = tabela["descricao"].map(extrair_documento)
+    tabela["descricao"] = documentos.str[0]
+    tabela["tipo_documento"] = documentos.str[1]
     tabela["data"] = pd.to_datetime(tabela["data"])
     tabela["mes"] = tabela["data"].dt.strftime("%Y-%m")
     tabela["valor"] = tabela["valor"].astype(float)

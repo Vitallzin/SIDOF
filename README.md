@@ -25,15 +25,15 @@ Os PDFs são gerados a partir dos HTMLs em `documentos/fontes/` com `.venv\Scrip
 
 | O que foi medido | Resultado |
 |---|---|
-| Saídas decididas sozinho pelo sistema em uso | **88,5%**, com **99,8%** de acerto e 0,2% de erros silenciosos |
-| Só regras (baseline) × regras + modelo + respostas do usuário | 52,8% → **93,7%** decididas sozinho, mantendo 99,8% de acerto |
+| Saídas decididas sozinho pelo sistema em uso | **92,2%**, com **99,8%** de acerto e 0,2% de erros silenciosos |
+| Só regras (baseline) × regras + modelo + respostas do usuário | 52,8% → **95,8%** decididas sozinho, com 99,1% de acerto |
 | Modelo em lojas já vistas × nunca vistas (teste duro) | 95,7% × **34,2%** de acerto (nesses casos ele pergunta) |
 | Origem das entradas / perfis de renda | 100% corretas / **12 de 12** perfis, incluindo trocas de emprego |
 | Parcelamentos encontrados (inclui IPVA e IPTU) | **38 de 38** |
 | Anomalias encontradas (método estatístico) | 93% dos tipos previstos e 65% dos não previstos |
 | Faturas fictícias em PDF lidas de volta | **807 de 807** compras sem erro |
 | Extrato fictício de 6 meses: SIDOF × categoria do banco | **86%** de concordância nas saídas comparáveis |
-| Testes automáticos | **252**, todos passando |
+| Testes automáticos | **274**, todos passando |
 
 ## Como instalar (Windows)
 
@@ -175,6 +175,9 @@ O comando `python -m financas` grava em `dados_gerados/` (semente fixa 42, sempr
 - **Lojas novas:** o modelo de texto decorou as lojas que viu e acerta só 34,2% em lojas novas; quem resolve esses
   casos são as regras e as respostas do usuário.
 - **PIX entre pessoas** é ambíguo por natureza: a resposta correta é baixa confiança e pergunta ao usuário.
+  Para saber se um PIX foi para pessoa ou loja, o sistema usa o CPF/CNPJ quando o arquivo traz (CNPJ = loja), a
+  mesma loja vista no cartão e o primeiro nome. Num banco, o CPF/CNPJ viria sempre; nos arquivos, nem sempre.
+  O número do documento é apagado na leitura e nunca é guardado nem mostrado.
   O mesmo sobrenome só sugere "transferência familiar"; quem confirma é o usuário.
 - **Gastos legítimos raros e altos** (ex.: conserto do carro) também geram o alerta de "lugar novo"; por isso 67% dos
   alertas acertam uma anomalia plantada.

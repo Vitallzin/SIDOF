@@ -17,8 +17,8 @@
       diagnóstico, metas, detecção de anomalias, leitura de faturas em PDF e a avaliação honesta de cada parte.</p>
     <div class="numeros">
       <div><b>2.756</b><span>transações fictícias analisadas</span></div>
-      <div><b>88,5%</b><span>das saídas classificadas sozinho, com 99,8% de acerto</span></div>
-      <div><b>252</b><span>testes automáticos passando</span></div>
+      <div><b>92,2%</b><span>das saídas classificadas sozinho, com 99,8% de acerto</span></div>
+      <div><b>274</b><span>testes automáticos passando</span></div>
     </div>
   </div>
   <div class="rodape"><span>Python · pandas · scikit-learn · Streamlit</span><span>Novembro de 2026</span></div>
@@ -102,7 +102,7 @@
   <p>Um extrato real é bagunçado: "SUPERMERCADO BOM PRECO" aparece como "SUPE BOM PRECO", "LV*SUPERMERCADOBOMPRECO" ou
     "PGTO*SUPERMERCADOBOMPR BELO HORIZONT". Regras de palavra-chave reconhecem só a forma prevista. Nos dados do projeto,
     as regras reconhecem <strong>52,2%</strong> das transações; com o modelo de aprendizado de máquina e as respostas do
-    usuário, o sistema passa a decidir sozinho cerca de <strong>94%</strong> delas mantendo 99,8% de acerto (capítulo 6).
+    usuário, o sistema passa a decidir sozinho cerca de <strong>96%</strong> delas, com 99,1% de acerto (capítulo 6).
     Além disso, cada pessoa é diferente: o sistema aprende com as respostas de cada usuário.</p>
 </section>
 
@@ -245,6 +245,11 @@
     <li><strong>Memória do usuário</strong>: se ele já disse o que é aquele pagamento. Para lojas, vale também quando o nome
       vem escrito de outro jeito ("LV*SUSHIKAZU" ≈ "SUSHI KAZU 1234"); para pessoas, só nome exato.</li>
     <li><strong>Modelo</strong>: para o restante. Abaixo de 0,70 de confiança, a transação vira pergunta.</li>
+    <li><strong>Pessoa ou loja?</strong> Num banco, o CPF ou CNPJ de quem recebeu viria em cada PIX. Nos arquivos do
+      protótipo ele às vezes vem na descrição: CNPJ é loja, CPF é pessoa (o número é apagado logo na leitura e nunca é
+      guardado nem mostrado). Sem documento, o sistema usa pistas: a mesma loja já apareceu no cartão ou débito; o nome
+      tem forma de pessoa (o que está entre parênteses não conta); e o primeiro nome é um nome de gente comum
+      ("ACAI DA PRAIA" é loja, "MARIA DA SILVA" é pessoa). Metade dos PIX dos dados fictícios traz CPF ou CNPJ.</li>
     <li><strong>Trava de segurança</strong>: em PIX para uma pessoa, o palpite do modelo nunca passa de 0,50 — só o
       usuário sabe a finalidade. Na versão dos dados em que a trava foi criada, sem ela o modelo decidia sozinho 40 desses PIX e acertava só 25%. Quando o PIX vai para alguém com o mesmo sobrenome do usuário, a sugestão passa a ser "transferência familiar", mas continua sendo pergunta.</li>
   </ol>
@@ -255,10 +260,10 @@
   <table>
     <tr><th>Estratégia</th><th class="num">Decide sozinho</th><th class="num">Acerto quando decide</th><th class="num">Erro silencioso</th><th class="num">Pergunta</th></tr>
     <tr><td>Só regras (baseline)</td><td class="num">52,8%</td><td class="num">99,7%</td><td class="num">0,2%</td><td class="num">47,2%</td></tr>
-    <tr><td>Regras + modelo</td><td class="num">85,5%</td><td class="num">99,1%</td><td class="num">0,8%</td><td class="num">14,5%</td></tr>
-    <tr><td>Regras + modelo + correções do usuário</td><td class="num"><b>93,7%</b></td><td class="num">99,8%</td><td class="num">0,2%</td><td class="num"><b>6,3%</b></td></tr>
+    <tr><td>Regras + modelo</td><td class="num">89,2%</td><td class="num">99,0%</td><td class="num">0,9%</td><td class="num">10,8%</td></tr>
+    <tr><td>Regras + modelo + correções do usuário</td><td class="num"><b>95,8%</b></td><td class="num">99,1%</td><td class="num">0,8%</td><td class="num"><b>4,2%</b></td></tr>
   </table>
-  <p class="legenda">Erro silencioso: o sistema decide sozinho e erra — o pior tipo de erro, porque ninguém confere. Quase todos os 0,8% vêm de uma loja só ("BAZAR DA ESQUINA", de compras, confundida com "LANCHONETE ESQUINA"); a primeira resposta do usuário corrige todas as compras seguintes nela.</p>
+  <p class="legenda">Erro silencioso: o sistema decide sozinho e erra — o pior tipo de erro, porque ninguém confere. Quase todos os erros silenciosos vêm de uma loja só ("BAZAR DA ESQUINA", de compras, confundida com "LANCHONETE ESQUINA"). O modelo erra com confiança alta e por isso não pergunta; antes, os PIX para essa loja eram tratados como PIX para pessoa, viravam pergunta e a resposta corrigia a loja por acaso. Com a decisão "pessoa ou loja" melhor, o erro aparece como ele é: um limite do modelo de texto em nomes com palavras ambíguas.</p>
   <p>Nas 1.203 saídas que as regras não reconheciam, o primeiro palpite do modelo acerta <strong>85,9%</strong>; chutar
     sempre a categoria mais comum acerta só 22,4%.</p>
 
@@ -283,7 +288,7 @@
     <p>O modelo <strong>decorou as lojas</strong> em vez de aprender o significado das palavras: "SUSHI KAZU" vira "transporte" ou "lazer"
       porque ele nunca viu a palavra "SUSHI". O sistema continua seguro, porque nessas lojas a confiança é baixa (média 0,35 no primeiro palpite)
       e ele pergunta. Quem resolve as lojas novas é a <strong>resposta do usuário</strong>: as perguntas em lojas novas caem
-      de 50,1% para 17,6% com as correções.</p>
+      de 50,1% para 15,9% com as correções.</p>
   </div>
 </section>
 
@@ -359,7 +364,7 @@
     <strong>pontos de atenção</strong>, sempre com termos neutros e a seção "De onde vêm os números".</p>
   <table>
     <tr><th>Erro médio por mês contra o diagnóstico com as categorias verdadeiras</th><th class="num">Essenciais</th><th class="num">Discricionários</th><th class="num">A confirmar</th></tr>
-    <tr><td>Sem as respostas do usuário</td><td class="num">R$ 906</td><td class="num">R$ 176</td><td class="num">R$ 1.215</td></tr>
+    <tr><td>Sem as respostas do usuário</td><td class="num">R$ 867</td><td class="num">R$ 147</td><td class="num">R$ 1.144</td></tr>
     <tr><td>Com as respostas do usuário</td><td class="num">R$ 3</td><td class="num">R$ 3</td><td class="num">R$ 0</td></tr>
   </table>
   <p>Ou seja: responder às perguntas é o que torna o diagnóstico confiável. Por isso a interface mostra as perguntas com destaque.</p>
@@ -396,13 +401,13 @@
     <tr><th>Tipo de anomalia</th><th>Previsto?</th><th class="num">Estatístico</th><th class="num">IsolationForest</th></tr>
     <tr><td>Cobrança duplicada</td><td>sim</td><td class="num">6/6</td><td class="num">4/6</td></tr>
     <tr><td>Loja nova com valor alto</td><td>sim</td><td class="num">6/6</td><td class="num">6/6</td></tr>
-    <tr><td>Muitas compras em pouco tempo</td><td>sim</td><td class="num">10/10</td><td class="num">8/10</td></tr>
+    <tr><td>Muitas compras em pouco tempo</td><td>sim</td><td class="num">10/10</td><td class="num">7/10</td></tr>
     <tr><td>Pico de gasto numa categoria</td><td>sim</td><td class="num">6/8</td><td class="num">3/8</td></tr>
     <tr><td>Conta fixa disparada</td><td><span class="etiqueta laranja">não</span></td><td class="num">8/8</td><td class="num">0/8</td></tr>
     <tr><td>PIX alto para desconhecido</td><td><span class="etiqueta laranja">não</span></td><td class="num">3/3</td><td class="num">3/3</td></tr>
     <tr><td>Nova cobrança recorrente</td><td><span class="etiqueta laranja">não</span></td><td class="num">0/6</td><td class="num">0/6</td></tr>
-    <tr><td><b>Revocação: previstos / não previstos</b></td><td></td><td class="num"><b>93% / 65%</b></td><td class="num"><b>70% / 18%</b></td></tr>
-    <tr><td><b>Alertas que acertam alguma anomalia</b></td><td></td><td class="num"><b>67%</b></td><td class="num"><b>73%</b></td></tr>
+    <tr><td><b>Revocação: previstos / não previstos</b></td><td></td><td class="num"><b>93% / 65%</b></td><td class="num"><b>67% / 18%</b></td></tr>
+    <tr><td><b>Alertas que acertam alguma anomalia</b></td><td></td><td class="num"><b>67%</b></td><td class="num"><b>71%</b></td></tr>
   </table>
   <p class="legenda">Tipos "não previstos" foram criados sem detector próprio e registrados antes de rodar
     (<code>docs/03_decisoes_anomalias.md</code>), para medir o que ninguém antecipou.</p>
@@ -457,9 +462,9 @@
   <p>Os experimentos usam a verdade para medir. O <strong>sistema em uso</strong> não: o modelo é treinado numa base separada
     de usuários fictícios (outra semente), que faz o papel de clientes antigos, e os 12 usuários atendidos nunca entram no treino.</p>
   <div class="grade">
-    <div class="cartao"><div class="rotulo">Decididas sozinho</div><div class="valor">88,5%</div><div class="detalhe">com 99,8% de acerto</div></div>
-    <div class="cartao"><div class="rotulo">Quem decidiu</div><div class="valor" style="font-size:12pt">regras 53% · modelo 36%</div><div class="detalhe">perguntas 12%</div></div>
-    <div class="cartao"><div class="rotulo">Perguntas por usuário</div><div class="valor">≈ 24</div><div class="detalhe">em 6 meses (de 18 a 33)</div></div>
+    <div class="cartao"><div class="rotulo">Decididas sozinho</div><div class="valor">92,2%</div><div class="detalhe">com 99,8% de acerto</div></div>
+    <div class="cartao"><div class="rotulo">Quem decidiu</div><div class="valor" style="font-size:12pt">regras 53% · modelo 39%</div><div class="detalhe">perguntas 8%</div></div>
+    <div class="cartao"><div class="rotulo">Perguntas por usuário</div><div class="valor">≈ 17</div><div class="detalhe">em 6 meses (de 9 a 24)</div></div>
   </div>
   <h2>Interface (Streamlit)</h2>
   <p>Na barra lateral, escolhe-se de quem é o diagnóstico. Em <strong>Usuário de simulação</strong>, um dos usuários fictícios
@@ -501,7 +506,7 @@
     <tr><td>Renda baixa, pouca margem</td><td class="num">5%</td><td class="num">R$ 39</td><td class="num">3%</td><td class="num">0%</td><td class="num">6%</td></tr>
   </table>
   <ul>
-    <li><strong>Transações corretamente classificadas:</strong> 88,5% decididas sozinho, com 99,8% de acerto e 0,2% de erros silenciosos.</li>
+    <li><strong>Transações corretamente classificadas:</strong> 92,2% decididas sozinho, com 99,8% de acerto e 0,2% de erros silenciosos.</li>
     <li><strong>Gastos inesperados:</strong> 28 de 30 anomalias previstas e 11 de 17 não previstas encontradas.</li>
     <li><strong>Comprometimento futuro:</strong> o sistema projeta a queda natural conforme as parcelas terminam (25% → 13% no perfil com dívidas).</li>
     <li><strong>Metas:</strong> após 6 meses, 3 usuários adiantados e 9 atrasados — o perfil determina o resultado, como esperado.</li>

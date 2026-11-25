@@ -18,7 +18,7 @@ import pandas as pd
 
 from financas.formatacao import mes_por_extenso, reais
 from financas.normalizacao import normalizar_texto
-from financas.regras import CONFIANCA_MINIMA, MARCAS_DE_EMPRESA, REGRAS_INTERNAS, parece_pessoa
+from financas.regras import CONFIANCA_MINIMA, MARCAS_DE_EMPRESA, REGRAS_INTERNAS, parece_pessoa, sem_detalhes
 
 # Palavras comuns em nomes de empresas (além de LTDA, ME, SA...)
 PALAVRAS_DE_EMPRESA = set(MARCAS_DE_EMPRESA) | {
@@ -112,7 +112,8 @@ def _decidir(linha, sobrenome_usuario, fonte, eh_par):
         return "renda_fixa", 0.85, (
             f'"{contraparte}" paga uma vez por mês, perto do dia {linha["data"].day} e com valor estável: tratado como salário.'
         )
-    mesmo_sobrenome = sobrenome_usuario and parece_pessoa(contraparte) and contraparte.split()[-1:] == [sobrenome_usuario]
+    pessoa = linha.get("eh_pessoa", parece_pessoa(contraparte))
+    mesmo_sobrenome = sobrenome_usuario and pessoa and sem_detalhes(contraparte).split()[-1:] == [sobrenome_usuario]
     if _tem_palavra(descricao, PALAVRAS_DE_FAMILIA) or mesmo_sobrenome:
         return "renda_eventual", CONFIANCA_RENDA_SEM_PERGUNTA, (
             f'"{contraparte}" parece ajuda da família: entra, mas não conta como renda do trabalho.'
