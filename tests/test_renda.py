@@ -78,25 +78,24 @@ def test_salario_empresa_e_transferencia():
     assert not entradas.loc[["T0", "T1", "T2"], "perguntar_usuario"].any()
 
 
-def test_mesmo_sobrenome_sugere_ajuda_da_familia_e_pergunta():
+def test_mesmo_sobrenome_e_ajuda_da_familia_sem_perguntar():
     entradas = _categorias([
         ("2026-03-05", "CREDITO SALARIO METALURGICA ALFA LTDA", 4000.0),
         ("2026-03-20", "PIX RECEBIDO PAULO VIEIRA", 500.0),
     ])
     assert entradas.loc["T1", "categoria_renda"] == "renda_eventual"
-    assert entradas.loc["T1", "perguntar_usuario"]
+    assert not entradas["perguntar_usuario"].any()  # o sistema nunca pergunta sobre ganhos
 
 
-def test_entrada_recorrente_desconhecida_e_neutra():
+def test_entrada_recorrente_desconhecida_conta_como_renda_sem_perguntar_e_sem_falar_de_imposto():
     linhas = [(f"{mes}-05", "CREDITO SALARIO METALURGICA ALFA LTDA", 4000.0) for mes in MESES]
     linhas += [(f"{mes}-15", "PIX RECEBIDO LUANA ROCHA", 400.0 + i) for i, mes in enumerate(MESES[:4])]
     entradas = _categorias(linhas)
     desconhecidas = entradas[entradas["contraparte"] == "LUANA ROCHA"]
-    assert (desconhecidas["categoria_renda"] == "renda_nao_identificada").all()
-    assert desconhecidas["perguntar_usuario"].all()
+    assert (desconhecidas["categoria_renda"] == "renda_variavel").all()
+    assert not desconhecidas["perguntar_usuario"].any()
     explicacao = desconhecidas["explicacao_renda"].iloc[0].lower()
-    assert "obrigações fiscais" in explicacao
-    for palavra in ("sonega", "irregular", "ilegal", "fraude"):
+    for palavra in ("fiscal", "imposto", "sonega", "irregular", "ilegal", "fraude"):
         assert palavra not in explicacao
 
 
@@ -109,7 +108,7 @@ def test_autonomo_com_cliente_pessoa():
     entradas = _categorias(linhas)
     maria = entradas[entradas["contraparte"] == "MARIA LIMA"]
     assert (maria["categoria_renda"] == "renda_variavel").all()
-    assert maria["perguntar_usuario"].all()  # provável cliente, mas confirma
+    assert not maria["perguntar_usuario"].any()  # cliente: conta como renda, sem perguntar
 
 
 def test_perfil_renda_fixa_usa_a_media_e_ignora_ajuda():
@@ -232,3 +231,75 @@ def test_trocas_de_emprego_detectadas_no_conjunto_gerado(resultado_gerado):
     _, perfis = resultado_gerado
     assert perfis["troca_emprego_real"].sum() == 3
     assert (perfis["troca_emprego"] == perfis["troca_emprego_real"]).all()
+
+
+# ---------- 25/11/2026: ganhos sem pergunta e mudanças no salário ----------
+
+def _perfil(linhas, nome_usuario="ANA VIEIRA"):
+    classificado, usuarios = _tabela(linhas, nome_usuario)
+    return perfil_de_renda(classificar_entradas(classificado, usuarios), MESES).iloc[0]
+
+
+def test_nenhuma_entrada_vira_pergunta():
+    linhas = [
+        ("2026-01-05", "PIX RECEBIDO JOAO SOUZA", 80.0),
+        ("2026-01-06", "CREDITO MAQUININHA STONE VENDAS", 250.0),
+        ("2026-01-07", "DEPOSITO EM DINHEIRO", 300.0),
+        ("2026-01-08", "PIX RECEBIDO MARIA LIMA", 45.0),
+    ]
+    entradas = _categorias(linhas)
+    assert not entradas["perguntar_usuario"].any()
+    assert (entradas["categoria_renda"] == "renda_variavel").all()
+
+
+@pytest.mark.parametrize("descricao", [
+    "CREDITO EMPRESTIMO PESSOAL BANCO X",
+    "PIX RECEBIDO - ADIANTAMENTO FAMILIAR (IRMAO)",
+    "PIX RECEBIDO AJUDA DA TIA",
+])
+def test_excecoes_reconhecidas_sozinhas_nao_sao_renda_do_trabalho(descricao):
+    entradas = _categorias([("2026-01-10", descricao, 900.0)])
+    assert entradas.loc["T0", "categoria_renda"] == "renda_eventual"
+    assert not entradas.loc["T0", "perguntar_usuario"]
+
+
+def test_salario_que_parou_mostra_periodo_sem_emprego_e_planeja_pelo_menor_mes():
+    # Salário de janeiro a abril; em maio e junho só PIX de clientes
+    linhas = [(f"{mes}-05", "CREDITO SALARIO METALURGICA ALFA LTDA", 3000.0) for mes in MESES[:4]]
+    linhas += [("2026-05-10", "PIX RECEBIDO JOAO SOUZA", 900.0), ("2026-06-10", "PIX RECEBIDO JOAO SOUZA", 1200.0)]
+    perfil = _perfil(linhas)
+    assert perfil["situacao_salario"] == "parou"
+    assert perfil["tipo_renda"] == "variavel"
+    assert perfil["renda_referencia"] == 900.0
+    assert "período sem emprego fixo" in perfil["explicacao"]
+    assert "abril" in perfil["explicacao"]
+
+
+def test_salario_que_comecou_depois_de_meses_so_com_pix():
+    linhas = [("2026-01-10", "PIX RECEBIDO JOAO SOUZA", 700.0), ("2026-02-10", "PIX RECEBIDO MARIA LIMA", 600.0)]
+    linhas += [(f"{mes}-05", "CREDITO SALARIO METALURGICA ALFA LTDA", 3000.0) for mes in MESES[2:]]
+    perfil = _perfil(linhas)
+    assert perfil["situacao_salario"] == "comecou"
+    assert perfil["tipo_renda"] == "fixa"
+    assert perfil["renda_referencia"] == 3000.0
+    assert "Renda fixa desde março" in perfil["explicacao"]
+
+
+def test_salario_fixo_com_extras_planeja_so_pelo_salario():
+    linhas = [(f"{mes}-05", "CREDITO SALARIO METALURGICA ALFA LTDA", 3000.0) for mes in MESES]
+    linhas += [(f"{mes}-20", "PIX RECEBIDO JOAO SOUZA", 200.0 * (i + 1)) for i, mes in enumerate(MESES)]
+    perfil = _perfil(linhas)
+    assert perfil["tipo_renda"] == "fixa"  # os extras variam, mas o salário não
+    assert perfil["renda_referencia"] == 3000.0
+    assert perfil["extra_por_mes"] == pytest.approx(700.0)
+    assert "fora do planejamento" in perfil["explicacao"]
+
+
+def test_sobrenome_so_conta_quando_quem_mandou_parece_uma_pessoa():
+    # Usuário "CARLOS BAR": um depósito do caixa do bar termina com "BAR", mas não é parente
+    entradas = _categorias([
+        ("2026-01-10", "DEPOSITO EM DINHEIRO - CAIXA BAR", 400.0),
+        ("2026-01-11", "PIX RECEBIDO MARIA BAR", 300.0),
+    ], nome_usuario="CARLOS BAR")
+    assert entradas.loc["T0", "categoria_renda"] == "renda_variavel"
+    assert entradas.loc["T1", "categoria_renda"] == "renda_eventual"

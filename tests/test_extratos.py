@@ -138,11 +138,26 @@ def test_csv_com_coluna_credito_debito():
 
 
 def test_csv_de_fatura_tem_compras_positivas():
-    texto = "date,title,amount\n2026-06-02,IFOOD,45.90\n2026-06-03,NETFLIX,39.90\n2026-06-10,Pagamento recebido,-85.80\n"
+    # Uma fatura real: várias compras (positivas) e um pagamento (negativo)
+    compras = [("IFOOD", 45.90), ("NETFLIX", 39.90), ("POSTO SHELL", 120.00), ("FARMACIA", 32.50), ("UBER", 18.70),
+               ("PADARIA", 12.00), ("CINEMA", 60.00), ("LIVRARIA", 79.90)]
+    linhas = [f"2026-06-{dia + 2:02d},{nome},{valor:.2f}" for dia, (nome, valor) in enumerate(compras)]
+    texto = "date,title,amount\n" + "\n".join(linhas) + "\n2026-06-10,Pagamento recebido,-408.90\n"
     documento = ler_csv(texto.encode("utf-8"), "nubank-2026-06.csv")
     assert documento.tipo == FATURA
-    assert list(documento.movimentos["valor"]) == [45.9, 39.9]
+    assert list(documento.movimentos["valor"]) == [valor for _, valor in compras]
     assert documento.ignoradas == 1
+
+
+def test_csv_de_quem_recebe_muitos_pix_e_extrato_e_nao_fatura():
+    # Quem vende salgados: metade das linhas são recebimentos (positivas). Antes isso era lido como fatura.
+    linhas = []
+    for dia in range(1, 21):
+        linhas.append(f"2026-06-{dia:02d};PIX RECEBIDO - CLIENTE {dia};{30 + dia},00")
+        linhas.append(f"2026-06-{dia:02d};ATACADAO;-{50 + dia},00")
+    documento = ler_csv(("data;descricao;valor\n" + "\n".join(linhas)).encode(), "movimentacao.csv")
+    assert documento.tipo == EXTRATO
+    assert (documento.movimentos["valor"] > 0).sum() == 20
 
 
 def test_csv_sem_cabecalho_reconhecivel_fica_vazio():
@@ -165,7 +180,9 @@ def test_renda_digitada_nao_duplica_salario_do_extrato(modelo):
     assert not extrato["descricao"].str.contains("RENDA INFORMADA").any()
     assert any("já mostra renda" in aviso for aviso in avisos)
     linha = Sistema(extrato, usuarios, modelo).diagnosticar()[0].set_index("id_usuario").loc[ID_FATURA]
-    assert linha["renda_media"] == pytest.approx(5000)  # rendimento e PIX recebido não contam como renda
+    # Salário de 5.000 nos 2 meses (sem somar a renda digitada) + o PIX recebido em junho, que conta como renda.
+    # O rendimento da aplicação não conta.
+    assert linha["renda_media"] == pytest.approx(5000 + 368.01 / 2)
 
 
 def test_renda_digitada_entra_so_nos_meses_sem_renda():

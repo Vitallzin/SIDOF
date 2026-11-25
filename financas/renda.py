@@ -1,21 +1,24 @@
 """Renda e transferências internas (Fase 4).
 
-Nem toda entrada de dinheiro é renda. Para cada entrada o sistema decide entre:
+O SIDOF orienta sobre os gastos; dos ganhos ele só precisa saber se a renda é fixa ou variável.
+Por isso nunca pergunta sobre entradas (decisão do maestro, 25/11/2026). Todo dinheiro que entra conta
+como renda, menos as exceções que o sistema reconhece sozinho:
 - transferencia_interna: dinheiro do próprio usuário mudando de conta
-- renda_fixa: salário
-- renda_variavel: pagamento por trabalho ou serviço (clientes de autônomo, empresas)
-- renda_eventual: ajuda pontual, por exemplo da família
-- renda_nao_identificada: origem desconhecida (nunca tratada como irregularidade)
+- guardar_investir: aplicação ou resgate de investimento
+- renda_eventual: rendimento, reembolso/estorno, empréstimo recebido e ajuda da família
+  (mesmo sobrenome ou palavras como "familiar"): entram, mas não são renda do trabalho
+- renda_fixa: salário (com ou sem a palavra "salário")
+- renda_variavel: todo o resto (clientes, PIX de várias pessoas, maquininha, bicos)
 
-Depois, com a renda efetiva (fixa + variável), calcula o perfil de renda de cada
-usuário: média, menor mês, maior mês e variação mensal.
+Depois calcula o perfil de renda: fixa ou variável, média, menor mês, e mudanças no salário
+(troca de emprego, salário que começou ou que parou, meses sem salário).
 """
 
 import pandas as pd
 
 from financas.formatacao import mes_por_extenso, reais
 from financas.normalizacao import normalizar_texto
-from financas.regras import CONFIANCA_MINIMA, MARCAS_DE_EMPRESA, REGRAS_INTERNAS
+from financas.regras import CONFIANCA_MINIMA, MARCAS_DE_EMPRESA, REGRAS_INTERNAS, parece_pessoa
 
 # Palavras comuns em nomes de empresas (além de LTDA, ME, SA...)
 PALAVRAS_DE_EMPRESA = set(MARCAS_DE_EMPRESA) | {
@@ -23,9 +26,7 @@ PALAVRAS_DE_EMPRESA = set(MARCAS_DE_EMPRESA) | {
     "CONSULTORIA", "INDUSTRIA", "DISTRIBUIDORA", "ASSOCIACAO", "INSTITUTO",
 }
 LIMITE_RENDA_FIXA = 0.10  # variação mensal até 10% = renda fixa
-VARIACAO_DE_CLIENTE = 0.25  # valores de uma mesma fonte que variam mais que isso parecem pagamentos por serviço
 MINIMO_FONTES_AUTONOMO = 3  # sem salário e com 3+ fontes pagadoras = perfil de autônomo
-MESES_RECORRENTE = 3  # uma fonte que aparece em 3+ meses é recorrente
 # Salário sem a palavra "salário": empresa que paga 1 vez por mês, em 2+ meses,
 # sempre perto do mesmo dia e com valor estável
 MESES_SALARIO = 2
@@ -33,6 +34,11 @@ VARIACAO_SALARIO = 0.10
 VARIACAO_DIA_SALARIO = 3  # dias
 
 CATEGORIAS_RENDA_EFETIVA = ["renda_fixa", "renda_variavel"]
+# Entradas que não são renda do trabalho, reconhecidas pelo texto (sem perguntar)
+PALAVRAS_DE_EMPRESTIMO = ("EMPRESTIMO", "FINANCIAMENTO", "CREDITO PESSOAL", "CONSIGNADO")
+PALAVRAS_DE_FAMILIA = ("FAMILIAR", "FAMILIA", "MESADA", "AJUDA")
+# Nenhuma entrada vira pergunta: a confiança das decisões sobre renda fica sempre acima do limite
+CONFIANCA_RENDA_SEM_PERGUNTA = 0.80
 
 
 def parece_empresa(contraparte):
@@ -79,9 +85,14 @@ def _parece_salario(contraparte, fonte):
     )
 
 
-def _decidir(linha, sobrenome_usuario, fonte, varias_fontes, eh_par):
-    """Devolve (categoria, confiança, explicação) para uma entrada."""
+def _tem_palavra(texto, palavras):
+    return any(palavra in texto.split() or f" {palavra} " in f" {texto} " for palavra in palavras)
+
+
+def _decidir(linha, sobrenome_usuario, fonte, eh_par):
+    """Devolve (categoria, confiança, explicação) para uma entrada. Nunca pergunta."""
     contraparte = linha["contraparte"]
+    descricao = linha["descricao"]
 
     if linha["regra"] == "aplicacao_propria":
         return "guardar_investir", linha["confianca"], "Aplicação ou resgate de investimento seu: dinheiro guardado, não é renda."
@@ -93,28 +104,25 @@ def _decidir(linha, sobrenome_usuario, fonte, varias_fontes, eh_par):
         return "renda_eventual", 0.85, "Reembolso ou estorno: devolve um gasto, não é renda do trabalho."
     if eh_par:
         return "transferencia_interna", 0.85, "Saiu o mesmo valor de outra conta sua no mesmo dia: transferência entre contas."
+    if _tem_palavra(descricao, PALAVRAS_DE_EMPRESTIMO):
+        return "renda_eventual", 0.90, "Empréstimo recebido: o dinheiro entra, mas é dívida, não renda."
     if linha["regra"] == "salario":
         return "renda_fixa", 0.95, f"Crédito de salário ({contraparte})."
     if _parece_salario(contraparte, fonte):
         return "renda_fixa", 0.85, (
             f'"{contraparte}" paga uma vez por mês, perto do dia {linha["data"].day} e com valor estável: tratado como salário.'
         )
-    if parece_empresa(contraparte):
-        return "renda_variavel", 0.80, f'Pagamento de uma empresa ("{contraparte}") sem indicação de salário: renda de trabalho ou serviço.'
-    if sobrenome_usuario and contraparte.split()[-1:] == [sobrenome_usuario]:
-        return "renda_eventual", 0.60, f'"{contraparte}" tem o mesmo sobrenome que você: pode ser ajuda da família. Confirme.'
-
-    recorrente_e_estavel = fonte["meses"] >= MESES_RECORRENTE and not fonte["variacao"] > VARIACAO_DE_CLIENTE
-    if varias_fontes and not recorrente_e_estavel:
-        return "renda_variavel", 0.60, f'Você recebe de várias fontes; "{contraparte}" pode ser um cliente. Confirme.'
-    if fonte["meses"] >= MESES_RECORRENTE:
-        explicacao = (
-            f'Entradas de "{contraparte}" em {fonte["meses"]} meses, sem origem identificada. '
-            "Se for pagamento por trabalho ou serviço, vale verificar suas obrigações fiscais."
+    mesmo_sobrenome = sobrenome_usuario and parece_pessoa(contraparte) and contraparte.split()[-1:] == [sobrenome_usuario]
+    if _tem_palavra(descricao, PALAVRAS_DE_FAMILIA) or mesmo_sobrenome:
+        return "renda_eventual", CONFIANCA_RENDA_SEM_PERGUNTA, (
+            f'"{contraparte}" parece ajuda da família: entra, mas não conta como renda do trabalho.'
         )
-    else:
-        explicacao = f'Entrada de "{contraparte}" sem origem conhecida: pode ser ajuda, reembolso ou outra coisa. Confirme.'
-    return "renda_nao_identificada", 0.30, explicacao
+    if parece_empresa(contraparte):
+        return "renda_variavel", 0.85, f'Pagamento de uma empresa ("{contraparte}") sem indicação de salário: renda de trabalho ou serviço.'
+    return "renda_variavel", CONFIANCA_RENDA_SEM_PERGUNTA, (
+        f'Entrada de "{contraparte}": conta como renda do trabalho (clientes, vendas, bicos). '
+        "O sistema não pergunta sobre ganhos; ele só observa se a renda é fixa ou variável."
+    )
 
 
 def classificar_entradas(classificado, usuarios):
@@ -126,11 +134,6 @@ def classificar_entradas(classificado, usuarios):
     internas = entradas["regra"].isin(REGRAS_INTERNAS) | entradas["id_transacao"].isin(pares)
     fontes = _resumo_das_fontes(entradas[~internas])
     # Quem tem salário (com ou sem a palavra) não é tratado como autônomo
-    salario_sem_palavra = {
-        usuario for (usuario, contraparte), fonte in fontes.iterrows() if _parece_salario(contraparte, fonte)
-    }
-    tem_salario = set(entradas.loc[entradas["regra"] == "salario", "id_usuario"]) | salario_sem_palavra
-    quantidade_de_fontes = fontes.groupby("id_usuario").size()
 
     resultados = []
     for linha in entradas.to_dict("records"):
@@ -138,10 +141,7 @@ def classificar_entradas(classificado, usuarios):
         chave = (usuario, linha["contraparte"])
         vazia = {"meses": 0, "vezes": 0, "variacao": float("nan"), "variacao_dia": float("nan")}
         fonte = fontes.loc[chave] if chave in fontes.index else vazia
-        varias_fontes = usuario not in tem_salario and quantidade_de_fontes.get(usuario, 0) >= MINIMO_FONTES_AUTONOMO
-        categoria, confianca, explicacao = _decidir(
-            linha, sobrenomes.get(usuario, ""), fonte, varias_fontes, linha["id_transacao"] in pares
-        )
+        categoria, confianca, explicacao = _decidir(linha, sobrenomes.get(usuario, ""), fonte, linha["id_transacao"] in pares)
         resultados.append({"categoria_renda": categoria, "confianca_renda": confianca, "explicacao_renda": explicacao})
 
     colunas = ["categoria_renda", "confianca_renda", "explicacao_renda"]
@@ -150,13 +150,42 @@ def classificar_entradas(classificado, usuarios):
     return entradas
 
 
-def _tipo_de_renda(tem_salario, troca, fontes_efetivas, variacao):
-    # Quem recebe salário nunca é classificado como autônomo, mesmo com meses sem salário
-    if tem_salario:
-        return "fixa" if variacao < LIMITE_RENDA_FIXA or troca else "variavel"
+def _tipo_sem_salario(fontes_efetivas, variacao):
     if fontes_efetivas >= MINIMO_FONTES_AUTONOMO:
         return "autonoma"
     return "fixa" if variacao < LIMITE_RENDA_FIXA else "variavel"
+
+
+def _mudancas_no_salario(salarios, meses):
+    """O que aconteceu com o salário no período. Devolve None se ele veio todos os meses.
+
+    situacao: "troca" (trocou de empresa), "comecou" (não havia salário no início), "parou" (o salário
+    sumiu antes do fim: parece um período sem emprego fixo) ou "intervalo" (meses sem salário no meio).
+    """
+    meses_com_salario = sorted(salarios["mes"].unique())
+    sem_salario = [mes for mes in meses if mes not in meses_com_salario]
+    if not sem_salario:
+        return None
+    troca = _troca_de_emprego(salarios, meses)
+    ultimo = meses_com_salario[-1]
+    if ultimo < meses[-1]:
+        situacao = "parou"
+    elif troca:
+        situacao = "troca"
+    elif meses_com_salario[0] > meses[0] and all(mes < meses_com_salario[0] for mes in sem_salario):
+        situacao = "comecou"
+    else:
+        situacao = "intervalo"
+    empresa_atual = salarios.loc[salarios["mes"] == ultimo, "contraparte"].iloc[0]
+    inicio_atual = salarios.loc[salarios["contraparte"] == empresa_atual, "mes"].min()
+    return {
+        "situacao": situacao,
+        "meses_sem_salario": sem_salario,
+        "empresa_anterior": troca["empresa_anterior"] if troca else "",
+        "empresa_atual": empresa_atual,
+        "inicio_atual": inicio_atual,
+        "ultimo_salario": ultimo,
+    }
 
 
 def _troca_de_emprego(salarios, meses):
@@ -178,30 +207,56 @@ def _troca_de_emprego(salarios, meses):
     }
 
 
+def _lista_de_meses(meses):
+    return ", ".join(mes_por_extenso(mes) for mes in meses)
+
+
+def _explicar_salario(perfil):
+    situacao, sem_salario = perfil["situacao_salario"], perfil["meses_sem_salario"]
+    if situacao == "parou":
+        depois = [mes for mes in sem_salario if mes > perfil["ultimo_salario"]]
+        return (
+            f"O último salário de {perfil['empresa_atual']} foi em {mes_por_extenso(perfil['ultimo_salario'])}. "
+            f"Desde então ({_lista_de_meses(depois)}) a renda veio de outras entradas, o que parece um período sem emprego "
+            f"fixo. Para planejar, o sistema usa o menor desses meses, por segurança: cerca de {reais(perfil['renda_referencia'])}."
+        )
+    if situacao == "troca":
+        texto = (
+            f"Renda fixa, com troca de emprego: o salário passou de {perfil['empresa_anterior']} "
+            f"para {perfil['empresa_atual']} em {mes_por_extenso(perfil['inicio_atual'])}"
+        )
+    elif situacao == "comecou":
+        texto = (
+            f"Renda fixa desde {mes_por_extenso(perfil['inicio_atual'])}, com salário de {perfil['empresa_atual']}. "
+            "Antes disso não havia salário (parece um período sem emprego fixo)"
+        )
+    else:
+        texto = f"Renda fixa de {perfil['empresa_atual']}"
+    texto += f", com {_lista_de_meses(sem_salario)} sem salário (só outras entradas)"
+    return texto + f". Para planejar, o sistema usa o salário atual: cerca de {reais(perfil['renda_referencia'])}."
+
+
 def _explicar_perfil(perfil):
     if perfil["tipo_renda"] == "nao_informada":
         return (
             "Renda não informada: não há entradas de salário ou trabalho nestes dados (uma fatura de cartão só mostra gastos). "
             "Informe a renda mensal para ver a sobra e as porcentagens."
         )
-    if perfil["troca_emprego"]:
-        texto = (
-            f"Renda fixa, com troca de emprego: o salário passou de {perfil['empresa_anterior']} "
-            f"para {perfil['empresa_atual']} em {mes_por_extenso(perfil['inicio_atual'])}"
-        )
-        if perfil["meses_sem_salario"]:
-            meses = ', '.join(mes_por_extenso(mes) for mes in perfil['meses_sem_salario'])
-            texto += f", com {meses} sem salário (só outras entradas)"
-        texto += f". Para planejar, o sistema usa o salário atual: cerca de {reais(perfil['renda_referencia'])}."
+    if perfil["situacao_salario"]:
+        texto = _explicar_salario(perfil)
     elif perfil["tipo_renda"] == "fixa":
         texto = (
-            f"Renda fixa: cerca de {reais(perfil['media'])} por mês, com variação de {perfil['variacao']:.0%} entre os meses. "
-            "Para planejar, o sistema usa a média."
+            f"Renda fixa: cerca de {reais(perfil['renda_referencia'])} por mês de salário, com variação de "
+            f"{perfil['variacao']:.0%} entre os meses. Para planejar, o sistema usa o salário."
         )
+        if perfil["extra_por_mes"] > 0:
+            texto += (
+                f" Além dele, entram em média {reais(perfil['extra_por_mes'])} por mês de outras fontes; como variam, "
+                "ficam fora do planejamento."
+            )
     else:
-        nome = "autônoma" if perfil["tipo_renda"] == "autonoma" else "variável"
         texto = (
-            f"Renda {nome}: {perfil['fontes']} fontes, média de {reais(perfil['media'])}, "
+            f"Renda variável: {perfil['fontes']} fontes, média de {reais(perfil['media'])}, "
             f"menor mês {reais(perfil['minima'])} e maior mês {reais(perfil['maxima'])} "
             f"(variação de {perfil['variacao']:.0%}). Para planejar, o sistema usa o menor mês, por segurança."
         )
@@ -227,16 +282,31 @@ def perfil_de_renda(entradas, meses, usuarios=None):
     for usuario, valores in por_mes.iterrows():
         do_usuario = entradas[entradas["id_usuario"] == usuario]
         salarios = do_usuario[do_usuario["categoria_renda"] == "renda_fixa"]
-        tem_salario = len(salarios) > 0
-        troca = _troca_de_emprego(salarios, meses) if tem_salario else None
         fontes = do_usuario.loc[do_usuario["categoria_renda"].isin(CATEGORIAS_RENDA_EFETIVA), "contraparte"].nunique()
         media = valores.mean()
         variacao = valores.std() / media if media > 0 else 0.0
-        tipo = _tipo_de_renda(tem_salario, troca is not None, fontes, variacao) if media > 0 else "nao_informada"
-        if troca:
-            referencia = salarios.loc[salarios["contraparte"] == troca["empresa_atual"], "valor"].mean()
-        else:
+        mudanca = _mudancas_no_salario(salarios, meses) if len(salarios) else None
+        extra_por_mes = 0.0
+        if media <= 0:
+            tipo, referencia = "nao_informada", 0.0
+        elif not len(salarios):
+            tipo = _tipo_sem_salario(fontes, variacao)
             referencia = media if tipo == "fixa" else valores.min()
+        elif mudanca and mudanca["situacao"] == "parou":
+            # Sem salário no fim do período: a renda de agora é variável
+            depois = valores[[mes for mes in meses if mes > mudanca["ultimo_salario"]]]
+            tipo, referencia = "variavel", depois.min()
+        elif mudanca:
+            tipo = "fixa"
+            referencia = salarios.loc[salarios["contraparte"] == mudanca["empresa_atual"]].groupby("mes")["valor"].sum().mean()
+        else:
+            # Salário todo mês: a variação é a do salário; outras entradas são extras fora do planejamento
+            salario_por_mes = salarios.groupby("mes")["valor"].sum().reindex(meses, fill_value=0)
+            referencia = salario_por_mes.mean()
+            variacao = salario_por_mes.std() / referencia if referencia > 0 else 0.0
+            tipo = "fixa" if variacao < LIMITE_RENDA_FIXA else "variavel"
+            extra_por_mes = max(media - referencia, 0.0)
+        troca = mudanca if mudanca and mudanca["situacao"] == "troca" else None
         perfil = {
             "id_usuario": usuario,
             "tipo_renda": tipo,
@@ -247,10 +317,13 @@ def perfil_de_renda(entradas, meses, usuarios=None):
             "fontes": fontes,
             "renda_referencia": round(referencia, 2),
             "troca_emprego": troca is not None,
-            "empresa_anterior": troca["empresa_anterior"] if troca else "",
-            "empresa_atual": troca["empresa_atual"] if troca else "",
-            "inicio_atual": troca["inicio_atual"] if troca else "",
-            "meses_sem_salario": troca["meses_sem_salario"] if troca else [],
+            "situacao_salario": mudanca["situacao"] if mudanca else "",
+            "empresa_anterior": mudanca["empresa_anterior"] if mudanca else "",
+            "empresa_atual": mudanca["empresa_atual"] if mudanca else "",
+            "inicio_atual": mudanca["inicio_atual"] if mudanca else "",
+            "ultimo_salario": mudanca["ultimo_salario"] if mudanca else "",
+            "meses_sem_salario": mudanca["meses_sem_salario"] if mudanca else [],
+            "extra_por_mes": round(extra_por_mes, 2),
             "eventual_total": round(do_usuario.loc[do_usuario["categoria_renda"] == "renda_eventual", "valor"].sum(), 2),
             "nao_identificada_total": round(
                 do_usuario.loc[do_usuario["categoria_renda"] == "renda_nao_identificada", "valor"].sum(), 2

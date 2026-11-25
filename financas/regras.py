@@ -81,7 +81,7 @@ REGRAS = [
     Regra("educacao", ("FACULDADE", "ESCOLA", "IDIOMAS", "CURSO"), "educacao", 0.85),
     # Discricionários
     Regra("restaurantes", ("RESTAURANTE", "PIZZARIA", "LANCHONETE", "HAMBURGUERIA", "BAR", "ENTREGA COMIDA"), "restaurantes_bares", 0.85),
-    Regra("jogos", ("JOGOS", "GAME"), "jogos", 0.85),
+    Regra("jogos", ("JOGOS", "GAME", "GAMES"), "lazer", 0.85),
     Regra("assinaturas", ("STREAMING", "ASSINATURA", "ACADEMIA", "PREMIUM"), "assinaturas", 0.80),
     Regra("lazer", ("CINEMA", "INGRESSOS", "TEATRO", "SHOW", "PARQUE", "VIAGENS"), "lazer", 0.80),
     Regra("compras", ("MAGAZINE", "MOVEIS", "CELULARES", "CALCADOS", "PAPELARIA", "MKTPLACE", "UTILIDADES", "LOJA"), "compras", 0.75),

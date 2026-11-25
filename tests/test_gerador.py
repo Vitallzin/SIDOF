@@ -188,9 +188,10 @@ def test_ajuda_da_familia_tem_o_sobrenome_do_usuario(dados, tabela):
         assert linha["descricao"].endswith(sobrenomes[linha["id_usuario"]])
 
 
-def test_todo_perfil_tem_renda_nao_identificada(tabela):
-    perfis = tabela.loc[tabela["categoria"] == "renda_nao_identificada", "perfil"].unique()
-    assert set(perfis) == set(PERFIS)
+def test_todo_perfil_tem_pix_de_pessoa_que_conta_como_renda(tabela):
+    # Vendas, bicos, clientes: PIX de uma pessoa sem dizer de quê. Desde 25/11/2026 conta como renda (sem pergunta).
+    de_pessoa = (tabela["categoria"] == "renda_variavel") & (tabela["ambigua"] == "sim")
+    assert set(tabela.loc[de_pessoa, "perfil"].unique()) == set(PERFIS)
 
 
 def test_existem_pix_ambiguos_mas_nao_sao_maioria(tabela):
@@ -250,7 +251,7 @@ def _sobra_por_usuario(tabela):
     """(renda efetiva - gastos) / renda efetiva, com as categorias verdadeiras."""
     renda = tabela[tabela["categoria"].isin(["renda_fixa", "renda_variavel"])].groupby("id_usuario")["valor"].sum()
     gastos = -tabela[
-        (tabela["valor"] < 0) & ~tabela["categoria"].isin(["transferencia_interna", "pagamento_fatura"])
+        (tabela["valor"] < 0) & ~tabela["categoria"].isin(["transferencia_interna", "guardar_investir", "pagamento_fatura"])
     ].groupby("id_usuario")["valor"].sum()
     perfis = tabela.groupby("id_usuario")["perfil"].first()
     return pd.DataFrame({"perfil": perfis, "sobra": (renda - gastos) / renda})

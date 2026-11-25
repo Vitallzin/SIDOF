@@ -16,7 +16,7 @@ Duas formas de guardar, com as mesmas funções:
 from collections import Counter
 from datetime import datetime, timezone
 
-from financas.categorias import CATEGORIAS
+from financas.categorias import CATEGORIAS_ANTIGAS, CATEGORIAS
 from financas.normalizacao import chave_de_loja, normalizar_texto
 from financas.regras import parece_pessoa
 
@@ -127,7 +127,10 @@ def registrar_confirmacao(armazenamento, contraparte, categoria, sessao, origem,
 
 def _apuracao(loja, origens):
     """Contagem de votos por categoria, considerando só as origens pedidas."""
-    return Counter(voto["categoria"] for voto in loja.get("votos", {}).values() if voto.get("origem") in origens)
+    return Counter(
+        CATEGORIAS_ANTIGAS.get(voto["categoria"], voto["categoria"])  # voto antigo em categoria que mudou de nome
+        for voto in loja.get("votos", {}).values() if voto.get("origem") in origens
+    )
 
 
 def conhecimento_coletivo(armazenamento, minimo=MINIMO_DE_CONFIRMACOES, origens=ORIGENS):

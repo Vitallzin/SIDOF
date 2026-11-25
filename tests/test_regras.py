@@ -28,7 +28,7 @@ def _classificar(descricao, valor=-50.0, nome_usuario="ANA VIEIRA"):
     ("COMPRA DEBITO SUPERMERCADO BOM PRECO", "alimentacao_basica"),
     ("PIX ENVIADO PADARIA PAO DOURADO", "alimentacao_basica"),
     ("DLV*APP ENTREGA COMIDA", "restaurantes_bares"),
-    ("LOJA JOGOS DIGITAIS *ONLINE", "jogos"),  # jogos vem antes de compras
+    ("LOJA JOGOS DIGITAIS *ONLINE", "lazer"),  # jogos (lazer) vem antes de compras
     ("PAGAMENTO FATURA CARTAO", "pagamento_fatura"),
     ("PAGTO BOLETO EMPRESTIMO PESSOAL BANCO FACIL", "pagamento_dividas"),
 ])

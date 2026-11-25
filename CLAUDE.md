@@ -29,15 +29,15 @@ Contexto completo:
 - **Dados:** os dados do projeto (gerador, testes, treino, avaliação) são sempre fictícios. Nunca colocar chaves de API ou credenciais no código.
 - **Faturas e extratos (decisão do maestro):** a interface aceita faturas de cartão e extratos de conta (PDF ou CSV) enviados pelos testadores, inclusive reais. O arquivo nunca é salvo (nem em disco, nem no Git: `*.pdf` está no .gitignore). Sem duplicar: a renda do extrato vale mais que a digitada; o pagamento da fatura no extrato não é gasto; o mesmo documento em dois formatos conta uma vez. A categoria que o banco põe no extrato nunca é usada para classificar, só para comparar.
 - **Aprendizado contínuo (decisão do maestro):** só o par loja → categoria que o usuário confirma (aba Perguntas, com usuários de simulação ou no modo Minha fatura) vai para o aprendizado coletivo (Firebase, chave só nos Secrets do Streamlit), com a origem do voto e um código aleatório de sessão. Nunca guardar valores, datas, o arquivo, PIX para pessoas, renda ou transferências. Uma loja vale para todos com 2 confirmações de sessões diferentes e entra no re-treino do modelo.
-- **Categorias (decisão do maestro, 24/11/2026):** além da lista da Sessão 1, existem Veículos (essencial: combustível, manutenção, seguro, IPVA, licenciamento, multas; acessórios e limpeza do carro são Compras), Transferência familiar, Impostos e contribuições, Tarifas e juros bancários (prioritários), Saque em dinheiro (discricionário) e Guardar/investir (fora dos gastos, soma na reserva). "Impostos" não é categoria única: IPTU é moradia, IPVA é veículo, o resto é imposto. Transporte é ônibus, metrô e aplicativo. Transferência familiar nunca vai para o aprendizado coletivo.
+- **Categorias (decisão do maestro, 24/11/2026):** além da lista da Sessão 1, existem Veículos (essencial: combustível, manutenção, seguro, IPVA, licenciamento, multas; acessórios e limpeza do carro são Compras), Transferência familiar, Impostos e contribuições, Tarifas e juros bancários (prioritários), Saque em dinheiro (discricionário; desde 25/11/2026 "Jogos" faz parte de Lazer, e votos antigos em jogos valem como lazer) e Guardar/investir (fora dos gastos, soma na reserva). "Impostos" não é categoria única: IPTU é moradia, IPVA é veículo, o resto é imposto. Transporte é ônibus, metrô e aplicativo. Transferência familiar nunca vai para o aprendizado coletivo. Parcela ("5/18", "PARCELA 5 DE 18" ou coluna Parcela) conta no bloco das parcelas; se a categoria for desconhecida, o sistema pergunta do que é a compra.
 - **Código:** simples e legível, funções pequenas, sem otimização prematura.
 
 ## Regras de produto (não negociáveis)
 
 - Nunca rotular o usuário ("gastador", "irresponsável"). Use linguagem factual e neutra.
 - Nunca recomendar ativos financeiros específicos.
-- Nunca acusar o usuário de irregularidade fiscal. Entrada sem origem conhecida é "renda não identificada".
-- Toda classificação tem nível de confiança. Confiança baixa significa perguntar ao usuário, não inventar.
+- Nunca falar de impostos sobre os ganhos nem acusar irregularidade fiscal (decisão do maestro, 25/11/2026: o SIDOF não pergunta sobre entradas; todo dinheiro que entra é renda, menos transferências próprias, aplicações, rendimentos, reembolsos, empréstimos e ajuda da família, reconhecidos sozinhos). Dos ganhos, só importa se a renda é fixa ou variável.
+- Toda classificação tem nível de confiança. Confiança baixa significa perguntar ao usuário, não inventar (vale para gastos; sobre ganhos o sistema não pergunta).
 - Todo alerta deve ter uma explicação curta de por que foi gerado.
 
 ## Comandos úteis

@@ -155,6 +155,10 @@ def aplicar_tema(cores):
     [data-testid="stToast"] p, [data-testid="stToast"] div, [data-testid="stToast"] span {{color: var(--texto) !important;}}
     [data-testid="stToast"] button svg {{fill: var(--suave) !important; color: var(--suave) !important;}}
     [data-testid="stSpinner"], [data-testid="stSpinner"] p {{color: var(--texto) !important;}}
+    [data-testid="stText"], [data-testid="stText"] * {{color: var(--texto) !important;}}
+    [data-testid="stExpander"] summary, [data-testid="stExpander"] summary:hover,
+    [data-testid="stExpander"] details[open] > summary {{background-color: var(--linha) !important; color: var(--texto) !important;}}
+    [data-testid="stExpander"] summary p, [data-testid="stExpander"] summary span {{color: var(--texto) !important;}}
     </style>
     """,
         unsafe_allow_html=True,
@@ -586,7 +590,10 @@ with abas["diagnostico"]:
     with st.expander("Como calculamos?"):
         st.write(md(secoes["origem"]))
     with st.expander("Ver o relatório completo em texto"):
-        st.text(resultado["textos"][usuario])
+        relatorio = resultado["textos"][usuario]
+        if modo_fatura:  # o código interno "FATURA" não diz nada para a pessoa
+            relatorio = relatorio.replace(f"Diagnóstico de {ID_FATURA}", "Seu diagnóstico", 1)
+        st.text(relatorio)
 
 # ---------- Notificações ----------
 with abas["notificacoes"]:
@@ -621,7 +628,8 @@ with abas["perguntas"]:
     for linha in perguntas_usuario.head(10).itertuples():
         with st.container(border=True):
             texto, escolha, botao = st.columns([3, 2, 1], vertical_alignment="center")
-            texto.markdown(md(f"**{linha.descricao}**  \n{reais(-linha.valor)} · {linha.data:%d/%m/%Y}"))
+            parcela = f" · parcela {linha.parcela}" if isinstance(linha.parcela, str) and linha.parcela else ""
+            texto.markdown(md(f"**{linha.descricao}**  \n{reais(-linha.valor)} · {linha.data:%d/%m/%Y}{parcela}"))
             texto.caption(md(linha.explicacao_final))
             sugestao = linha.sugestao_modelo if linha.sugestao_modelo in opcoes else "nao_identificado"
             categoria = escolha.selectbox(

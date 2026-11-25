@@ -190,4 +190,11 @@ def classificar_hibrido(classificado, modelo, memoria=None, conhecimento=None):
     tabela.loc[perguntar, "origem"] = "pergunta"
     saida_sem_resposta = perguntar & (tabela["direcao"] == "saida")
     tabela.loc[saida_sem_resposta, "categoria_final"] = "nao_identificado"
+    # Parcela que o sistema não reconhece: já conta nas parcelas, mas falta saber do que é a compra
+    parcelas = tabela["parcela"].fillna("").astype(str) if "parcela" in tabela else pd.Series("", index=tabela.index)
+    parcela_sem_resposta = saida_sem_resposta & (parcelas != "")
+    tabela.loc[parcela_sem_resposta, "explicacao_final"] = [
+        f"Parcela {parcela}: já conta nas suas parcelas, mas o sistema não sabe do que é essa compra. " + texto
+        for parcela, texto in zip(parcelas[parcela_sem_resposta], tabela.loc[parcela_sem_resposta, "explicacao_final"])
+    ]
     return tabela

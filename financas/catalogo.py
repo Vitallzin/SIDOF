@@ -60,8 +60,7 @@ ESTABELECIMENTOS = {
         ("TEATRO MUNICIPAL BILHETERIA", 40, 120),
         ("BOLICHE STRIKE", 40, 120),
         ("KARAOKE NOTURNO", 50, 150),
-    ],
-    "jogos": [
+        # Jogos fazem parte de lazer
         ("LOJA JOGOS DIGITAIS *ONLINE", 20, 180),
         ("RECARGA CREDITOS GAME", 15, 90),
         ("PIXEL GAMES STORE", 20, 150),

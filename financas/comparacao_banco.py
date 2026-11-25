@@ -27,7 +27,7 @@ MAPA_DO_BANCO = {
     "SAUDE": {"saude"}, "FARMACIA": {"saude"},
     "EDUCACAO": {"educacao"},
     "COMPRAS": {"compras"}, "VESTUARIO": {"compras"},
-    "LAZER": {"lazer"}, "ENTRETENIMENTO": {"lazer"}, "VIAGEM": {"lazer"}, "JOGOS": {"jogos"},
+    "LAZER": {"lazer"}, "ENTRETENIMENTO": {"lazer"}, "VIAGEM": {"lazer"}, "JOGOS": {"lazer"},
     "INVESTIMENTO": {"guardar_investir"}, "INVESTIMENTOS": {"guardar_investir"}, "POUPANCA": {"guardar_investir"},
     "APLICACAO": {"guardar_investir"},
     "TRANSFERENCIA ENTRE CONTAS": {"transferencia_interna"},

@@ -96,8 +96,7 @@ FREQUENCIA_MENSAL = {
     "veiculos": (2, 5),  # só para quem tem carro
     "saude": (0, 2),
     "restaurantes_bares": (2, 6),
-    "lazer": (0, 2),
-    "jogos": (0, 2),
+    "lazer": (0, 3),  # inclui jogos
     "compras": (1, 3),
 }
 
@@ -109,7 +108,6 @@ MEIOS = {
     "saude": ["cartao_debito", "cartao_credito", "pix"],
     "restaurantes_bares": ["cartao_credito", "pix", "cartao_debito", "pix"],
     "lazer": ["cartao_credito"],
-    "jogos": ["cartao_credito"],
     "compras": ["cartao_credito", "cartao_debito", "pix"],
 }
 
@@ -271,13 +269,13 @@ def _renda_eventual(rng, cfg, nome_usuario):
     ]
 
 
-def _renda_nao_identificada(rng):
-    """Entradas repetidas de uma pessoa sem origem conhecida."""
+def _renda_extra(rng):
+    """Entradas repetidas de uma pessoa, sem dizer de quê (ex.: vendas, bicos). Contam como renda do trabalho."""
     pessoa = _nome_pessoa(rng)
     valor_base = _uniforme(rng, 150, 600)
     meses = sorted(int(m) for m in rng.choice(MESES, size=int(rng.integers(3, 7)), replace=False))
     return [
-        _linha(_data(mes, _dia(rng)), f"PIX RECEBIDO {pessoa}", valor_base * _uniforme(rng, 0.9, 1.1), "pix", "renda_nao_identificada", ambigua=True)
+        _linha(_data(mes, _dia(rng)), f"PIX RECEBIDO {pessoa}", valor_base * _uniforme(rng, 0.9, 1.1), "pix", "renda_variavel", ambigua=True)
         for mes in meses
     ]
 
@@ -290,7 +288,7 @@ def _rendas(rng, usuario, cfg, tem_renda_desconhecida):
         linhas = _renda_autonomo(rng, usuario["renda_base"])
     linhas += _renda_eventual(rng, cfg, usuario["nome"])
     if tem_renda_desconhecida:
-        linhas += _renda_nao_identificada(rng)
+        linhas += _renda_extra(rng)
     return linhas
 
 
@@ -450,8 +448,6 @@ def _sortear_habitos(rng, tem_carro):
         quantidade = min(len(lojas), int(rng.integers(2, 4)))
         favoritos[categoria] = [lojas[i] for i in rng.choice(len(lojas), size=quantidade, replace=False)]
         frequencia[categoria] = _uniforme(rng, 0.5, 1.5)
-    if rng.random() < 0.5:
-        frequencia["jogos"] = 0  # metade dos usuários não gasta com jogos
     if not tem_carro:
         frequencia["veiculos"] = 0
     return {"favoritos": favoritos, "frequencia": frequencia}
@@ -605,7 +601,7 @@ def _estabelecimento_novo_alto(rng, mes, cfg, habitos, linhas):
 
 def _frequencia_incomum(rng, mes, cfg, habitos, linhas):
     """Muitas compras pequenas na mesma loja em um ou dois dias."""
-    categoria = _escolher(rng, ["transporte", "restaurantes_bares", "jogos"])
+    categoria = _escolher(rng, ["transporte", "restaurantes_bares", "lazer"])
     loja, minimo, maximo = min(habitos["favoritos"][categoria], key=lambda item: item[1])
     meio = _escolher(rng, MEIOS[categoria])
     texto = _baguncar(rng, loja)

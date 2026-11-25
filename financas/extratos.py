@@ -39,9 +39,10 @@ NOMES_DE_COLUNA = {
     "SAIDA": "saida", "SAIDAS": "saida", "DEBITO": "saida", "DEBITOS": "saida", "DEBITO (R$)": "saida",
     "VALOR": "valor", "VALOR (R$)": "valor", "AMOUNT": "valor", "QUANTIA": "valor",
     "SALDO": "saldo", "SALDO (R$)": "saldo",
+    "PARCELA": "parcela", "PARCELAS": "parcela", "INSTALLMENT": "parcela",
 }
 COLUNAS_NUMERICAS = ("entrada", "saida", "valor", "saldo")
-COLUNAS_DE_TEXTO = ("data", "descricao", "tipo", "categoria")
+COLUNAS_DE_TEXTO = ("data", "descricao", "tipo", "categoria", "parcela")
 
 # Palavras que indicam entrada quando nada mais resolve (no tipo da linha, aceita também "CREDITO")
 PALAVRAS_DE_ENTRADA = ("RECEBIDO", "RECEBIDA", "SALARIO", "DEPOSITO", "RENDIMENTO", "REEMBOLSO", "ESTORNO", "RESGATE", "PROVENTO")
@@ -57,7 +58,13 @@ _MES_ANO = re.compile(rf"^({'|'.join(MESES)})\s*(?:/|DE)?\s*(\d{{4}})")
 _PERIODO = re.compile(r"(\d{2})/(\d{2})/(\d{4})\s*(?:A|ATE|-)\s*\d{2}/\d{2}/\d{4}")
 _SALDO_INICIAL = re.compile(r"SALDO (?:INICIAL|ANTERIOR)\W*(?:R\$)?\s*(-?\s*[\d.]+,\d{2})")
 _PARCELA = re.compile(r"\s*-?\s*PARC(?:ELA)?\.?\s*(\d{1,2})\s*(?:/|DE)\s*(\d{1,2})\b")
+# Sem a palavra "parcela": "LOJA X 05/18" no fim da descrição também indica parcela
+_PARCELA_NO_FIM = re.compile(r"\s+(\d{1,2})\s*/\s*(\d{1,2})$")
 _FICTICIO = re.compile(r"FICTICI[AO]")
+# Numa fatura, negativos são só pagamentos e estornos: bem menos de 15% das linhas
+PROPORCAO_MAXIMA_NEGATIVOS_FATURA = 0.15
+_VALOR_NEGATIVO_NO_FIM = re.compile(r"(?:-\s*(?:R\$\s*)?\d{1,3}(?:\.\d{3})*,\d{2}|\d{1,3}(?:\.\d{3})*,\d{2}\s*-|\d,\d{2}\s+D)$")
+_VALOR_NO_FIM = re.compile(r"\d{1,3}(?:\.\d{3})*,\d{2}\s*[-CD]?$")
 
 
 @dataclass
@@ -122,8 +129,8 @@ def _data(texto, ano_padrao=None):
 
 def _separar_parcela(descricao):
     """'IPVA 2026 - PARCELA 3/3 (SEFAZ)' -> ('IPVA 2026 (SEFAZ)', '3/3'). Sem a parcela, a mesma compra fica com o mesmo texto todo mês."""
-    achado = _PARCELA.search(descricao)
-    if not achado or not 1 <= int(achado.group(1)) <= int(achado.group(2)):
+    achado = _PARCELA.search(descricao) or _PARCELA_NO_FIM.search(descricao)
+    if not achado or not 1 <= int(achado.group(1)) <= int(achado.group(2)) or int(achado.group(2)) < 2:
         return descricao, ""
     limpa = (descricao[: achado.start()] + " " + descricao[achado.end():]).strip(" -")
     return re.sub(r"\s+", " ", limpa), f"{int(achado.group(1))}/{int(achado.group(2))}"
@@ -139,8 +146,11 @@ def _entrou_pelas_palavras(descricao, tipo=""):
     return any(re.search(rf"\b{palavra}\b", descricao) for palavra in PALAVRAS_DE_ENTRADA)
 
 
-def _movimento(data, descricao, valor, tipo="", categoria=""):
+def _movimento(data, descricao, valor, tipo="", categoria="", parcela_escrita=""):
     descricao, parcela = _separar_parcela(normalizar_texto(descricao))
+    if not parcela and parcela_escrita:
+        # Coluna "Parcela" do documento: "05/18", "5 de 18" ou "PARC 5/18"
+        _, parcela = _separar_parcela("X PARCELA " + normalizar_texto(parcela_escrita).replace("PARCELA", "").replace("PARC", "").strip())
     return {
         "data": data, "descricao": descricao, "parcela": parcela, "valor": round(valor, 2),
         "tipo_banco": str(tipo or "").strip(), "categoria_banco": str(categoria or "").strip(),
@@ -293,7 +303,7 @@ def ler_extrato_pdf(conteudo):
                 if data is None or valor is None or not descricao or normalizar_texto(descricao).startswith("SALDO"):
                     ignoradas += 1
                     continue
-                movimentos.append(_movimento(data, descricao, valor, tipo, textos.get("categoria", "")))
+                movimentos.append(_movimento(data, descricao, valor, tipo, textos.get("categoria", ""), textos.get("parcela", "")))
     return _tabela(movimentos), ignoradas
 
 
@@ -338,6 +348,27 @@ def _colunas_do_csv(linha):
     return colunas if "data" in colunas and "descricao" in colunas and tem_valor else None
 
 
+def eh_texto_de_entrada(descricao):
+    """Descrição típica de dinheiro entrando na conta (nunca aparece numa compra de cartão)."""
+    return bool(re.search(r"\b(RECEBIDO|RECEBIDA|DEPOSITO|SALARIO|MAQUININHA|VENDAS|TED RECEBIDA|CRED TED)\b", normalizar_texto(descricao)))
+
+
+def _parece_fatura(nome_arquivo, linhas, negativos, recebimentos):
+    """Fatura: valores positivos são compras e quase não há negativos (só 1 ou 2 pagamentos por mês).
+
+    Extrato: tem bastante linha negativa (saídas) ou linhas de recebimento ("PIX RECEBIDO", "DEPOSITO"...).
+    Quem recebe muitos PIX (ex.: vende salgados) tem metade das linhas positivas, e mesmo assim é extrato.
+    """
+    nome = normalizar_texto(nome_arquivo)
+    if "EXTRATO" in nome:
+        return False
+    if "FATURA" in nome:
+        return True
+    if not linhas:
+        return False
+    return negativos / linhas < PROPORCAO_MAXIMA_NEGATIVOS_FATURA and recebimentos / linhas < 0.05
+
+
 def ler_csv(conteudo, nome_arquivo=""):
     """Lê um extrato ou uma fatura em CSV. Devolve um Documento."""
     texto = _texto_do_csv(conteudo)
@@ -362,25 +393,22 @@ def ler_csv(conteudo, nome_arquivo=""):
         if data is None or not descricao or (entrada is None and saida is None and valor is None):
             ignoradas += 1
             continue
-        brutos.append((data, descricao, entrada, saida, valor, campo(linha, "tipo"), campo(linha, "categoria")))
+        brutos.append((data, descricao, entrada, saida, valor, campo(linha, "tipo"), campo(linha, "categoria"), campo(linha, "parcela")))
 
     tipos = {normalizar_texto(b[5]) for b in brutos} - {""}
     tipo_c_d = bool(tipos) and tipos <= {"C", "D", "CREDITO", "DEBITO", "ENTRADA", "SAIDA"}
     so_valor = "entrada" not in colunas and "saida" not in colunas
     negativos = sum(1 for b in brutos if b[4] is not None and b[4] < 0)
-    # Fatura em CSV: uma coluna de valor, a maioria positiva (compras), sem indicação de crédito/débito.
-    # Num extrato, a maioria das linhas é saída (negativa).
-    eh_fatura = so_valor and not tipo_c_d and (
-        "FATURA" in normalizar_texto(nome_arquivo) or (brutos and negativos / len(brutos) < 0.5)
-    )
+    recebimentos = sum(1 for b in brutos if b[4] is not None and b[4] > 0 and eh_texto_de_entrada(b[1]))
+    eh_fatura = so_valor and not tipo_c_d and _parece_fatura(nome_arquivo, len(brutos), negativos, recebimentos)
 
     movimentos = []
-    for data, descricao, entrada, saida, valor, tipo, categoria in brutos:
+    for data, descricao, entrada, saida, valor, tipo, categoria, parcela in brutos:
         if eh_fatura:
             if valor is None or valor <= 0 or normalizar_texto(descricao).startswith(("PAGAMENTO", "ESTORNO", "CREDITO")):
                 ignoradas += 1
                 continue
-            movimentos.append(_movimento(data, descricao, valor, tipo, categoria))
+            movimentos.append(_movimento(data, descricao, valor, tipo, categoria, parcela))
             continue
         if entrada:
             final = abs(entrada)
@@ -393,7 +421,7 @@ def ler_csv(conteudo, nome_arquivo=""):
         if not final:
             ignoradas += 1
             continue
-        movimentos.append(_movimento(data, descricao, final, tipo, categoria))
+        movimentos.append(_movimento(data, descricao, final, tipo, categoria, parcela))
     tabela = _tabela(movimentos)
     if eh_fatura:
         tabela = tabela[["data", "descricao", "parcela", "valor"]]
@@ -402,13 +430,24 @@ def ler_csv(conteudo, nome_arquivo=""):
 
 # ---------- Qualquer arquivo ----------
 
+def _pdf_com_cara_de_extrato(texto):
+    """Sem título nem colunas: muitas linhas terminando com valor negativo, ou linhas de recebimento, indicam extrato."""
+    linhas = [normalizar_texto(linha) for linha in texto.splitlines()]
+    com_valor = [linha for linha in linhas if re.match(r"^\d{2}/\d{2}", linha) and _VALOR_NO_FIM.search(linha)]
+    if not com_valor:
+        return False
+    negativas = sum(1 for linha in com_valor if _VALOR_NEGATIVO_NO_FIM.search(linha))
+    recebimentos = sum(1 for linha in com_valor if eh_texto_de_entrada(linha))
+    return not _parece_fatura("", len(com_valor), negativas, recebimentos)
+
+
 def ler_documento(conteudo, nome_arquivo=""):
     """Lê um PDF ou CSV enviado (fatura ou extrato) e devolve um Documento."""
     if nome_arquivo.lower().endswith(".csv"):
         return ler_csv(conteudo, nome_arquivo)
     texto = extrair_texto(conteudo)
     ficticio = bool(_FICTICIO.search(normalizar_texto(texto[:1500])))
-    if parece_extrato(texto):
+    if parece_extrato(texto) or _pdf_com_cara_de_extrato(texto):
         movimentos, ignoradas = ler_extrato_pdf(conteudo)
         return Documento(nome_arquivo, EXTRATO, movimentos, ignoradas, ficticio)
     compras, ignoradas = ler_linhas(texto)

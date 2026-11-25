@@ -25,15 +25,15 @@ Os PDFs são gerados a partir dos HTMLs em `documentos/fontes/` com `.venv\Scrip
 
 | O que foi medido | Resultado |
 |---|---|
-| Saídas decididas sozinho pelo sistema em uso | **88,1%**, com **99,8%** de acerto e 0,2% de erros silenciosos |
-| Só regras (baseline) × regras + modelo + respostas do usuário | 56,0% → **93,1%** decididas sozinho, mantendo 99,8% de acerto |
-| Modelo em lojas já vistas × nunca vistas (teste duro) | 97,5% × **34,9%** de acerto (nesses casos ele pergunta) |
-| Origem das entradas / perfis de renda | 97,6% corretas / **12 de 12** perfis, incluindo trocas de emprego |
-| Parcelamentos encontrados (inclui IPVA e IPTU) | **40 de 40** |
-| Anomalias encontradas (método estatístico) | 100% dos tipos previstos e 58% dos não previstos |
-| Faturas fictícias em PDF lidas de volta | **866 de 866** compras sem erro |
-| Extrato fictício de 6 meses: SIDOF × categoria do banco | **87%** de concordância nas saídas comparáveis |
-| Testes automáticos | **234**, todos passando |
+| Saídas decididas sozinho pelo sistema em uso | **88,5%**, com **99,8%** de acerto e 0,2% de erros silenciosos |
+| Só regras (baseline) × regras + modelo + respostas do usuário | 52,8% → **93,7%** decididas sozinho, mantendo 99,8% de acerto |
+| Modelo em lojas já vistas × nunca vistas (teste duro) | 95,7% × **34,2%** de acerto (nesses casos ele pergunta) |
+| Origem das entradas / perfis de renda | 100% corretas / **12 de 12** perfis, incluindo trocas de emprego |
+| Parcelamentos encontrados (inclui IPVA e IPTU) | **38 de 38** |
+| Anomalias encontradas (método estatístico) | 93% dos tipos previstos e 65% dos não previstos |
+| Faturas fictícias em PDF lidas de volta | **807 de 807** compras sem erro |
+| Extrato fictício de 6 meses: SIDOF × categoria do banco | **86%** de concordância nas saídas comparáveis |
+| Testes automáticos | **252**, todos passando |
 
 ## Como instalar (Windows)
 
@@ -99,7 +99,7 @@ Para não contar nada duas vezes:
 
 Aplicações e resgates (CDB, poupança) contam como dinheiro guardado; rendimentos e reembolsos entram, mas não são
 renda do trabalho. Quando o extrato traz a categoria do banco, o SIDOF **não a usa para classificar**: classifica
-sozinho e depois compara. Num extrato fictício de 6 meses, concordou com o banco em 87% das saídas comparáveis.
+sozinho e depois compara. Num extrato fictício de 6 meses, concordou com o banco em 86% das saídas comparáveis.
 
 O arquivo **nunca é salvo**: não fica no servidor nem vai para o repositório (`*.pdf` está no `.gitignore`, exceto os
 PDFs de `documentos/`). Documentos escaneados (imagem) ou com layout muito diferente não são lidos.
@@ -126,8 +126,9 @@ dela nos Secrets do app, numa seção `[firebase]`.
 2. **Classificação híbrida**: regras de palavra-chave → memória das respostas do usuário → modelo
    (TF-IDF de pedaços de 2 a 4 letras + regressão logística). Abaixo de 0,70 de confiança, vira pergunta.
    Em PIX para pessoas, o modelo nunca decide sozinho.
-3. **Renda**: salário (com ou sem a palavra "salário"), autônomo, ajuda da família, renda não identificada,
-   transferências entre contas próprias e troca de emprego.
+3. **Renda** (sem nenhuma pergunta): todo dinheiro que entra conta como renda, menos transferências entre contas
+   próprias, aplicações, rendimentos, reembolsos, empréstimos e ajuda da família. O sistema diz se a renda é fixa ou
+   variável e percebe troca de emprego, salário que começou e salário que parou (período sem emprego fixo).
 4. **Parcelas**: valor total, restante e comprometimento da renda nos próximos 12 meses.
 5. **Diagnóstico e metas**: blocos de gasto, sobra, evolução, pontos de atenção e acompanhamento de metas.
 6. **Anomalias**: método estatístico (histórico do próprio usuário) comparado ao IsolationForest.
@@ -171,11 +172,11 @@ O comando `python -m financas` grava em `dados_gerados/` (semente fixa 42, sempr
 
 - **Dados sintéticos:** o mesmo autor escreveu o gerador, as regras e os detectores, então os números são otimistas.
   O protótipo demonstra o funcionamento do pipeline, não a eficácia no mundo real.
-- **Lojas novas:** o modelo de texto decorou as lojas que viu e acerta só 34,9% em lojas novas; quem resolve esses
+- **Lojas novas:** o modelo de texto decorou as lojas que viu e acerta só 34,2% em lojas novas; quem resolve esses
   casos são as regras e as respostas do usuário.
 - **PIX entre pessoas** é ambíguo por natureza: a resposta correta é baixa confiança e pergunta ao usuário.
   O mesmo sobrenome só sugere "transferência familiar"; quem confirma é o usuário.
-- **Gastos legítimos raros e altos** (ex.: conserto do carro) também geram o alerta de "lugar novo"; por isso 74% dos
+- **Gastos legítimos raros e altos** (ex.: conserto do carro) também geram o alerta de "lugar novo"; por isso 67% dos
   alertas acertam uma anomalia plantada.
 - **Nomes curtos de loja** ("EMPORIO DONA ROSA") podem ser tratados como pessoa e virar pergunta.
 - **Nova assinatura recorrente** não é detectada como anomalia por nenhum dos métodos.

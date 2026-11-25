@@ -175,8 +175,16 @@ def _pontos_de_atencao(linha, perfil, a_confirmar_pct):
         pontos.append(f"Alto comprometimento da renda: {linha['percentual_comprometido']:.0%} já está reservado para parcelas no próximo mês.")
     if linha["tipo_renda"] in ("autonoma", "variavel"):
         pontos.append(f"Renda com alta variação: o menor mês foi {reais(perfil['minima'])}, contra média de {reais(perfil['media'])}.")
-    if perfil["troca_emprego"]:
+    situacao = perfil.get("situacao_salario", "")
+    if situacao == "parou":
+        pontos.append(
+            f"O salário parou em {mes_por_extenso(perfil['ultimo_salario'])}: desde então a renda vem de outras entradas. "
+            "Nessa fase, uma reserva para os meses mais fracos ajuda."
+        )
+    elif situacao == "troca":
         pontos.append("Houve período sem salário por causa da troca de emprego.")
+    elif situacao in ("comecou", "intervalo"):
+        pontos.append("Houve meses sem salário no período; a renda desses meses veio de outras entradas.")
     if linha["variacao_discricionarios"] > AUMENTO_RELEVANTE:
         pontos.append(f"Aumento dos gastos discricionários: {linha['variacao_discricionarios']:.0%} a mais no último trimestre.")
     if a_confirmar_pct > A_CONFIRMAR_RELEVANTE:
@@ -185,7 +193,8 @@ def _pontos_de_atencao(linha, perfil, a_confirmar_pct):
 
 
 ORIGEM_DOS_NUMEROS = (
-    "Renda efetiva = salário e pagamentos por trabalho (sem ajudas nem entradas não identificadas). "
+    "Renda efetiva = tudo o que entrou, menos transferências entre suas contas, aplicações, rendimentos, reembolsos, "
+    "empréstimos e ajuda da família (o sistema não pergunta sobre ganhos). "
     "Gastos não incluem transferências entre suas contas, o que foi guardado ou investido, nem o pagamento da fatura, porque as compras "
     "do cartão já foram contadas uma a uma. 'A confirmar' são transações que o sistema vai perguntar a você."
 )
