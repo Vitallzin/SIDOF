@@ -41,7 +41,7 @@ NOMES_EXIBICAO = {
     "transporte": "Transporte", "veiculos": "Veículos", "telecom": "Telefone e internet", "educacao": "Educação",
     "saude": "Saúde", "pagamento_dividas": "Pagamento de dívidas", "transferencia_familiar": "Transferência familiar",
     "impostos_contribuicoes": "Impostos e contribuições", "tarifas_bancarias": "Tarifas e juros bancários",
-    "restaurantes_bares": "Restaurantes e bares", "lazer": "Lazer (inclui jogos)", "compras": "Compras",
+    "restaurantes_bares": "Restaurantes e bares", "lazer": "Lazer", "compras": "Compras",
     "assinaturas": "Assinaturas", "saque": "Saque em dinheiro",
     "transferencia_interna": "Transferência entre suas contas", "guardar_investir": "Guardar/investir",
     "renda_fixa": "Renda fixa", "renda_variavel": "Renda variável", "renda_eventual": "Renda eventual",

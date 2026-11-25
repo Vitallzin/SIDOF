@@ -61,6 +61,22 @@ def test_nada_alem_de_loja_categoria_e_origem_e_guardado(banco):
     assert set(banco.ler_usos()[0]) == {"data_hora", "compras", "perguntas", "resolvidas_pelo_coletivo"}
 
 
+def test_contagem_do_documento_separa_pix_para_pessoas():
+    import pandas as pd
+    from financas.aprendizado import contagem_do_documento
+    saidas = pd.DataFrame({
+        "descricao": ["PIX ENVIADO MARIA SOUZA", "PIX ENVIADO JOAO LIMA", "SUSHI KAZU", "ATACADAO 1234"],
+        "contraparte": ["MARIA SOUZA", "JOAO LIMA", "SUSHI KAZU", "ATACADAO 1234"],
+        "perguntar_usuario": [True, True, True, False],
+        "origem": ["pergunta", "pergunta", "pergunta", "coletivo"],
+    })
+    contagem = contagem_do_documento(saidas)
+    assert contagem == {"compras": 4, "perguntas": 3, "resolvidas_pelo_coletivo": 1, "compras_lojas": 2, "perguntas_lojas": 1}
+    banco = ArmazenamentoMemoria()
+    registrar_uso_fatura(banco, **contagem)
+    assert banco.ler_usos()[0]["perguntas_lojas"] == 1
+
+
 def test_origem_invalida(banco):
     with pytest.raises(ValueError):
         registrar_confirmacao(banco, "SUSHI KAZU", "restaurantes_bares", "a", "outra")

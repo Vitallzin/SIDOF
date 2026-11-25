@@ -284,7 +284,8 @@ def perfil_de_renda(entradas, meses, usuarios=None):
         salarios = do_usuario[do_usuario["categoria_renda"] == "renda_fixa"]
         fontes = do_usuario.loc[do_usuario["categoria_renda"].isin(CATEGORIAS_RENDA_EFETIVA), "contraparte"].nunique()
         media = valores.mean()
-        variacao = valores.std() / media if media > 0 else 0.0
+        # Com um mês só não há variação para medir (o desvio padrão de um único valor não existe)
+        variacao = valores.std() / media if media > 0 and len(valores) > 1 else 0.0
         mudanca = _mudancas_no_salario(salarios, meses) if len(salarios) else None
         extra_por_mes = 0.0
         if media <= 0:
@@ -303,7 +304,7 @@ def perfil_de_renda(entradas, meses, usuarios=None):
             # Salário todo mês: a variação é a do salário; outras entradas são extras fora do planejamento
             salario_por_mes = salarios.groupby("mes")["valor"].sum().reindex(meses, fill_value=0)
             referencia = salario_por_mes.mean()
-            variacao = salario_por_mes.std() / referencia if referencia > 0 else 0.0
+            variacao = salario_por_mes.std() / referencia if referencia > 0 and len(salario_por_mes) > 1 else 0.0
             tipo = "fixa" if variacao < LIMITE_RENDA_FIXA else "variavel"
             extra_por_mes = max(media - referencia, 0.0)
         troca = mudanca if mudanca and mudanca["situacao"] == "troca" else None

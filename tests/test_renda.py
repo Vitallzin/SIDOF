@@ -303,3 +303,10 @@ def test_sobrenome_so_conta_quando_quem_mandou_parece_uma_pessoa():
     ], nome_usuario="CARLOS BAR")
     assert entradas.loc["T0", "categoria_renda"] == "renda_variavel"
     assert entradas.loc["T1", "categoria_renda"] == "renda_eventual"
+
+
+def test_um_mes_so_nao_mostra_variacao_invalida():
+    classificado, usuarios = _tabela([("2026-06-05", "PIX RECEBIDO JOAO SOUZA", 500.0), ("2026-06-10", "PIX RECEBIDO MARIA LIMA", 300.0)])
+    perfil = perfil_de_renda(classificar_entradas(classificado, usuarios), ["2026-06"]).iloc[0]
+    assert perfil["variacao"] == 0.0
+    assert "nan" not in perfil["explicacao"].lower()

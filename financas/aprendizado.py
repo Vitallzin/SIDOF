@@ -154,14 +154,35 @@ def exemplos_de_treino(conhecimento):
     return tuple(sorted((nome, categoria) for categoria, _, nome in conhecimento.values()))
 
 
-def registrar_uso_fatura(armazenamento, compras, perguntas, resolvidas_pelo_coletivo):
-    """Guarda só números sobre uma fatura analisada (nada do conteúdo dela)."""
-    armazenamento.salvar_uso({
+def registrar_uso_fatura(armazenamento, compras, perguntas, resolvidas_pelo_coletivo, compras_lojas=None, perguntas_lojas=None):
+    """Guarda só números sobre um documento analisado (nada do conteúdo dele).
+
+    compras_lojas / perguntas_lojas: as mesmas contagens sem os PIX para pessoas. Esses PIX sempre viram
+    pergunta (só a pessoa sabe a finalidade) e nunca são aprendidos, então escondem o aprendizado das lojas.
+    """
+    uso = {
         "data_hora": _agora(),
         "compras": int(compras),
         "perguntas": int(perguntas),
         "resolvidas_pelo_coletivo": int(resolvidas_pelo_coletivo),
-    })
+    }
+    if compras_lojas is not None:
+        uso["compras_lojas"] = int(compras_lojas)
+        uso["perguntas_lojas"] = int(perguntas_lojas)
+    armazenamento.salvar_uso(uso)
+
+
+def contagem_do_documento(saidas):
+    """Números para registrar_uso_fatura a partir das saídas classificadas de um documento."""
+    pix_pessoa = [eh_pix_para_pessoa(d, c) for d, c in zip(saidas["descricao"], saidas["contraparte"])]
+    lojas = saidas[[not eh for eh in pix_pessoa]]
+    return {
+        "compras": len(saidas),
+        "perguntas": int(saidas["perguntar_usuario"].sum()),
+        "resolvidas_pelo_coletivo": int((saidas["origem"] == "coletivo").sum()),
+        "compras_lojas": len(lojas),
+        "perguntas_lojas": int(lojas["perguntar_usuario"].sum()),
+    }
 
 
 def resumo(armazenamento, minimo=MINIMO_DE_CONFIRMACOES):

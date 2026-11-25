@@ -24,6 +24,7 @@ from financas.aprendizado import (
     criar_armazenamento,
     exemplos_de_treino,
     registrar_confirmacao,
+    contagem_do_documento,
     registrar_uso_fatura,
 )
 from financas.aprendizado import resumo as resumo_do_aprendizado
@@ -433,10 +434,7 @@ if modo_fatura:
             extrato_do_doc, usuarios_do_doc, _ = extrato_de_documentos([doc], normalizar_texto(nome_titular))
             classificadas = Sistema(extrato_do_doc, usuarios_do_doc, modelo, conhecimento).saidas()
             try:
-                registrar_uso_fatura(
-                    armazenamento, len(classificadas), classificadas["perguntar_usuario"].sum(),
-                    int((classificadas["origem"] == "coletivo").sum()),
-                )
+                registrar_uso_fatura(armazenamento, **contagem_do_documento(classificadas))
             except Exception:
                 pass  # métrica opcional: não atrapalha o diagnóstico
 else:
@@ -903,7 +901,7 @@ with abas["aprendizado"]:
         colunas[0].markdown(cartao("Lojas aprendidas", str(dados_aprendizado["lojas_aprendidas"]), f"com {MINIMO_DE_CONFIRMACOES}+ confirmações"), unsafe_allow_html=True)
         colunas[1].markdown(cartao("Lojas com votos", str(dados_aprendizado["lojas_com_votos"]), "esperando confirmações"), unsafe_allow_html=True)
         colunas[2].markdown(cartao("Confirmações", str(dados_aprendizado["confirmacoes"]), f"de {dados_aprendizado['sessoes']} sessões"), unsafe_allow_html=True)
-        colunas[3].markdown(cartao("Faturas analisadas", str(len(dados_aprendizado["usos"]))), unsafe_allow_html=True)
+        colunas[3].markdown(cartao("Documentos analisados", str(len(dados_aprendizado["usos"]))), unsafe_allow_html=True)
         origem = dados_aprendizado["aprendidas_por_origem"]
         st.caption(
             f"Lojas aprendidas por origem: {origem['fatura']} de faturas reais enviadas · "
@@ -913,25 +911,32 @@ with abas["aprendizado"]:
         st.write("")
 
         usos = pd.DataFrame(dados_aprendizado["usos"])
-        st.markdown('<div class="secao">Perguntas por fatura ao longo do tempo</div>', unsafe_allow_html=True)
-        if usos.empty:
-            st.info("Ainda nenhuma fatura analisada. Escolha 'Minha fatura' na barra lateral e envie uma.")
+        st.markdown('<div class="secao">Perguntas em lojas por documento, ao longo do tempo</div>', unsafe_allow_html=True)
+        # Só documentos que já guardam a contagem sem PIX para pessoas (os mais antigos não têm esse número)
+        if "compras_lojas" in usos:
+            usos = usos[usos["compras_lojas"].fillna(0) > 0].reset_index(drop=True)
         else:
-            usos = usos[usos["compras"] > 0].reset_index(drop=True)
-            usos["fatura"] = usos.index + 1
-            usos["perguntas_pct"] = usos["perguntas"] / usos["compras"]
+            usos = usos.iloc[0:0]
+        if usos.empty:
+            st.info("Ainda nenhum documento analisado. Escolha 'Minha fatura' na barra lateral e envie uma fatura ou extrato.")
+        else:
+            usos["documento"] = usos.index + 1
+            usos["perguntas_pct"] = usos["perguntas_lojas"] / usos["compras_lojas"]
             linha_tempo = alt.Chart(usos).mark_line(point=True, strokeWidth=3, color="#0F766E").encode(
-                x=alt.X("fatura:O", title="Fatura analisada (em ordem)"),
-                y=alt.Y("perguntas_pct:Q", title="Compras que viraram pergunta", axis=alt.Axis(format="%")),
+                x=alt.X("documento:O", title="Documento analisado (em ordem)"),
+                y=alt.Y("perguntas_pct:Q", title="Lojas que viraram pergunta", axis=alt.Axis(format=".0%"), scale=alt.Scale(domain=[0, 1])),
                 tooltip=[
-                    alt.Tooltip("fatura:O", title="Fatura"),
-                    alt.Tooltip("compras:Q", title="Compras"),
-                    alt.Tooltip("perguntas:Q", title="Perguntas"),
+                    alt.Tooltip("documento:O", title="Documento"),
+                    alt.Tooltip("compras_lojas:Q", title="Gastos em lojas"),
+                    alt.Tooltip("perguntas_lojas:Q", title="Perguntas sobre lojas"),
                     alt.Tooltip("resolvidas_pelo_coletivo:Q", title="Resolvidas pelo aprendizado"),
                 ],
             ).properties(height=240)
             st.altair_chart(estilo_grafico(linha_tempo), use_container_width=True)
-            st.caption("Se o sistema aprende, a linha tende a cair: cada fatura nova gera menos perguntas.")
+            st.caption(
+                "Não conta os PIX para pessoas: esses sempre viram pergunta (só você sabe a finalidade) e nunca são "
+                "aprendidos. Se o sistema aprende, a linha tende a cair: cada documento novo gera menos perguntas sobre lojas."
+            )
 
         aprendidas = dados_aprendizado["conhecimento"]
         if aprendidas:
