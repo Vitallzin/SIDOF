@@ -5,6 +5,9 @@ cartão de débito e crédito, transferências), o sistema classifica cada gasto
 renda, projeta as parcelas futuras, monta um diagnóstico em linguagem neutra, acompanha metas e aponta gastos fora
 do padrão. Também aceita faturas de cartão e extratos de conta, em PDF ou CSV.
 
+- **Testar o app online:** https://mvp-sidof.streamlit.app/
+- **Explorar o código com explicações (DeepWiki):** https://deepwiki.com/Vitallzin/SIDOF
+
 > **Todos os dados de desenvolvimento são fictícios.** Eles mostram que o sistema funciona e é coerente, mas não
 > provam o desempenho com extratos reais (veja [Limitações](#limitações)).
 
