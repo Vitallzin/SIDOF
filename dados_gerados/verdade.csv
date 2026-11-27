@@ -1,0 +1,2757 @@
+id_transacao,categoria,grupo,ambigua,tipo_anomalia,loja
+T000001,alimentacao_basica,essencial,nao,,ACOUGUE BOI NOBRE
+T000002,alimentacao_basica,essencial,nao,,ACOUGUE BOI NOBRE
+T000003,moradia,essencial,sim,,
+T000004,alimentacao_basica,essencial,nao,,ACOUGUE BOI NOBRE
+T000005,guardar_investir,outros,nao,,
+T000006,guardar_investir,outros,nao,,
+T000007,saude,prioritario,nao,,FARMACIA DO BAIRRO
+T000008,renda_fixa,outros,nao,,
+T000009,transferencia_interna,outros,nao,,
+T000010,transferencia_interna,outros,nao,,
+T000011,saque,discricionario,nao,,SAQUE CAIXA ELETRONICO
+T000012,pagamento_fatura,outros,nao,,
+T000013,transporte,essencial,nao,,PASSE ONIBUS URBANO
+T000014,assinaturas,discricionario,nao,,ACADEMIA CORPO ATIVO
+T000015,restaurantes_bares,discricionario,nao,,PIZZARIA FORNO A LENHA
+T000016,saude,prioritario,nao,,PLANO SAUDE VIDA PLENA
+T000017,restaurantes_bares,discricionario,nao,,ACAI DA PRAIA
+T000018,transporte,essencial,nao,,MOBI APP *TRIP
+T000019,restaurantes_bares,discricionario,nao,,CANTINA NONNA ITALIA
+T000020,compras,discricionario,nao,,CALCADOS PASSO FIRME
+T000021,alimentacao_basica,essencial,nao,,ACOUGUE BOI NOBRE
+T000022,energia,essencial,nao,,CIA ENERGIA ELETRICA
+T000023,telecom,essencial,nao,,OPERADORA CONECTA TELECOM
+T000024,alimentacao_basica,essencial,nao,,ACOUGUE BOI NOBRE
+T000025,agua,essencial,nao,,SANEAMENTO AGUAS CLARAS
+T000026,assinaturas,discricionario,nao,,CLUBE LIVROS DO MES
+T000027,transporte,essencial,nao,,MOBI APP *TRIP
+T000028,transporte,essencial,nao,,METRO LINHA AZUL
+T000029,restaurantes_bares,discricionario,nao,,ACAI DA PRAIA
+T000030,alimentacao_basica,essencial,nao,,ACOUGUE BOI NOBRE
+T000031,restaurantes_bares,discricionario,nao,,CANTINA NONNA ITALIA
+T000032,saque,discricionario,nao,,SAQUE CAIXA ELETRONICO
+T000033,compras,discricionario,nao,,UTILIDADES DO LAR
+T000034,transporte,essencial,nao,,METRO LINHA AZUL
+T000035,lazer,discricionario,nao,,BOLICHE STRIKE
+T000036,lazer,discricionario,nao,,RECARGA CREDITOS GAME
+T000037,alimentacao_basica,essencial,nao,,ATACADAO DO POVO
+T000038,alimentacao_basica,essencial,nao,,ACOUGUE BOI NOBRE
+T000039,restaurantes_bares,discricionario,nao,,CANTINA NONNA ITALIA
+T000040,transporte,essencial,nao,,METRO LINHA AZUL
+T000041,moradia,essencial,sim,,
+T000042,restaurantes_bares,discricionario,nao,,ACAI DA PRAIA
+T000043,guardar_investir,outros,nao,,
+T000044,guardar_investir,outros,nao,,
+T000045,renda_fixa,outros,nao,,
+T000046,lazer,discricionario,nao,,RECARGA CREDITOS GAME
+T000047,compras,discricionario,nao,,UTILIDADES DO LAR
+T000048,alimentacao_basica,essencial,nao,,ATACADAO DO POVO
+T000049,pagamento_fatura,outros,nao,,
+T000050,alimentacao_basica,essencial,nao,,ACOUGUE BOI NOBRE
+T000051,transporte,essencial,nao,,PASSE ONIBUS URBANO
+T000052,assinaturas,discricionario,nao,,ACADEMIA CORPO ATIVO
+T000053,restaurantes_bares,discricionario,nao,,CANTINA NONNA ITALIA
+T000054,transferencia_interna,outros,nao,,
+T000055,transferencia_interna,outros,nao,,
+T000056,saude,prioritario,nao,,PLANO SAUDE VIDA PLENA
+T000057,transporte,essencial,nao,,PASSE ONIBUS URBANO
+T000058,saude,prioritario,nao,,DROGAMAIS
+T000059,compras,discricionario,nao,,CALCADOS PASSO FIRME
+T000060,energia,essencial,nao,,CIA ENERGIA ELETRICA
+T000061,telecom,essencial,nao,,OPERADORA CONECTA TELECOM
+T000062,agua,essencial,nao,,SANEAMENTO AGUAS CLARAS
+T000063,lazer,discricionario,nao,,BOLICHE STRIKE
+T000064,assinaturas,discricionario,nao,,CLUBE LIVROS DO MES
+T000065,alimentacao_basica,essencial,nao,,ACOUGUE BOI NOBRE
+T000066,alimentacao_basica,essencial,nao,,ACOUGUE BOI NOBRE
+T000067,alimentacao_basica,essencial,nao,,ACOUGUE BOI NOBRE
+T000068,transporte,essencial,nao,,METRO LINHA AZUL
+T000069,alimentacao_basica,essencial,nao,,ACOUGUE BOI NOBRE
+T000070,compras,discricionario,sim,,
+T000071,educacao,prioritario,nao,,CURSO ONLINE CERTIFICA
+T000072,transporte,essencial,nao,,METRO LINHA AZUL
+T000073,alimentacao_basica,essencial,nao,,ACOUGUE BOI NOBRE
+T000074,restaurantes_bares,discricionario,nao,,CANTINA NONNA ITALIA
+T000075,alimentacao_basica,essencial,nao,,ACOUGUE BOI NOBRE
+T000076,moradia,essencial,sim,,
+T000077,guardar_investir,outros,nao,,
+T000078,guardar_investir,outros,nao,,
+T000079,renda_fixa,outros,nao,,
+T000080,saque,discricionario,nao,,SAQUE CAIXA ELETRONICO
+T000081,alimentacao_basica,essencial,nao,,ATACADAO DO POVO
+T000082,compras,discricionario,nao,,MKTPLACE*PEDIDO
+T000083,pagamento_fatura,outros,nao,,
+T000084,alimentacao_basica,essencial,nao,,ACOUGUE BOI NOBRE
+T000085,assinaturas,discricionario,nao,,ACADEMIA CORPO ATIVO
+T000086,restaurantes_bares,discricionario,nao,,ACAI DA PRAIA
+T000087,saude,prioritario,nao,,PLANO SAUDE VIDA PLENA
+T000088,alimentacao_basica,essencial,nao,,ACOUGUE BOI NOBRE
+T000089,transporte,essencial,nao,,METRO LINHA AZUL
+T000090,alimentacao_basica,essencial,nao,,ACOUGUE BOI NOBRE
+T000091,energia,essencial,nao,,CIA ENERGIA ELETRICA
+T000092,telecom,essencial,nao,,OPERADORA CONECTA TELECOM
+T000093,alimentacao_basica,essencial,nao,,ACOUGUE BOI NOBRE
+T000094,agua,essencial,nao,,SANEAMENTO AGUAS CLARAS
+T000095,assinaturas,discricionario,nao,,CLUBE LIVROS DO MES
+T000096,transporte,essencial,nao,,METRO LINHA AZUL
+T000097,lazer,discricionario,nao,,BOLICHE STRIKE
+T000098,saque,discricionario,nao,,SAQUE CAIXA ELETRONICO
+T000099,alimentacao_basica,essencial,nao,,ACOUGUE BOI NOBRE
+T000100,transferencia_interna,outros,nao,,
+T000101,transferencia_interna,outros,nao,,
+T000102,alimentacao_basica,essencial,nao,,ACOUGUE BOI NOBRE
+T000103,educacao,prioritario,nao,,CURSO ONLINE CERTIFICA
+T000104,alimentacao_basica,essencial,nao,,ACOUGUE BOI NOBRE
+T000105,restaurantes_bares,discricionario,nao,,PIZZARIA FORNO A LENHA
+T000106,compras,discricionario,nao,,CALCADOS PASSO FIRME
+T000107,alimentacao_basica,essencial,nao,,ATACADAO DO POVO
+T000108,transferencia_interna,outros,nao,,
+T000109,transferencia_interna,outros,nao,,
+T000110,alimentacao_basica,essencial,nao,,ATACADAO DO POVO
+T000111,transporte,essencial,nao,,PASSE ONIBUS URBANO
+T000112,restaurantes_bares,discricionario,nao,,PIZZARIA FORNO A LENHA
+T000113,moradia,essencial,sim,,
+T000114,guardar_investir,outros,nao,,
+T000115,guardar_investir,outros,nao,,
+T000116,renda_fixa,outros,nao,,
+T000117,transporte,essencial,nao,,METRO LINHA AZUL
+T000118,pagamento_fatura,outros,nao,,
+T000119,assinaturas,discricionario,nao,,ACADEMIA CORPO ATIVO
+T000120,saque,discricionario,nao,,SAQUE CAIXA ELETRONICO
+T000121,saude,prioritario,nao,,PLANO SAUDE VIDA PLENA
+T000122,saude,prioritario,nao,cobranca_duplicada,PLANO SAUDE VIDA PLENA
+T000123,transporte,essencial,nao,,METRO LINHA AZUL
+T000124,transporte,essencial,nao,,MOBI APP *TRIP
+T000125,lazer,discricionario,nao,pico_categoria,RECARGA CREDITOS GAME
+T000126,energia,essencial,nao,,CIA ENERGIA ELETRICA
+T000127,restaurantes_bares,discricionario,nao,,ACAI DA PRAIA
+T000128,lazer,discricionario,nao,pico_categoria,RECARGA CREDITOS GAME
+T000129,telecom,essencial,nao,,OPERADORA CONECTA TELECOM
+T000130,agua,essencial,nao,,SANEAMENTO AGUAS CLARAS
+T000131,alimentacao_basica,essencial,nao,,ACOUGUE BOI NOBRE
+T000132,lazer,discricionario,nao,pico_categoria,RECARGA CREDITOS GAME
+T000133,assinaturas,discricionario,nao,,CLUBE LIVROS DO MES
+T000134,alimentacao_basica,essencial,nao,,ATACADAO DO POVO
+T000135,lazer,discricionario,nao,pico_categoria,BOLICHE STRIKE
+T000136,compras,discricionario,nao,,CALCADOS PASSO FIRME
+T000137,alimentacao_basica,essencial,nao,,ATACADAO DO POVO
+T000138,restaurantes_bares,discricionario,nao,,PIZZARIA FORNO A LENHA
+T000139,educacao,prioritario,nao,,CURSO ONLINE CERTIFICA
+T000140,alimentacao_basica,essencial,nao,,ATACADAO DO POVO
+T000141,saude,prioritario,nao,,FARMACIA DO BAIRRO
+T000142,alimentacao_basica,essencial,nao,,ATACADAO DO POVO
+T000143,moradia,essencial,sim,,
+T000144,alimentacao_basica,essencial,nao,,ACOUGUE BOI NOBRE
+T000145,renda_fixa,outros,nao,,
+T000146,alimentacao_basica,essencial,nao,,ATACADAO DO POVO
+T000147,restaurantes_bares,discricionario,nao,,CANTINA NONNA ITALIA
+T000148,pagamento_fatura,outros,nao,,
+T000149,assinaturas,discricionario,nao,,ACADEMIA CORPO ATIVO
+T000150,transferencia_interna,outros,nao,,
+T000151,transferencia_interna,outros,nao,,
+T000152,transporte,essencial,nao,,MOBI APP *TRIP
+T000153,saude,prioritario,nao,,PLANO SAUDE VIDA PLENA
+T000154,transporte,essencial,nao,,MOBI APP *TRIP
+T000155,energia,essencial,nao,conta_fixa_disparada,CIA ENERGIA ELETRICA
+T000156,alimentacao_basica,essencial,nao,,ATACADAO DO POVO
+T000157,telecom,essencial,nao,,OPERADORA CONECTA TELECOM
+T000158,restaurantes_bares,discricionario,nao,,PIZZARIA FORNO A LENHA
+T000159,saque,discricionario,nao,,SAQUE CAIXA ELETRONICO
+T000160,agua,essencial,nao,,SANEAMENTO AGUAS CLARAS
+T000161,assinaturas,discricionario,nao,,CLUBE LIVROS DO MES
+T000162,alimentacao_basica,essencial,nao,,ACOUGUE BOI NOBRE
+T000163,transporte,essencial,nao,,PASSE ONIBUS URBANO
+T000164,transporte,essencial,nao,,MOBI APP *TRIP
+T000165,compras,discricionario,nao,,MKTPLACE*PEDIDO
+T000166,restaurantes_bares,discricionario,nao,,CANTINA NONNA ITALIA
+T000167,transporte,essencial,nao,,MOBI APP *TRIP
+T000168,alimentacao_basica,essencial,nao,,ATACADAO DO POVO
+T000169,restaurantes_bares,discricionario,nao,,ACAI DA PRAIA
+T000170,educacao,prioritario,nao,,CURSO ONLINE CERTIFICA
+T000171,transporte,essencial,nao,,MOBI APP *TRIP
+T000172,alimentacao_basica,essencial,nao,,ATACADAO DO POVO
+T000173,moradia,essencial,sim,,
+T000174,lazer,discricionario,nao,,BOLICHE STRIKE
+T000175,renda_fixa,outros,nao,,
+T000176,transferencia_interna,outros,nao,,
+T000177,transferencia_interna,outros,nao,,
+T000178,alimentacao_basica,essencial,nao,,ATACADAO DO POVO
+T000179,restaurantes_bares,discricionario,nao,,CANTINA NONNA ITALIA
+T000180,pagamento_fatura,outros,nao,,
+T000181,assinaturas,discricionario,nao,,ACADEMIA CORPO ATIVO
+T000182,alimentacao_basica,essencial,nao,,ACOUGUE BOI NOBRE
+T000183,restaurantes_bares,discricionario,nao,,PIZZARIA FORNO A LENHA
+T000184,restaurantes_bares,discricionario,nao,,CANTINA NONNA ITALIA
+T000185,saude,prioritario,nao,,PLANO SAUDE VIDA PLENA
+T000186,alimentacao_basica,essencial,nao,,ACOUGUE BOI NOBRE
+T000187,restaurantes_bares,discricionario,nao,,PIZZARIA FORNO A LENHA
+T000188,alimentacao_basica,essencial,nao,,ACOUGUE BOI NOBRE
+T000189,transporte,essencial,nao,,MOBI APP *TRIP
+T000190,energia,essencial,nao,,CIA ENERGIA ELETRICA
+T000191,alimentacao_basica,essencial,nao,,ATACADAO DO POVO
+T000192,telecom,essencial,nao,,OPERADORA CONECTA TELECOM
+T000193,alimentacao_basica,essencial,nao,,ATACADAO DO POVO
+T000194,compras,discricionario,nao,,UTILIDADES DO LAR
+T000195,transporte,essencial,nao,frequencia_incomum,METRO LINHA AZUL
+T000196,transporte,essencial,nao,frequencia_incomum,METRO LINHA AZUL
+T000197,transporte,essencial,nao,frequencia_incomum,METRO LINHA AZUL
+T000198,transporte,essencial,nao,frequencia_incomum,METRO LINHA AZUL
+T000199,agua,essencial,nao,,SANEAMENTO AGUAS CLARAS
+T000200,transporte,essencial,nao,frequencia_incomum,METRO LINHA AZUL
+T000201,transporte,essencial,nao,frequencia_incomum,METRO LINHA AZUL
+T000202,transporte,essencial,nao,frequencia_incomum,METRO LINHA AZUL
+T000203,transporte,essencial,nao,frequencia_incomum,METRO LINHA AZUL
+T000204,transporte,essencial,nao,frequencia_incomum,METRO LINHA AZUL
+T000205,transporte,essencial,nao,frequencia_incomum,METRO LINHA AZUL
+T000206,assinaturas,discricionario,nao,,CLUBE LIVROS DO MES
+T000207,alimentacao_basica,essencial,nao,,ATACADAO DO POVO
+T000208,transporte,essencial,nao,,PASSE ONIBUS URBANO
+T000209,transporte,essencial,nao,,METRO LINHA AZUL
+T000210,alimentacao_basica,essencial,nao,,ATACADAO DO POVO
+T000211,saude,prioritario,nao,,FARMACIA DO BAIRRO
+T000212,alimentacao_basica,essencial,nao,,ATACADAO DO POVO
+T000213,transferencia_interna,outros,nao,,
+T000214,transferencia_interna,outros,nao,,
+T000215,saude,prioritario,nao,,PLANO SAUDE VIDA PLENA
+T000216,renda_variavel,outros,sim,,
+T000217,veiculos,essencial,nao,,AUTOPOSTO TREVO
+T000218,transporte,essencial,nao,,PASSE ONIBUS URBANO
+T000219,compras,discricionario,nao,,BAZAR DA ESQUINA
+T000220,renda_fixa,outros,nao,,
+T000221,restaurantes_bares,discricionario,nao,,LANCHONETE ESQUINA
+T000222,restaurantes_bares,discricionario,nao,,LANCHONETE ESQUINA
+T000223,transporte,essencial,sim,,
+T000224,veiculos,essencial,nao,,ESTACIONAMENTO CENTRAL
+T000225,saude,prioritario,nao,,DROGARIA SAUDE TOTAL
+T000226,veiculos,essencial,nao,,IPVA 2026 DETRAN
+T000227,guardar_investir,outros,nao,,
+T000228,guardar_investir,outros,nao,,
+T000229,pagamento_fatura,outros,nao,,
+T000230,veiculos,essencial,nao,,ESTACIONAMENTO CENTRAL
+T000231,restaurantes_bares,discricionario,nao,,LANCHONETE ESQUINA
+T000232,lazer,discricionario,nao,,LOJA JOGOS DIGITAIS *ONLINE
+T000233,transporte,essencial,nao,,APP CORRIDA *VIAGEM
+T000234,veiculos,essencial,nao,,ESTACIONAMENTO CENTRAL
+T000235,transporte,essencial,nao,,APP CORRIDA *VIAGEM
+T000236,veiculos,essencial,nao,,AUTOPOSTO TREVO
+T000237,restaurantes_bares,discricionario,nao,,LANCHONETE ESQUINA
+T000238,assinaturas,discricionario,nao,,MUSICA PREMIUM
+T000239,transporte,essencial,nao,,MOBI APP *TRIP
+T000240,veiculos,essencial,nao,,ESTACIONAMENTO CENTRAL
+T000241,veiculos,essencial,nao,,ESTACIONAMENTO CENTRAL
+T000242,moradia,essencial,nao,,IMOBILIARIA CHAVE CERTA
+T000243,transporte,essencial,nao,,APP CORRIDA *VIAGEM
+T000244,saque,discricionario,nao,,SAQUE CAIXA ELETRONICO
+T000245,agua,essencial,nao,,SANEAMENTO AGUAS CLARAS
+T000246,telecom,essencial,nao,,OPERADORA CONECTA TELECOM
+T000247,alimentacao_basica,essencial,nao,,EMPORIO DONA ROSA
+T000248,alimentacao_basica,essencial,nao,,EMPORIO DONA ROSA
+T000249,restaurantes_bares,discricionario,nao,,BAR DO ZECA
+T000250,energia,essencial,nao,,CIA ENERGIA ELETRICA
+T000251,veiculos,essencial,nao,,SEGURO AUTO TRANQUILO
+T000252,veiculos,essencial,nao,,AUTOPOSTO TREVO
+T000253,saude,prioritario,nao,,PLANO SAUDE VIDA PLENA
+T000254,lazer,discricionario,nao,,CINEMA SHOPPING PLAZA
+T000255,alimentacao_basica,essencial,nao,,EMPORIO DONA ROSA
+T000256,restaurantes_bares,discricionario,nao,,LANCHONETE ESQUINA
+T000257,renda_fixa,outros,nao,,
+T000258,restaurantes_bares,discricionario,nao,,LANCHONETE ESQUINA
+T000259,transferencia_interna,outros,nao,,
+T000260,transferencia_interna,outros,nao,,
+T000261,compras,discricionario,nao,,BAZAR DA ESQUINA
+T000262,compras,discricionario,nao,,BAZAR DA ESQUINA
+T000263,veiculos,essencial,nao,,IPVA 2026 DETRAN
+T000264,guardar_investir,outros,nao,,
+T000265,guardar_investir,outros,nao,,
+T000266,pagamento_fatura,outros,nao,,
+T000267,alimentacao_basica,essencial,nao,,EMPORIO DONA ROSA
+T000268,veiculos,essencial,nao,,ESTACIONAMENTO CENTRAL
+T000269,veiculos,essencial,nao,,ESTACIONAMENTO CENTRAL
+T000270,transporte,essencial,nao,,PASSE ONIBUS URBANO
+T000271,alimentacao_basica,essencial,nao,,EMPORIO DONA ROSA
+T000272,alimentacao_basica,essencial,nao,,HORTIFRUTI VERDE VIDA
+T000273,transporte,essencial,nao,,MOBI APP *TRIP
+T000274,assinaturas,discricionario,nao,,MUSICA PREMIUM
+T000275,saude,prioritario,nao,,DROGARIA SAUDE TOTAL
+T000276,veiculos,essencial,nao,,ESTACIONAMENTO CENTRAL
+T000277,compras,discricionario,nao,,PERFUMARIA AROMA
+T000278,veiculos,essencial,nao,,AUTOPOSTO TREVO
+T000279,transporte,essencial,sim,,
+T000280,moradia,essencial,nao,,IMOBILIARIA CHAVE CERTA
+T000281,transporte,essencial,nao,,PASSE ONIBUS URBANO
+T000282,restaurantes_bares,discricionario,nao,,LANCHONETE ESQUINA
+T000283,lazer,discricionario,nao,,CINEMA SHOPPING PLAZA
+T000284,agua,essencial,nao,,SANEAMENTO AGUAS CLARAS
+T000285,telecom,essencial,nao,,OPERADORA CONECTA TELECOM
+T000286,veiculos,essencial,nao,,AUTOPOSTO TREVO
+T000287,transporte,essencial,nao,,MOBI APP *TRIP
+T000288,saque,discricionario,nao,,SAQUE CAIXA ELETRONICO
+T000289,veiculos,essencial,nao,,AUTOPOSTO TREVO
+T000290,restaurantes_bares,discricionario,nao,,LANCHONETE ESQUINA
+T000291,energia,essencial,nao,,CIA ENERGIA ELETRICA
+T000292,veiculos,essencial,nao,,SEGURO AUTO TRANQUILO
+T000293,alimentacao_basica,essencial,nao,,EMPORIO DONA ROSA
+T000294,saque,discricionario,nao,,SAQUE CAIXA ELETRONICO
+T000295,saque,discricionario,nao,,SAQUE CAIXA ELETRONICO
+T000296,saude,prioritario,nao,,PLANO SAUDE VIDA PLENA
+T000297,restaurantes_bares,discricionario,nao,,BAR DO ZECA
+T000298,renda_fixa,outros,nao,,
+T000299,renda_variavel,outros,sim,,
+T000300,alimentacao_basica,essencial,nao,,EMPORIO DONA ROSA
+T000301,transporte,essencial,nao,,APP CORRIDA *VIAGEM
+T000302,transporte,essencial,nao,,PASSE ONIBUS URBANO
+T000303,restaurantes_bares,discricionario,nao,,LANCHONETE ESQUINA
+T000304,veiculos,essencial,nao,,IPVA 2026 DETRAN
+T000305,restaurantes_bares,discricionario,nao,,LANCHONETE ESQUINA
+T000306,pagamento_fatura,outros,nao,,
+T000307,transporte,essencial,nao,,APP CORRIDA *VIAGEM
+T000308,veiculos,essencial,nao,,ESTACIONAMENTO CENTRAL
+T000309,veiculos,essencial,nao,,AUTOPOSTO TREVO
+T000310,assinaturas,discricionario,nao,,MUSICA PREMIUM
+T000311,alimentacao_basica,essencial,nao,,EMPORIO DONA ROSA
+T000312,compras,discricionario,nao,,PERFUMARIA AROMA
+T000313,veiculos,essencial,nao,,AUTOPOSTO TREVO
+T000314,lazer,discricionario,nao,,BOLICHE STRIKE
+T000315,compras,discricionario,nao,,PERFUMARIA AROMA
+T000316,moradia,essencial,nao,,IMOBILIARIA CHAVE CERTA
+T000317,veiculos,essencial,nao,,AUTOPOSTO TREVO
+T000318,alimentacao_basica,essencial,nao,,EMPORIO DONA ROSA
+T000319,transporte,essencial,nao,,PASSE ONIBUS URBANO
+T000320,transporte,essencial,nao,,PASSE ONIBUS URBANO
+T000321,compras,discricionario,nao,,BAZAR DA ESQUINA
+T000322,agua,essencial,nao,,SANEAMENTO AGUAS CLARAS
+T000323,veiculos,essencial,nao,,AUTOPOSTO TREVO
+T000324,telecom,essencial,nao,,OPERADORA CONECTA TELECOM
+T000325,restaurantes_bares,discricionario,nao,,BAR DO ZECA
+T000326,lazer,discricionario,nao,,BOLICHE STRIKE
+T000327,energia,essencial,nao,,CIA ENERGIA ELETRICA
+T000328,veiculos,essencial,nao,,SEGURO AUTO TRANQUILO
+T000329,transferencia_interna,outros,nao,,
+T000330,transferencia_interna,outros,nao,,
+T000331,restaurantes_bares,discricionario,nao,,LANCHONETE ESQUINA
+T000332,alimentacao_basica,essencial,nao,,HORTIFRUTI VERDE VIDA
+T000333,transporte,essencial,nao,,PASSE ONIBUS URBANO
+T000334,compras,discricionario,nao,,BAZAR DA ESQUINA
+T000335,lazer,discricionario,nao,,LOJA JOGOS DIGITAIS *ONLINE
+T000336,saude,prioritario,nao,,PLANO SAUDE VIDA PLENA
+T000337,veiculos,essencial,nao,,ESTACIONAMENTO CENTRAL
+T000338,restaurantes_bares,discricionario,nao,,LANCHONETE ESQUINA
+T000339,renda_fixa,outros,nao,,
+T000340,veiculos,essencial,nao,,ESTACIONAMENTO CENTRAL
+T000341,veiculos,essencial,nao,,LICENCIAMENTO 2026 DETRAN
+T000342,restaurantes_bares,discricionario,nao,,LANCHONETE ESQUINA
+T000343,renda_variavel,outros,sim,,
+T000344,veiculos,essencial,nao,,AUTOPOSTO TREVO
+T000345,compras,discricionario,nao,,BAZAR DA ESQUINA
+T000346,guardar_investir,outros,nao,,
+T000347,guardar_investir,outros,nao,,
+T000348,pagamento_fatura,outros,nao,,
+T000349,assinaturas,discricionario,nao,,MUSICA PREMIUM
+T000350,veiculos,essencial,nao,,ESTACIONAMENTO CENTRAL
+T000351,alimentacao_basica,essencial,nao,,HORTIFRUTI VERDE VIDA
+T000352,moradia,essencial,nao,,IMOBILIARIA CHAVE CERTA
+T000353,transporte,essencial,sim,,
+T000354,alimentacao_basica,essencial,nao,,HORTIFRUTI VERDE VIDA
+T000355,lazer,discricionario,nao,,BOLICHE STRIKE
+T000356,restaurantes_bares,discricionario,nao,,LANCHONETE ESQUINA
+T000357,restaurantes_bares,discricionario,nao,,BAR DO ZECA
+T000358,restaurantes_bares,discricionario,nao,,LANCHONETE ESQUINA
+T000359,agua,essencial,nao,,SANEAMENTO AGUAS CLARAS
+T000360,saude,prioritario,nao,,DROGARIA SAUDE TOTAL
+T000361,compras,discricionario,nao,,PERFUMARIA AROMA
+T000362,telecom,essencial,nao,,OPERADORA CONECTA TELECOM
+T000363,compras,discricionario,nao,,BAZAR DA ESQUINA
+T000364,transporte,essencial,nao,,PASSE ONIBUS URBANO
+T000365,veiculos,essencial,nao,,ESTACIONAMENTO CENTRAL
+T000366,saque,discricionario,nao,,SAQUE CAIXA ELETRONICO
+T000367,transferencia_interna,outros,nao,,
+T000368,transferencia_interna,outros,nao,,
+T000369,energia,essencial,nao,,CIA ENERGIA ELETRICA
+T000370,veiculos,essencial,nao,,SEGURO AUTO TRANQUILO
+T000371,impostos_contribuicoes,prioritario,nao,,DARF IRPF 2026
+T000372,restaurantes_bares,discricionario,nao,,BAR DO ZECA
+T000373,veiculos,essencial,nao,,AUTOPOSTO TREVO
+T000374,restaurantes_bares,discricionario,nao,,BAR DO ZECA
+T000375,saude,prioritario,nao,,PLANO SAUDE VIDA PLENA
+T000376,lazer,discricionario,nao,,LOJA JOGOS DIGITAIS *ONLINE
+T000377,compras,discricionario,nao,,BRECHO VINTAGE
+T000378,renda_fixa,outros,nao,,
+T000379,veiculos,essencial,nao,,AUTOPOSTO TREVO
+T000380,compras,discricionario,nao,,BRECHO VINTAGE
+T000381,compras,discricionario,nao,,PERFUMARIA AROMA
+T000382,guardar_investir,outros,nao,,
+T000383,guardar_investir,outros,nao,,
+T000384,pagamento_fatura,outros,nao,,
+T000385,alimentacao_basica,essencial,nao,,HORTIFRUTI VERDE VIDA
+T000386,transporte,essencial,nao,,APP CORRIDA *VIAGEM
+T000387,veiculos,essencial,nao,,ESTACIONAMENTO CENTRAL
+T000388,assinaturas,discricionario,nao,,MUSICA PREMIUM
+T000389,veiculos,essencial,nao,,AUTOPOSTO TREVO
+T000390,moradia,essencial,nao,,IMOBILIARIA CHAVE CERTA
+T000391,restaurantes_bares,discricionario,nao,,BAR DO ZECA
+T000392,transporte,essencial,nao,,PASSE ONIBUS URBANO
+T000393,agua,essencial,nao,,SANEAMENTO AGUAS CLARAS
+T000394,alimentacao_basica,essencial,nao,,EMPORIO DONA ROSA
+T000395,compras,discricionario,nao,,BAZAR DA ESQUINA
+T000396,telecom,essencial,nao,,OPERADORA CONECTA TELECOM
+T000397,veiculos,essencial,nao,,ESTACIONAMENTO CENTRAL
+T000398,saque,discricionario,nao,,SAQUE CAIXA ELETRONICO
+T000399,restaurantes_bares,discricionario,nao,,LANCHONETE ESQUINA
+T000400,transferencia_interna,outros,nao,,
+T000401,transferencia_interna,outros,nao,,
+T000402,energia,essencial,nao,,CIA ENERGIA ELETRICA
+T000403,veiculos,essencial,nao,,SEGURO AUTO TRANQUILO
+T000404,restaurantes_bares,discricionario,nao,,BAR DO ZECA
+T000405,compras,discricionario,nao,,MAGAZINE ELETRO LAR
+T000406,lazer,discricionario,nao,,LOJA JOGOS DIGITAIS *ONLINE
+T000407,veiculos,essencial,nao,,AUTOPOSTO TREVO
+T000408,saude,prioritario,nao,,PLANO SAUDE VIDA PLENA
+T000409,restaurantes_bares,discricionario,nao,,BAR DO ZECA
+T000410,compras,discricionario,nao,,PERFUMARIA AROMA
+T000411,restaurantes_bares,discricionario,nao,pico_categoria,LANCHONETE ESQUINA
+T000412,renda_fixa,outros,nao,,
+T000413,restaurantes_bares,discricionario,nao,pico_categoria,BAR DO ZECA
+T000414,restaurantes_bares,discricionario,nao,pico_categoria,LANCHONETE ESQUINA
+T000415,veiculos,essencial,nao,,ESTACIONAMENTO CENTRAL
+T000416,lazer,discricionario,nao,frequencia_incomum,LOJA JOGOS DIGITAIS *ONLINE
+T000417,lazer,discricionario,nao,frequencia_incomum,LOJA JOGOS DIGITAIS *ONLINE
+T000418,lazer,discricionario,nao,frequencia_incomum,LOJA JOGOS DIGITAIS *ONLINE
+T000419,lazer,discricionario,nao,frequencia_incomum,LOJA JOGOS DIGITAIS *ONLINE
+T000420,lazer,discricionario,nao,frequencia_incomum,LOJA JOGOS DIGITAIS *ONLINE
+T000421,lazer,discricionario,nao,frequencia_incomum,LOJA JOGOS DIGITAIS *ONLINE
+T000422,lazer,discricionario,nao,frequencia_incomum,LOJA JOGOS DIGITAIS *ONLINE
+T000423,lazer,discricionario,nao,frequencia_incomum,LOJA JOGOS DIGITAIS *ONLINE
+T000424,restaurantes_bares,discricionario,nao,pico_categoria,LANCHONETE ESQUINA
+T000425,restaurantes_bares,discricionario,nao,pico_categoria,LANCHONETE ESQUINA
+T000426,veiculos,essencial,nao,,ESTACIONAMENTO CENTRAL
+T000427,guardar_investir,outros,nao,,
+T000428,guardar_investir,outros,nao,,
+T000429,restaurantes_bares,discricionario,nao,pico_categoria,BAR DO ZECA
+T000430,restaurantes_bares,discricionario,nao,pico_categoria,BAR DO ZECA
+T000431,pagamento_fatura,outros,nao,,
+T000432,veiculos,essencial,nao,,ESTACIONAMENTO CENTRAL
+T000433,restaurantes_bares,discricionario,nao,,LANCHONETE ESQUINA
+T000434,restaurantes_bares,discricionario,nao,pico_categoria,LANCHONETE ESQUINA
+T000435,assinaturas,discricionario,nao,,MUSICA PREMIUM
+T000436,transporte,essencial,nao,,MOBI APP *TRIP
+T000437,transporte,essencial,nao,,PASSE ONIBUS URBANO
+T000438,compras,discricionario,nao,,BRECHO VINTAGE
+T000439,transferencia_interna,outros,nao,,
+T000440,transferencia_interna,outros,nao,,
+T000441,restaurantes_bares,discricionario,nao,pico_categoria,LANCHONETE ESQUINA
+T000442,moradia,essencial,nao,,IMOBILIARIA CHAVE CERTA
+T000443,saude,prioritario,nao,,DROGARIA SAUDE TOTAL
+T000444,restaurantes_bares,discricionario,nao,,LANCHONETE ESQUINA
+T000445,compras,discricionario,nao,,BAZAR DA ESQUINA
+T000446,restaurantes_bares,discricionario,nao,pico_categoria,LANCHONETE ESQUINA
+T000447,agua,essencial,nao,conta_fixa_disparada,SANEAMENTO AGUAS CLARAS
+T000448,restaurantes_bares,discricionario,nao,pico_categoria,BAR DO ZECA
+T000449,telecom,essencial,nao,,OPERADORA CONECTA TELECOM
+T000450,restaurantes_bares,discricionario,nao,pico_categoria,LANCHONETE ESQUINA
+T000451,alimentacao_basica,essencial,nao,,HORTIFRUTI VERDE VIDA
+T000452,alimentacao_basica,essencial,nao,,EMPORIO DONA ROSA
+T000453,veiculos,essencial,nao,,AUTOPOSTO TREVO
+T000454,restaurantes_bares,discricionario,nao,pico_categoria,BAR DO ZECA
+T000455,alimentacao_basica,essencial,nao,cobranca_duplicada,EMPORIO DONA ROSA
+T000456,restaurantes_bares,discricionario,nao,pico_categoria,LANCHONETE ESQUINA
+T000457,alimentacao_basica,essencial,nao,,HORTIFRUTI VERDE VIDA
+T000458,compras,discricionario,nao,,PERFUMARIA AROMA
+T000459,energia,essencial,nao,,CIA ENERGIA ELETRICA
+T000460,veiculos,essencial,nao,,SEGURO AUTO TRANQUILO
+T000461,transporte,essencial,nao,,MOBI APP *TRIP
+T000462,assinaturas,discricionario,nao,,NUVEM ARMAZENAMENTO
+T000463,moradia,essencial,sim,,
+T000464,compras,discricionario,nao,,UTILIDADES DO LAR
+T000465,saude,prioritario,nao,,PLANO SAUDE VIDA PLENA
+T000466,transporte,essencial,nao,,MOBI APP *TRIP
+T000467,renda_fixa,outros,nao,,
+T000468,alimentacao_basica,essencial,nao,,SACOLAO BARATAO
+T000469,restaurantes_bares,discricionario,nao,,BAR DO ZECA
+T000470,compras,discricionario,nao,,UTILIDADES DO LAR
+T000471,alimentacao_basica,essencial,nao,,EMPORIO DONA ROSA
+T000472,alimentacao_basica,essencial,nao,,SACOLAO BARATAO
+T000473,pagamento_fatura,outros,nao,,
+T000474,transporte,essencial,nao,,METRO LINHA AZUL
+T000475,alimentacao_basica,essencial,nao,,SACOLAO BARATAO
+T000476,telecom,essencial,nao,,OPERADORA CONECTA TELECOM
+T000477,assinaturas,discricionario,nao,,CLUBE LIVROS DO MES
+T000478,agua,essencial,nao,,SANEAMENTO AGUAS CLARAS
+T000479,alimentacao_basica,essencial,nao,,EMPORIO DONA ROSA
+T000480,guardar_investir,outros,nao,,
+T000481,guardar_investir,outros,nao,,
+T000482,alimentacao_basica,essencial,nao,,EMPORIO DONA ROSA
+T000483,pagamento_dividas,prioritario,sim,,
+T000484,educacao,prioritario,nao,,CURSO IDIOMAS FALE BEM
+T000485,transporte,essencial,nao,,MOBI APP *TRIP
+T000486,saude,prioritario,nao,,DROGAMAIS
+T000487,restaurantes_bares,discricionario,nao,,BAR DO ZECA
+T000488,energia,essencial,nao,,CIA ENERGIA ELETRICA
+T000489,compras,discricionario,nao,,UTILIDADES DO LAR
+T000490,transporte,essencial,sim,,
+T000491,restaurantes_bares,discricionario,nao,,SUSHI KAZU
+T000492,pagamento_dividas,prioritario,sim,,
+T000493,transferencia_interna,outros,nao,,
+T000494,transferencia_interna,outros,nao,,
+T000495,assinaturas,discricionario,nao,,NUVEM ARMAZENAMENTO
+T000496,lazer,discricionario,nao,,BOLICHE STRIKE
+T000497,moradia,essencial,sim,,
+T000498,saude,prioritario,nao,,PLANO SAUDE VIDA PLENA
+T000499,alimentacao_basica,essencial,nao,,EMPORIO DONA ROSA
+T000500,alimentacao_basica,essencial,nao,,EMPORIO DONA ROSA
+T000501,alimentacao_basica,essencial,nao,,EMPORIO DONA ROSA
+T000502,renda_fixa,outros,nao,,
+T000503,moradia,essencial,nao,,IPTU 2026 PREFEITURA
+T000504,restaurantes_bares,discricionario,nao,,SUSHI KAZU
+T000505,compras,discricionario,nao,,UTILIDADES DO LAR
+T000506,compras,discricionario,nao,,UTILIDADES DO LAR
+T000507,pagamento_fatura,outros,nao,,
+T000508,alimentacao_basica,essencial,nao,,EMPORIO DONA ROSA
+T000509,transporte,essencial,nao,,PASSE ONIBUS URBANO
+T000510,compras,discricionario,nao,,UTILIDADES DO LAR
+T000511,telecom,essencial,nao,,OPERADORA CONECTA TELECOM
+T000512,assinaturas,discricionario,nao,,CLUBE LIVROS DO MES
+T000513,agua,essencial,nao,,SANEAMENTO AGUAS CLARAS
+T000514,transporte,essencial,nao,,PASSE ONIBUS URBANO
+T000515,guardar_investir,outros,nao,,
+T000516,guardar_investir,outros,nao,,
+T000517,transporte,essencial,nao,,PASSE ONIBUS URBANO
+T000518,transferencia_interna,outros,nao,,
+T000519,transferencia_interna,outros,nao,,
+T000520,educacao,prioritario,nao,,CURSO IDIOMAS FALE BEM
+T000521,energia,essencial,nao,,CIA ENERGIA ELETRICA
+T000522,transporte,essencial,nao,,MOBI APP *TRIP
+T000523,restaurantes_bares,discricionario,nao,,BAR DO ZECA
+T000524,pagamento_dividas,prioritario,sim,,
+T000525,restaurantes_bares,discricionario,nao,,BAR DO ZECA
+T000526,assinaturas,discricionario,nao,,NUVEM ARMAZENAMENTO
+T000527,transporte,essencial,nao,,MOBI APP *TRIP
+T000528,transporte,essencial,nao,,PASSE ONIBUS URBANO
+T000529,transporte,essencial,nao,,METRO LINHA AZUL
+T000530,moradia,essencial,sim,,
+T000531,saude,prioritario,nao,,PLANO SAUDE VIDA PLENA
+T000532,transporte,essencial,nao,,METRO LINHA AZUL
+T000533,renda_fixa,outros,nao,,
+T000534,moradia,essencial,nao,,IPTU 2026 PREFEITURA
+T000535,compras,discricionario,nao,,UTILIDADES DO LAR
+T000536,transferencia_interna,outros,nao,,
+T000537,transferencia_interna,outros,nao,,
+T000538,compras,discricionario,nao,,AUTO SHOP ACESSORIOS
+T000539,alimentacao_basica,essencial,nao,,EMPORIO DONA ROSA
+T000540,transporte,essencial,nao,,MOBI APP *TRIP
+T000541,compras,discricionario,nao,,UTILIDADES DO LAR
+T000542,saque,discricionario,nao,,SAQUE BANCO 24 HORAS
+T000543,pagamento_fatura,outros,nao,,
+T000544,alimentacao_basica,essencial,nao,,EMPORIO DONA ROSA
+T000545,alimentacao_basica,essencial,nao,,SACOLAO BARATAO
+T000546,transporte,essencial,nao,,PASSE ONIBUS URBANO
+T000547,telecom,essencial,nao,,OPERADORA CONECTA TELECOM
+T000548,assinaturas,discricionario,nao,,CLUBE LIVROS DO MES
+T000549,agua,essencial,nao,,SANEAMENTO AGUAS CLARAS
+T000550,guardar_investir,outros,nao,,
+T000551,guardar_investir,outros,nao,,
+T000552,restaurantes_bares,discricionario,nao,,BAR DO ZECA
+T000553,educacao,prioritario,nao,,CURSO IDIOMAS FALE BEM
+T000554,alimentacao_basica,essencial,nao,,SACOLAO BARATAO
+T000555,energia,essencial,nao,,CIA ENERGIA ELETRICA
+T000556,saude,prioritario,nao,,LAB ANALISES VIDA
+T000557,pagamento_dividas,prioritario,sim,,
+T000558,transporte,essencial,nao,,PASSE ONIBUS URBANO
+T000559,lazer,discricionario,nao,,PARQUE AQUATICO SOL
+T000560,renda_variavel,outros,nao,,
+T000561,assinaturas,discricionario,nao,,NUVEM ARMAZENAMENTO
+T000562,transporte,essencial,nao,,PASSE ONIBUS URBANO
+T000563,compras,discricionario,nao,,UTILIDADES DO LAR
+T000564,moradia,essencial,sim,,
+T000565,transporte,essencial,sim,,
+T000566,saude,prioritario,nao,,PLANO SAUDE VIDA PLENA
+T000567,moradia,essencial,nao,,IPTU 2026 PREFEITURA
+T000568,saque,discricionario,nao,,SAQUE BANCO 24 HORAS
+T000569,transferencia_interna,outros,nao,,
+T000570,transferencia_interna,outros,nao,,
+T000571,transporte,essencial,nao,frequencia_incomum,PASSE ONIBUS URBANO
+T000572,transporte,essencial,nao,frequencia_incomum,PASSE ONIBUS URBANO
+T000573,transporte,essencial,nao,frequencia_incomum,PASSE ONIBUS URBANO
+T000574,transporte,essencial,nao,frequencia_incomum,PASSE ONIBUS URBANO
+T000575,transporte,essencial,nao,frequencia_incomum,PASSE ONIBUS URBANO
+T000576,renda_variavel,outros,nao,,
+T000577,alimentacao_basica,essencial,nao,,SACOLAO BARATAO
+T000578,transporte,essencial,nao,frequencia_incomum,PASSE ONIBUS URBANO
+T000579,transporte,essencial,nao,frequencia_incomum,PASSE ONIBUS URBANO
+T000580,transporte,essencial,nao,frequencia_incomum,PASSE ONIBUS URBANO
+T000581,transporte,essencial,nao,frequencia_incomum,PASSE ONIBUS URBANO
+T000582,transporte,essencial,nao,frequencia_incomum,PASSE ONIBUS URBANO
+T000583,transporte,essencial,nao,,MOBI APP *TRIP
+T000584,restaurantes_bares,discricionario,nao,,BAR DO ZECA
+T000585,pagamento_fatura,outros,nao,,
+T000586,renda_variavel,outros,nao,,
+T000587,saque,discricionario,nao,,SAQUE BANCO 24 HORAS
+T000588,alimentacao_basica,essencial,nao,,SACOLAO BARATAO
+T000589,alimentacao_basica,essencial,nao,,SACOLAO BARATAO
+T000590,alimentacao_basica,essencial,nao,,SACOLAO BARATAO
+T000591,telecom,essencial,nao,conta_fixa_disparada,OPERADORA CONECTA TELECOM
+T000592,assinaturas,discricionario,nao,,CLUBE LIVROS DO MES
+T000593,saude,prioritario,nao,,DROGAMAIS
+T000594,agua,essencial,nao,,SANEAMENTO AGUAS CLARAS
+T000595,transporte,essencial,nao,,MOBI APP *TRIP
+T000596,guardar_investir,outros,nao,,
+T000597,guardar_investir,outros,nao,,
+T000598,alimentacao_basica,essencial,nao,,EMPORIO DONA ROSA
+T000599,educacao,prioritario,nao,,CURSO IDIOMAS FALE BEM
+T000600,compras,discricionario,nao,,AUTO SHOP ACESSORIOS
+T000601,alimentacao_basica,essencial,nao,,EMPORIO DONA ROSA
+T000602,energia,essencial,nao,,CIA ENERGIA ELETRICA
+T000603,transporte,essencial,nao,,METRO LINHA AZUL
+T000604,lazer,discricionario,nao,,PARQUE AQUATICO SOL
+T000605,renda_fixa,outros,nao,,
+T000606,assinaturas,discricionario,nao,,NUVEM ARMAZENAMENTO
+T000607,restaurantes_bares,discricionario,nao,,SUSHI KAZU
+T000608,transporte,essencial,sim,pix_alto_desconhecido,
+T000609,moradia,essencial,sim,,
+T000610,lazer,discricionario,nao,,PARQUE AQUATICO SOL
+T000611,saude,prioritario,nao,,PLANO SAUDE VIDA PLENA
+T000612,alimentacao_basica,essencial,nao,,SACOLAO BARATAO
+T000613,saude,prioritario,nao,cobranca_duplicada,PLANO SAUDE VIDA PLENA
+T000614,transporte,essencial,nao,,PASSE ONIBUS URBANO
+T000615,transporte,essencial,nao,,METRO LINHA AZUL
+T000616,moradia,essencial,nao,,IPTU 2026 PREFEITURA
+T000617,transporte,essencial,nao,,METRO LINHA AZUL
+T000618,pagamento_dividas,prioritario,sim,,
+T000619,transferencia_interna,outros,nao,,
+T000620,transferencia_interna,outros,nao,,
+T000621,alimentacao_basica,essencial,nao,,SACOLAO BARATAO
+T000622,compras,discricionario,nao,,AUTO SHOP ACESSORIOS
+T000623,pagamento_fatura,outros,nao,,
+T000624,restaurantes_bares,discricionario,nao,,BAR DO ZECA
+T000625,restaurantes_bares,discricionario,nao,,BAR DO ZECA
+T000626,telecom,essencial,nao,,OPERADORA CONECTA TELECOM
+T000627,assinaturas,discricionario,nao,,CLUBE LIVROS DO MES
+T000628,agua,essencial,nao,,SANEAMENTO AGUAS CLARAS
+T000629,compras,discricionario,nao,,AUTO SHOP ACESSORIOS
+T000630,saque,discricionario,nao,,SAQUE BANCO 24 HORAS
+T000631,guardar_investir,outros,nao,,
+T000632,guardar_investir,outros,nao,,
+T000633,educacao,prioritario,nao,,CURSO IDIOMAS FALE BEM
+T000634,alimentacao_basica,essencial,nao,,EMPORIO DONA ROSA
+T000635,restaurantes_bares,discricionario,nao,,SUSHI KAZU
+T000636,transporte,essencial,nao,,METRO LINHA AZUL
+T000637,energia,essencial,nao,,CIA ENERGIA ELETRICA
+T000638,compras,discricionario,nao,,AUTO SHOP ACESSORIOS
+T000639,saque,discricionario,nao,,SAQUE BANCO 24 HORAS
+T000640,alimentacao_basica,essencial,nao,,EMPORIO DONA ROSA
+T000641,renda_fixa,outros,nao,,
+T000642,assinaturas,discricionario,nao,,NUVEM ARMAZENAMENTO
+T000643,compras,discricionario,nao,,UTILIDADES DO LAR
+T000644,moradia,essencial,sim,,
+T000645,lazer,discricionario,nao,,BOLICHE STRIKE
+T000646,saude,prioritario,nao,,PLANO SAUDE VIDA PLENA
+T000647,transferencia_interna,outros,nao,,
+T000648,transferencia_interna,outros,nao,,
+T000649,transporte,essencial,nao,,METRO LINHA AZUL
+T000650,moradia,essencial,nao,,IPTU 2026 PREFEITURA
+T000651,transporte,essencial,nao,,METRO LINHA AZUL
+T000652,transporte,essencial,nao,,PASSE ONIBUS URBANO
+T000653,transporte,essencial,nao,,PASSE ONIBUS URBANO
+T000654,transporte,essencial,sim,,
+T000655,alimentacao_basica,essencial,nao,,SACOLAO BARATAO
+T000656,pagamento_fatura,outros,nao,,
+T000657,alimentacao_basica,essencial,nao,,EMPORIO DONA ROSA
+T000658,transporte,essencial,nao,,MOBI APP *TRIP
+T000659,renda_eventual,outros,sim,,
+T000660,telecom,essencial,nao,,OPERADORA CONECTA TELECOM
+T000661,assinaturas,discricionario,nao,,CLUBE LIVROS DO MES
+T000662,agua,essencial,nao,,SANEAMENTO AGUAS CLARAS
+T000663,compras,discricionario,nao,,AUTO SHOP ACESSORIOS
+T000664,guardar_investir,outros,nao,,
+T000665,guardar_investir,outros,nao,,
+T000666,transporte,essencial,nao,,PASSE ONIBUS URBANO
+T000667,restaurantes_bares,discricionario,nao,,BAR DO ZECA
+T000668,educacao,prioritario,nao,,CURSO IDIOMAS FALE BEM
+T000669,restaurantes_bares,discricionario,nao,,SUSHI KAZU
+T000670,energia,essencial,nao,,CIA ENERGIA ELETRICA
+T000671,saque,discricionario,nao,,SAQUE BANCO 24 HORAS
+T000672,alimentacao_basica,essencial,nao,,SACOLAO BARATAO
+T000673,saque,discricionario,nao,,SAQUE BANCO 24 HORAS
+T000674,transporte,essencial,nao,,METRO LINHA AZUL
+T000675,restaurantes_bares,discricionario,nao,,SUSHI KAZU
+T000676,compras,discricionario,nao,,MAGAZINE ELETRO LAR
+T000677,alimentacao_basica,essencial,nao,,SACOLAO BARATAO
+T000678,transporte,essencial,nao,,PASSE ONIBUS URBANO
+T000679,pagamento_dividas,prioritario,sim,,
+T000680,alimentacao_basica,essencial,nao,,ACOUGUE BOI NOBRE
+T000681,assinaturas,discricionario,nao,,CLUBE LIVROS DO MES
+T000682,impostos_contribuicoes,prioritario,nao,,DAS MEI SIMPLES NACIONAL
+T000683,transporte,essencial,nao,,MOBI APP *TRIP
+T000684,tarifas_bancarias,prioritario,nao,,TARIFA PACOTE SERVICOS
+T000685,saude,prioritario,nao,,LAB ANALISES VIDA
+T000686,guardar_investir,outros,nao,,
+T000687,guardar_investir,outros,nao,,
+T000688,moradia,essencial,sim,,
+T000689,alimentacao_basica,essencial,nao,,ACOUGUE BOI NOBRE
+T000690,pagamento_fatura,outros,nao,,
+T000691,renda_variavel,outros,nao,,
+T000692,saude,prioritario,nao,,DROGAMAIS
+T000693,agua,essencial,nao,,SANEAMENTO AGUAS CLARAS
+T000694,restaurantes_bares,discricionario,nao,,BOTECO DO ALEMAO
+T000695,alimentacao_basica,essencial,nao,,EMPORIO DONA ROSA
+T000696,energia,essencial,nao,,CIA ENERGIA ELETRICA
+T000697,compras,discricionario,nao,,BRECHO VINTAGE
+T000698,telecom,essencial,nao,,OPERADORA CONECTA TELECOM
+T000699,restaurantes_bares,discricionario,nao,,SUSHI KAZU
+T000700,lazer,discricionario,nao,,PARQUE AQUATICO SOL
+T000701,saude,prioritario,nao,,LAB ANALISES VIDA
+T000702,restaurantes_bares,discricionario,nao,,HAMBURGUERIA DO CHEF
+T000703,renda_variavel,outros,nao,,
+T000704,lazer,discricionario,nao,,TEATRO MUNICIPAL BILHETERIA
+T000705,alimentacao_basica,essencial,nao,,HORTIFRUTI VERDE VIDA
+T000706,transporte,essencial,nao,,MOBI APP *TRIP
+T000707,assinaturas,discricionario,nao,,CLUBE LIVROS DO MES
+T000708,impostos_contribuicoes,prioritario,nao,,DAS MEI SIMPLES NACIONAL
+T000709,saude,prioritario,nao,,LAB ANALISES VIDA
+T000710,transporte,essencial,nao,,RECARGA BILHETE TRANSPORTE
+T000711,tarifas_bancarias,prioritario,nao,,TARIFA PACOTE SERVICOS
+T000712,guardar_investir,outros,nao,,
+T000713,guardar_investir,outros,nao,,
+T000714,moradia,essencial,sim,,
+T000715,restaurantes_bares,discricionario,nao,,SUSHI KAZU
+T000716,pagamento_fatura,outros,nao,,
+T000717,transporte,essencial,nao,,RECARGA BILHETE TRANSPORTE
+T000718,saude,prioritario,sim,,
+T000719,renda_variavel,outros,nao,,
+T000720,agua,essencial,nao,,SANEAMENTO AGUAS CLARAS
+T000721,restaurantes_bares,discricionario,nao,,SUSHI KAZU
+T000722,compras,discricionario,nao,,BRECHO VINTAGE
+T000723,energia,essencial,nao,,CIA ENERGIA ELETRICA
+T000724,telecom,essencial,nao,,OPERADORA CONECTA TELECOM
+T000725,lazer,discricionario,nao,,PARQUE AQUATICO SOL
+T000726,alimentacao_basica,essencial,nao,,HORTIFRUTI VERDE VIDA
+T000727,renda_variavel,outros,nao,,
+T000728,alimentacao_basica,essencial,nao,,EMPORIO DONA ROSA
+T000729,lazer,discricionario,nao,,PARQUE AQUATICO SOL
+T000730,compras,discricionario,nao,,BRECHO VINTAGE
+T000731,compras,discricionario,nao,,MKTPLACE*PEDIDO
+T000732,renda_variavel,outros,nao,,
+T000733,compras,discricionario,nao,,MKTPLACE*PEDIDO
+T000734,transporte,essencial,nao,,RECARGA BILHETE TRANSPORTE
+T000735,assinaturas,discricionario,nao,,CLUBE LIVROS DO MES
+T000736,impostos_contribuicoes,prioritario,nao,,DAS MEI SIMPLES NACIONAL
+T000737,alimentacao_basica,essencial,nao,,HORTIFRUTI VERDE VIDA
+T000738,saude,prioritario,nao,,DROGAMAIS
+T000739,alimentacao_basica,essencial,nao,,HORTIFRUTI VERDE VIDA
+T000740,compras,discricionario,nao,,MKTPLACE*PEDIDO
+T000741,compras,discricionario,nao,,MKTPLACE*PEDIDO
+T000742,transferencia_interna,outros,nao,,
+T000743,transferencia_interna,outros,nao,,
+T000744,renda_variavel,outros,sim,,
+T000745,tarifas_bancarias,prioritario,nao,,TARIFA PACOTE SERVICOS
+T000746,saque,discricionario,nao,,SAQUE CAIXA ELETRONICO
+T000747,moradia,essencial,sim,,
+T000748,pagamento_fatura,outros,nao,,
+T000749,renda_variavel,outros,sim,,
+T000750,restaurantes_bares,discricionario,nao,,HAMBURGUERIA DO CHEF
+T000751,compras,discricionario,nao,,BRECHO VINTAGE
+T000752,renda_variavel,outros,nao,,
+T000753,saque,discricionario,nao,,SAQUE CAIXA ELETRONICO
+T000754,agua,essencial,nao,,SANEAMENTO AGUAS CLARAS
+T000755,saude,prioritario,nao,,DROGAMAIS
+T000756,restaurantes_bares,discricionario,nao,,SUSHI KAZU
+T000757,energia,essencial,nao,,CIA ENERGIA ELETRICA
+T000758,telecom,essencial,nao,,OPERADORA CONECTA TELECOM
+T000759,transporte,essencial,nao,,MOBI APP *TRIP
+T000760,restaurantes_bares,discricionario,nao,,BOTECO DO ALEMAO
+T000761,compras,discricionario,nao,,CELULARES CONECTADOS
+T000762,saude,prioritario,nao,,LAB ANALISES VIDA
+T000763,compras,discricionario,nao,,MKTPLACE*PEDIDO
+T000764,renda_variavel,outros,sim,,
+T000765,transporte,essencial,nao,,MOBI APP *TRIP
+T000766,compras,discricionario,nao,pico_categoria,BRECHO VINTAGE
+T000767,assinaturas,discricionario,nao,,CLUBE LIVROS DO MES
+T000768,impostos_contribuicoes,prioritario,nao,,DAS MEI SIMPLES NACIONAL
+T000769,transporte,essencial,nao,,MOBI APP *TRIP
+T000770,renda_variavel,outros,nao,,
+T000771,tarifas_bancarias,prioritario,nao,,TARIFA PACOTE SERVICOS
+T000772,guardar_investir,outros,nao,,
+T000773,guardar_investir,outros,nao,,
+T000774,compras,discricionario,nao,pico_categoria,MKTPLACE*PEDIDO
+T000775,renda_variavel,outros,sim,,
+T000776,moradia,essencial,sim,,
+T000777,pagamento_fatura,outros,nao,,
+T000778,restaurantes_bares,discricionario,nao,,SUSHI KAZU
+T000779,transporte,essencial,nao,frequencia_incomum,MOBI APP *TRIP
+T000780,transporte,essencial,nao,frequencia_incomum,MOBI APP *TRIP
+T000781,transporte,essencial,nao,frequencia_incomum,MOBI APP *TRIP
+T000782,transporte,essencial,nao,frequencia_incomum,MOBI APP *TRIP
+T000783,transporte,essencial,nao,frequencia_incomum,MOBI APP *TRIP
+T000784,transporte,essencial,nao,frequencia_incomum,MOBI APP *TRIP
+T000785,transporte,essencial,nao,frequencia_incomum,MOBI APP *TRIP
+T000786,transporte,essencial,nao,frequencia_incomum,MOBI APP *TRIP
+T000787,transporte,essencial,nao,frequencia_incomum,MOBI APP *TRIP
+T000788,transporte,essencial,nao,frequencia_incomum,MOBI APP *TRIP
+T000789,transporte,essencial,nao,frequencia_incomum,MOBI APP *TRIP
+T000790,transporte,essencial,nao,frequencia_incomum,MOBI APP *TRIP
+T000791,transporte,essencial,nao,frequencia_incomum,MOBI APP *TRIP
+T000792,transporte,essencial,nao,frequencia_incomum,MOBI APP *TRIP
+T000793,compras,discricionario,nao,pico_categoria,MKTPLACE*PEDIDO
+T000794,compras,discricionario,nao,pico_categoria,BRECHO VINTAGE
+T000795,compras,discricionario,nao,pico_categoria,MKTPLACE*PEDIDO
+T000796,renda_variavel,outros,nao,,
+T000797,agua,essencial,nao,,SANEAMENTO AGUAS CLARAS
+T000798,transporte,essencial,nao,,MOBI APP *TRIP
+T000799,renda_variavel,outros,sim,,
+T000800,alimentacao_basica,essencial,nao,,EMPORIO DONA ROSA
+T000801,lazer,discricionario,nao,,PARQUE AQUATICO SOL
+T000802,lazer,discricionario,nao,,TEATRO MUNICIPAL BILHETERIA
+T000803,compras,discricionario,nao,pico_categoria,MKTPLACE*PEDIDO
+T000804,renda_variavel,outros,nao,,
+T000805,energia,essencial,nao,,CIA ENERGIA ELETRICA
+T000806,compras,discricionario,nao,pico_categoria,MKTPLACE*PEDIDO
+T000807,telecom,essencial,nao,,OPERADORA CONECTA TELECOM
+T000808,compras,discricionario,nao,pico_categoria,BRECHO VINTAGE
+T000809,alimentacao_basica,essencial,nao,,EMPORIO DONA ROSA
+T000810,transferencia_interna,outros,nao,,
+T000811,transferencia_interna,outros,nao,,
+T000812,compras,discricionario,nao,pico_categoria,MKTPLACE*PEDIDO
+T000813,compras,discricionario,nao,pico_categoria,BRECHO VINTAGE
+T000814,saude,prioritario,nao,,LAB ANALISES VIDA
+T000815,restaurantes_bares,discricionario,nao,,SUSHI KAZU
+T000816,compras,discricionario,nao,pico_categoria,MKTPLACE*PEDIDO
+T000817,compras,discricionario,nao,,CELULARES CONECTADOS
+T000818,compras,discricionario,nao,pico_categoria,BRECHO VINTAGE
+T000819,compras,discricionario,nao,estabelecimento_novo_alto,ELETRONICOS IMPORTADOS LTDA
+T000820,compras,discricionario,nao,,BRECHO VINTAGE
+T000821,renda_variavel,outros,sim,,
+T000822,transporte,essencial,nao,,RECARGA BILHETE TRANSPORTE
+T000823,restaurantes_bares,discricionario,nao,,HAMBURGUERIA DO CHEF
+T000824,compras,discricionario,nao,pico_categoria,BRECHO VINTAGE
+T000825,compras,discricionario,nao,pico_categoria,MKTPLACE*PEDIDO
+T000826,transporte,essencial,nao,,MOBI APP *TRIP
+T000827,transporte,essencial,nao,,RECARGA BILHETE TRANSPORTE
+T000828,lazer,discricionario,nao,,PARQUE AQUATICO SOL
+T000829,assinaturas,discricionario,nao,,CLUBE LIVROS DO MES
+T000830,impostos_contribuicoes,prioritario,nao,,DAS MEI SIMPLES NACIONAL
+T000831,lazer,discricionario,nao,,KARAOKE NOTURNO
+T000832,renda_variavel,outros,nao,,
+T000833,alimentacao_basica,essencial,nao,,HORTIFRUTI VERDE VIDA
+T000834,saude,prioritario,nao,,DROGAMAIS
+T000835,assinaturas,discricionario,nao,cobranca_recorrente_nova,SEGURO CELULAR MENSAL
+T000836,renda_variavel,outros,nao,,
+T000837,compras,discricionario,nao,,BRECHO VINTAGE
+T000838,transferencia_interna,outros,nao,,
+T000839,transferencia_interna,outros,nao,,
+T000840,tarifas_bancarias,prioritario,nao,,TARIFA PACOTE SERVICOS
+T000841,guardar_investir,outros,nao,,
+T000842,guardar_investir,outros,nao,,
+T000843,renda_variavel,outros,sim,,
+T000844,moradia,essencial,sim,,
+T000845,pagamento_fatura,outros,nao,,
+T000846,renda_variavel,outros,nao,,
+T000847,renda_variavel,outros,nao,,
+T000848,agua,essencial,nao,conta_fixa_disparada,SANEAMENTO AGUAS CLARAS
+T000849,transporte,essencial,nao,,MOBI APP *TRIP
+T000850,energia,essencial,nao,,CIA ENERGIA ELETRICA
+T000851,telecom,essencial,nao,,OPERADORA CONECTA TELECOM
+T000852,alimentacao_basica,essencial,nao,,EMPORIO DONA ROSA
+T000853,restaurantes_bares,discricionario,nao,,SUSHI KAZU
+T000854,compras,discricionario,nao,,MKTPLACE*PEDIDO
+T000855,transporte,essencial,nao,,MOBI APP *TRIP
+T000856,compras,discricionario,nao,,CELULARES CONECTADOS
+T000857,alimentacao_basica,essencial,nao,,HORTIFRUTI VERDE VIDA
+T000858,renda_variavel,outros,nao,,
+T000859,compras,discricionario,nao,,BRECHO VINTAGE
+T000860,alimentacao_basica,essencial,nao,,HORTIFRUTI VERDE VIDA
+T000861,transporte,essencial,nao,,MOBI APP *TRIP
+T000862,restaurantes_bares,discricionario,nao,,HAMBURGUERIA DO CHEF
+T000863,assinaturas,discricionario,nao,,CLUBE LIVROS DO MES
+T000864,impostos_contribuicoes,prioritario,nao,,DAS MEI SIMPLES NACIONAL
+T000865,renda_variavel,outros,sim,,
+T000866,restaurantes_bares,discricionario,nao,,BOTECO DO ALEMAO
+T000867,assinaturas,discricionario,nao,cobranca_recorrente_nova,SEGURO CELULAR MENSAL
+T000868,renda_variavel,outros,nao,,
+T000869,compras,discricionario,nao,,MKTPLACE*PEDIDO
+T000870,tarifas_bancarias,prioritario,nao,,TARIFA PACOTE SERVICOS
+T000871,guardar_investir,outros,nao,,
+T000872,guardar_investir,outros,nao,,
+T000873,moradia,essencial,sim,,
+T000874,pagamento_fatura,outros,nao,,
+T000875,compras,discricionario,nao,,MKTPLACE*PEDIDO
+T000876,saque,discricionario,nao,,SAQUE CAIXA ELETRONICO
+T000877,agua,essencial,nao,,SANEAMENTO AGUAS CLARAS
+T000878,energia,essencial,nao,,CIA ENERGIA ELETRICA
+T000879,restaurantes_bares,discricionario,nao,,SUSHI KAZU
+T000880,telecom,essencial,nao,,OPERADORA CONECTA TELECOM
+T000881,compras,discricionario,nao,,CELULARES CONECTADOS
+T000882,alimentacao_basica,essencial,nao,,EMPORIO DONA ROSA
+T000883,transporte,essencial,nao,,MOBI APP *TRIP
+T000884,alimentacao_basica,essencial,nao,,ACOUGUE BOI NOBRE
+T000885,lazer,discricionario,nao,,KARAOKE NOTURNO
+T000886,compras,discricionario,nao,,MKTPLACE*PEDIDO
+T000887,alimentacao_basica,essencial,nao,,EMPORIO DONA ROSA
+T000888,transporte,essencial,nao,,MOBI APP *TRIP
+T000889,restaurantes_bares,discricionario,nao,,ACAI DA PRAIA
+T000890,renda_variavel,outros,nao,,
+T000891,restaurantes_bares,discricionario,nao,,CANTINA NONNA ITALIA
+T000892,compras,discricionario,nao,,AUTO SHOP ACESSORIOS
+T000893,alimentacao_basica,essencial,nao,,QUITANDA DO VALE
+T000894,moradia,essencial,sim,,
+T000895,renda_variavel,outros,nao,,
+T000896,renda_variavel,outros,sim,,
+T000897,renda_variavel,outros,nao,,
+T000898,impostos_contribuicoes,prioritario,nao,,DAS MEI SIMPLES NACIONAL
+T000899,alimentacao_basica,essencial,nao,,QUITANDA DO VALE
+T000900,transferencia_familiar,prioritario,sim,,
+T000901,renda_variavel,outros,nao,,
+T000902,alimentacao_basica,essencial,nao,,MERCADINHO SAO JORGE
+T000903,restaurantes_bares,discricionario,nao,,ACAI DA PRAIA
+T000904,transferencia_interna,outros,nao,,
+T000905,transferencia_interna,outros,nao,,
+T000906,pagamento_fatura,outros,nao,,
+T000907,telecom,essencial,nao,,OPERADORA CONECTA TELECOM
+T000908,assinaturas,discricionario,nao,,MUSICA PREMIUM
+T000909,transporte,essencial,nao,,APP CORRIDA *VIAGEM
+T000910,renda_variavel,outros,nao,,
+T000911,compras,discricionario,nao,,AUTO SHOP ACESSORIOS
+T000912,restaurantes_bares,discricionario,nao,,SUSHI KAZU
+T000913,compras,discricionario,nao,,AUTO SHOP ACESSORIOS
+T000914,renda_variavel,outros,nao,,
+T000915,transporte,essencial,nao,,METRO LINHA AZUL
+T000916,energia,essencial,nao,,CIA ENERGIA ELETRICA
+T000917,saude,prioritario,nao,,PLANO SAUDE VIDA PLENA
+T000918,saude,prioritario,nao,,FARMACIA DO BAIRRO
+T000919,lazer,discricionario,sim,,
+T000920,alimentacao_basica,essencial,nao,,SUPERMERCADO BOM PRECO
+T000921,alimentacao_basica,essencial,nao,,MERCADINHO SAO JORGE
+T000922,compras,discricionario,nao,,PERFUMARIA AROMA
+T000923,agua,essencial,nao,,SANEAMENTO AGUAS CLARAS
+T000924,alimentacao_basica,essencial,nao,,QUITANDA DO VALE
+T000925,compras,discricionario,nao,,PERFUMARIA AROMA
+T000926,moradia,essencial,sim,,
+T000927,impostos_contribuicoes,prioritario,nao,,DAS MEI SIMPLES NACIONAL
+T000928,compras,discricionario,nao,,BAZAR DA ESQUINA
+T000929,transferencia_familiar,prioritario,sim,,
+T000930,alimentacao_basica,essencial,nao,,SUPERMERCADO BOM PRECO
+T000931,lazer,discricionario,nao,,KARAOKE NOTURNO
+T000932,pagamento_fatura,outros,nao,,
+T000933,telecom,essencial,nao,,OPERADORA CONECTA TELECOM
+T000934,alimentacao_basica,essencial,nao,,QUITANDA DO VALE
+T000935,transporte,essencial,nao,,APP CORRIDA *VIAGEM
+T000936,transferencia_interna,outros,nao,,
+T000937,transferencia_interna,outros,nao,,
+T000938,assinaturas,discricionario,nao,,MUSICA PREMIUM
+T000939,alimentacao_basica,essencial,nao,,SUPERMERCADO BOM PRECO
+T000940,compras,discricionario,nao,,BAZAR DA ESQUINA
+T000941,pagamento_dividas,prioritario,sim,,
+T000942,alimentacao_basica,essencial,nao,,QUITANDA DO VALE
+T000943,renda_variavel,outros,nao,,
+T000944,renda_variavel,outros,nao,,
+T000945,restaurantes_bares,discricionario,nao,,SUSHI KAZU
+T000946,restaurantes_bares,discricionario,nao,,SUSHI KAZU
+T000947,energia,essencial,nao,,CIA ENERGIA ELETRICA
+T000948,saude,prioritario,nao,,PLANO SAUDE VIDA PLENA
+T000949,alimentacao_basica,essencial,nao,,SUPERMERCADO BOM PRECO
+T000950,renda_variavel,outros,sim,,
+T000951,compras,discricionario,nao,,AUTO SHOP ACESSORIOS
+T000952,agua,essencial,nao,,SANEAMENTO AGUAS CLARAS
+T000953,alimentacao_basica,essencial,nao,,SUPERMERCADO BOM PRECO
+T000954,alimentacao_basica,essencial,nao,,MERCADINHO SAO JORGE
+T000955,transporte,essencial,nao,,METRO LINHA AZUL
+T000956,renda_variavel,outros,nao,,
+T000957,moradia,essencial,sim,,
+T000958,impostos_contribuicoes,prioritario,nao,,DAS MEI SIMPLES NACIONAL
+T000959,pagamento_dividas,prioritario,sim,,
+T000960,transferencia_familiar,prioritario,sim,,
+T000961,alimentacao_basica,essencial,nao,,QUITANDA DO VALE
+T000962,alimentacao_basica,essencial,nao,,SUPERMERCADO BOM PRECO
+T000963,transporte,essencial,nao,,MOBI APP *TRIP
+T000964,pagamento_fatura,outros,nao,,
+T000965,alimentacao_basica,essencial,nao,,SUPERMERCADO BOM PRECO
+T000966,compras,discricionario,nao,,BAZAR DA ESQUINA
+T000967,renda_variavel,outros,nao,,
+T000968,telecom,essencial,nao,,OPERADORA CONECTA TELECOM
+T000969,restaurantes_bares,discricionario,nao,,CANTINA NONNA ITALIA
+T000970,renda_variavel,outros,sim,,
+T000971,assinaturas,discricionario,nao,,MUSICA PREMIUM
+T000972,compras,discricionario,nao,,BAZAR DA ESQUINA
+T000973,alimentacao_basica,essencial,nao,,MERCADINHO SAO JORGE
+T000974,restaurantes_bares,discricionario,nao,,SUSHI KAZU
+T000975,energia,essencial,nao,,CIA ENERGIA ELETRICA
+T000976,saude,prioritario,nao,,PLANO SAUDE VIDA PLENA
+T000977,compras,discricionario,nao,,BAZAR DA ESQUINA
+T000978,alimentacao_basica,essencial,nao,,SUPERMERCADO BOM PRECO
+T000979,transferencia_interna,outros,nao,,
+T000980,transferencia_interna,outros,nao,,
+T000981,agua,essencial,nao,,SANEAMENTO AGUAS CLARAS
+T000982,alimentacao_basica,essencial,nao,,SUPERMERCADO BOM PRECO
+T000983,lazer,discricionario,nao,frequencia_incomum,PIXEL GAMES STORE
+T000984,lazer,discricionario,nao,frequencia_incomum,PIXEL GAMES STORE
+T000985,lazer,discricionario,nao,frequencia_incomum,PIXEL GAMES STORE
+T000986,lazer,discricionario,nao,frequencia_incomum,PIXEL GAMES STORE
+T000987,lazer,discricionario,nao,frequencia_incomum,PIXEL GAMES STORE
+T000988,lazer,discricionario,nao,frequencia_incomum,PIXEL GAMES STORE
+T000989,lazer,discricionario,nao,frequencia_incomum,PIXEL GAMES STORE
+T000990,lazer,discricionario,nao,frequencia_incomum,PIXEL GAMES STORE
+T000991,lazer,discricionario,nao,frequencia_incomum,PIXEL GAMES STORE
+T000992,lazer,discricionario,nao,frequencia_incomum,PIXEL GAMES STORE
+T000993,lazer,discricionario,nao,frequencia_incomum,PIXEL GAMES STORE
+T000994,renda_variavel,outros,nao,,
+T000995,moradia,essencial,sim,,
+T000996,compras,discricionario,nao,,PERFUMARIA AROMA
+T000997,compras,discricionario,nao,estabelecimento_novo_alto,LOJA TECH PREMIUM
+T000998,alimentacao_basica,essencial,nao,,SUPERMERCADO BOM PRECO
+T000999,compras,discricionario,nao,,BAZAR DA ESQUINA
+T001000,impostos_contribuicoes,prioritario,nao,,DAS MEI SIMPLES NACIONAL
+T001001,lazer,discricionario,nao,,KARAOKE NOTURNO
+T001002,transporte,essencial,sim,,
+T001003,transferencia_familiar,prioritario,sim,,
+T001004,renda_variavel,outros,nao,,
+T001005,renda_variavel,outros,nao,,
+T001006,restaurantes_bares,discricionario,nao,,ACAI DA PRAIA
+T001007,renda_variavel,outros,nao,,
+T001008,alimentacao_basica,essencial,nao,,MERCADINHO SAO JORGE
+T001009,pagamento_fatura,outros,nao,,
+T001010,telecom,essencial,nao,,OPERADORA CONECTA TELECOM
+T001011,restaurantes_bares,discricionario,nao,,ACAI DA PRAIA
+T001012,compras,discricionario,nao,,AUTO SHOP ACESSORIOS
+T001013,renda_eventual,outros,sim,,
+T001014,assinaturas,discricionario,nao,,MUSICA PREMIUM
+T001015,alimentacao_basica,essencial,nao,,SUPERMERCADO BOM PRECO
+T001016,lazer,discricionario,sim,pix_alto_desconhecido,
+T001017,educacao,prioritario,nao,,CURSO ONLINE CERTIFICA
+T001018,alimentacao_basica,essencial,nao,,SUPERMERCADO BOM PRECO
+T001019,transporte,essencial,nao,,APP CORRIDA *VIAGEM
+T001020,saude,prioritario,nao,,FARMACIA DO BAIRRO
+T001021,lazer,discricionario,nao,,KARAOKE NOTURNO
+T001022,alimentacao_basica,essencial,nao,,QUITANDA DO VALE
+T001023,alimentacao_basica,essencial,nao,,SUPERMERCADO BOM PRECO
+T001024,energia,essencial,nao,,CIA ENERGIA ELETRICA
+T001025,saude,prioritario,nao,,PLANO SAUDE VIDA PLENA
+T001026,compras,discricionario,nao,,MAGAZINE ELETRO LAR
+T001027,saude,prioritario,nao,,DROGARIA SAUDE TOTAL
+T001028,compras,discricionario,nao,,BAZAR DA ESQUINA
+T001029,alimentacao_basica,essencial,nao,,SUPERMERCADO BOM PRECO
+T001030,renda_variavel,outros,sim,,
+T001031,agua,essencial,nao,,SANEAMENTO AGUAS CLARAS
+T001032,alimentacao_basica,essencial,nao,,MERCADINHO SAO JORGE
+T001033,compras,discricionario,nao,,PERFUMARIA AROMA
+T001034,moradia,essencial,sim,,
+T001035,pagamento_dividas,prioritario,sim,,
+T001036,impostos_contribuicoes,prioritario,nao,,DAS MEI SIMPLES NACIONAL
+T001037,alimentacao_basica,essencial,nao,,SUPERMERCADO BOM PRECO
+T001038,renda_variavel,outros,nao,,
+T001039,transferencia_familiar,prioritario,sim,,
+T001040,alimentacao_basica,essencial,nao,,SUPERMERCADO BOM PRECO
+T001041,renda_variavel,outros,nao,,
+T001042,pagamento_fatura,outros,nao,,
+T001043,restaurantes_bares,discricionario,nao,,SUSHI KAZU
+T001044,compras,discricionario,nao,,AUTO SHOP ACESSORIOS
+T001045,compras,discricionario,nao,,PERFUMARIA AROMA
+T001046,telecom,essencial,nao,,OPERADORA CONECTA TELECOM
+T001047,renda_variavel,outros,sim,,
+T001048,renda_variavel,outros,nao,,
+T001049,assinaturas,discricionario,nao,,MUSICA PREMIUM
+T001050,saude,prioritario,nao,,FARMACIA DO BAIRRO
+T001051,transferencia_interna,outros,nao,,
+T001052,transferencia_interna,outros,nao,,
+T001053,educacao,prioritario,nao,,CURSO ONLINE CERTIFICA
+T001054,alimentacao_basica,essencial,nao,,QUITANDA DO VALE
+T001055,renda_variavel,outros,nao,,
+T001056,alimentacao_basica,essencial,nao,,MERCADINHO SAO JORGE
+T001057,energia,essencial,nao,,CIA ENERGIA ELETRICA
+T001058,saude,prioritario,nao,,PLANO SAUDE VIDA PLENA
+T001059,compras,discricionario,nao,,MAGAZINE ELETRO LAR
+T001060,alimentacao_basica,essencial,nao,,SUPERMERCADO BOM PRECO
+T001061,saude,prioritario,nao,,DROGAMAIS
+T001062,restaurantes_bares,discricionario,nao,,CANTINA NONNA ITALIA
+T001063,transporte,essencial,nao,,METRO LINHA AZUL
+T001064,agua,essencial,nao,,SANEAMENTO AGUAS CLARAS
+T001065,compras,discricionario,nao,,PERFUMARIA AROMA
+T001066,transporte,essencial,sim,,
+T001067,restaurantes_bares,discricionario,nao,,ACAI DA PRAIA
+T001068,moradia,essencial,sim,,
+T001069,alimentacao_basica,essencial,nao,,QUITANDA DO VALE
+T001070,transferencia_interna,outros,nao,,
+T001071,transferencia_interna,outros,nao,,
+T001072,renda_variavel,outros,nao,,
+T001073,impostos_contribuicoes,prioritario,nao,,DAS MEI SIMPLES NACIONAL
+T001074,transferencia_familiar,prioritario,sim,,
+T001075,alimentacao_basica,essencial,nao,,SUPERMERCADO BOM PRECO
+T001076,alimentacao_basica,essencial,nao,,QUITANDA DO VALE
+T001077,pagamento_fatura,outros,nao,,
+T001078,alimentacao_basica,essencial,nao,,SUPERMERCADO BOM PRECO
+T001079,alimentacao_basica,essencial,nao,,SUPERMERCADO BOM PRECO
+T001080,telecom,essencial,nao,,OPERADORA CONECTA TELECOM
+T001081,alimentacao_basica,essencial,nao,,MERCADINHO SAO JORGE
+T001082,telecom,essencial,nao,cobranca_duplicada,OPERADORA CONECTA TELECOM
+T001083,alimentacao_basica,essencial,nao,,SUPERMERCADO BOM PRECO
+T001084,restaurantes_bares,discricionario,nao,,SUSHI KAZU
+T001085,renda_variavel,outros,sim,,
+T001086,assinaturas,discricionario,nao,,MUSICA PREMIUM
+T001087,alimentacao_basica,essencial,nao,,MERCADINHO SAO JORGE
+T001088,transporte,essencial,nao,,APP CORRIDA *VIAGEM
+T001089,restaurantes_bares,discricionario,nao,,SUSHI KAZU
+T001090,transporte,essencial,sim,,
+T001091,lazer,discricionario,nao,,PIXEL GAMES STORE
+T001092,lazer,discricionario,nao,,PIXEL GAMES STORE
+T001093,educacao,prioritario,nao,,CURSO ONLINE CERTIFICA
+T001094,lazer,discricionario,nao,,PIXEL GAMES STORE
+T001095,compras,discricionario,nao,,AUTO SHOP ACESSORIOS
+T001096,transporte,essencial,sim,,
+T001097,renda_variavel,outros,nao,,
+T001098,energia,essencial,nao,,CIA ENERGIA ELETRICA
+T001099,saude,prioritario,nao,,PLANO SAUDE VIDA PLENA
+T001100,compras,discricionario,nao,,MAGAZINE ELETRO LAR
+T001101,transporte,essencial,nao,,METRO LINHA AZUL
+T001102,renda_variavel,outros,nao,,
+T001103,transporte,essencial,nao,,APP CORRIDA *VIAGEM
+T001104,compras,discricionario,nao,,PERFUMARIA AROMA
+T001105,compras,discricionario,nao,,BAZAR DA ESQUINA
+T001106,agua,essencial,nao,,SANEAMENTO AGUAS CLARAS
+T001107,saque,discricionario,nao,,SAQUE BANCO 24 HORAS
+T001108,alimentacao_basica,essencial,nao,,HORTIFRUTI VERDE VIDA
+T001109,alimentacao_basica,essencial,nao,,HORTIFRUTI VERDE VIDA
+T001110,alimentacao_basica,essencial,nao,,HORTIFRUTI VERDE VIDA
+T001111,alimentacao_basica,essencial,nao,,ATACADAO DO POVO
+T001112,alimentacao_basica,essencial,nao,,QUITANDA DO VALE
+T001113,saque,discricionario,nao,,SAQUE BANCO 24 HORAS
+T001114,moradia,essencial,sim,,
+T001115,veiculos,essencial,nao,,AUTOPOSTO TREVO
+T001116,restaurantes_bares,discricionario,nao,,BAR DO ZECA
+T001117,lazer,discricionario,nao,,AGENCIA VIAGENS DESTINO
+T001118,alimentacao_basica,essencial,nao,,QUITANDA DO VALE
+T001119,pagamento_fatura,outros,nao,,
+T001120,veiculos,essencial,nao,,SEGURO AUTO TRANQUILO
+T001121,renda_variavel,outros,nao,,
+T001122,impostos_contribuicoes,prioritario,nao,,DAS MEI SIMPLES NACIONAL
+T001123,alimentacao_basica,essencial,nao,,QUITANDA DO VALE
+T001124,transporte,essencial,nao,,PASSE ONIBUS URBANO
+T001125,veiculos,essencial,nao,,AUTOPOSTO TREVO
+T001126,restaurantes_bares,discricionario,nao,,BAR DO ZECA
+T001127,transporte,essencial,nao,,APP CORRIDA *VIAGEM
+T001128,alimentacao_basica,essencial,nao,,HORTIFRUTI VERDE VIDA
+T001129,restaurantes_bares,discricionario,sim,,
+T001130,energia,essencial,nao,,CIA ENERGIA ELETRICA
+T001131,saude,prioritario,nao,,DROGARIA SAUDE TOTAL
+T001132,restaurantes_bares,discricionario,nao,,ACAI DA PRAIA
+T001133,compras,discricionario,nao,,MKTPLACE*PEDIDO
+T001134,renda_variavel,outros,nao,,
+T001135,assinaturas,discricionario,nao,,MUSICA PREMIUM
+T001136,lazer,discricionario,nao,,KARAOKE NOTURNO
+T001137,agua,essencial,nao,,SANEAMENTO AGUAS CLARAS
+T001138,telecom,essencial,nao,,OPERADORA CONECTA TELECOM
+T001139,veiculos,essencial,nao,,IPVA 2026 DETRAN
+T001140,renda_variavel,outros,sim,,
+T001141,renda_variavel,outros,nao,,
+T001142,assinaturas,discricionario,nao,,CLUBE LIVROS DO MES
+T001143,transferencia_interna,outros,nao,,
+T001144,transferencia_interna,outros,nao,,
+T001145,restaurantes_bares,discricionario,nao,,BAR DO ZECA
+T001146,compras,discricionario,nao,,MKTPLACE*PEDIDO
+T001147,moradia,essencial,sim,,
+T001148,moradia,essencial,nao,,IPTU 2026 PREFEITURA
+T001149,lazer,discricionario,nao,,AGENCIA VIAGENS DESTINO
+T001150,saque,discricionario,nao,,SAQUE BANCO 24 HORAS
+T001151,restaurantes_bares,discricionario,nao,,BAR DO ZECA
+T001152,pagamento_fatura,outros,nao,,
+T001153,transporte,essencial,nao,,RECARGA BILHETE TRANSPORTE
+T001154,veiculos,essencial,nao,,SEGURO AUTO TRANQUILO
+T001155,alimentacao_basica,essencial,nao,,ATACADAO DO POVO
+T001156,impostos_contribuicoes,prioritario,nao,,DAS MEI SIMPLES NACIONAL
+T001157,renda_variavel,outros,nao,,
+T001158,renda_variavel,outros,nao,,
+T001159,alimentacao_basica,essencial,nao,,ATACADAO DO POVO
+T001160,alimentacao_basica,essencial,nao,,HORTIFRUTI VERDE VIDA
+T001161,restaurantes_bares,discricionario,nao,,ACAI DA PRAIA
+T001162,saque,discricionario,nao,,SAQUE BANCO 24 HORAS
+T001163,alimentacao_basica,essencial,nao,,QUITANDA DO VALE
+T001164,transporte,essencial,nao,,PASSE ONIBUS URBANO
+T001165,restaurantes_bares,discricionario,nao,,ACAI DA PRAIA
+T001166,energia,essencial,nao,,CIA ENERGIA ELETRICA
+T001167,veiculos,essencial,nao,,AUTOPOSTO TREVO
+T001168,saude,prioritario,nao,,DROGARIA SAUDE TOTAL
+T001169,restaurantes_bares,discricionario,nao,,BAR DO ZECA
+T001170,assinaturas,discricionario,nao,,MUSICA PREMIUM
+T001171,restaurantes_bares,discricionario,nao,,BAR DO ZECA
+T001172,agua,essencial,nao,,SANEAMENTO AGUAS CLARAS
+T001173,veiculos,essencial,nao,,OFICINA MECANICA DO TIAO
+T001174,telecom,essencial,nao,,OPERADORA CONECTA TELECOM
+T001175,veiculos,essencial,nao,,IPVA 2026 DETRAN
+T001176,alimentacao_basica,essencial,nao,,ATACADAO DO POVO
+T001177,assinaturas,discricionario,nao,,CLUBE LIVROS DO MES
+T001178,renda_variavel,outros,sim,,
+T001179,renda_variavel,outros,nao,,
+T001180,transporte,essencial,nao,,APP CORRIDA *VIAGEM
+T001181,veiculos,essencial,nao,,AUTOPOSTO TREVO
+T001182,veiculos,essencial,nao,,OFICINA MECANICA DO TIAO
+T001183,alimentacao_basica,essencial,nao,,QUITANDA DO VALE
+T001184,transporte,essencial,nao,,APP CORRIDA *VIAGEM
+T001185,transporte,essencial,nao,,RECARGA BILHETE TRANSPORTE
+T001186,moradia,essencial,sim,,
+T001187,moradia,essencial,nao,,IPTU 2026 PREFEITURA
+T001188,transferencia_interna,outros,nao,,
+T001189,transferencia_interna,outros,nao,,
+T001190,alimentacao_basica,essencial,nao,,HORTIFRUTI VERDE VIDA
+T001191,lazer,discricionario,nao,,TEATRO MUNICIPAL BILHETERIA
+T001192,pagamento_fatura,outros,nao,,
+T001193,alimentacao_basica,essencial,nao,,HORTIFRUTI VERDE VIDA
+T001194,veiculos,essencial,nao,,SEGURO AUTO TRANQUILO
+T001195,impostos_contribuicoes,prioritario,nao,,DAS MEI SIMPLES NACIONAL
+T001196,compras,discricionario,nao,,AUTO SHOP ACESSORIOS
+T001197,restaurantes_bares,discricionario,nao,,ACAI DA PRAIA
+T001198,alimentacao_basica,essencial,sim,,
+T001199,saque,discricionario,nao,,SAQUE BANCO 24 HORAS
+T001200,restaurantes_bares,discricionario,nao,,BAR DO ZECA
+T001201,transporte,essencial,nao,,APP CORRIDA *VIAGEM
+T001202,veiculos,essencial,nao,,OFICINA MECANICA DO TIAO
+T001203,restaurantes_bares,discricionario,nao,,ACAI DA PRAIA
+T001204,alimentacao_basica,essencial,nao,,HORTIFRUTI VERDE VIDA
+T001205,alimentacao_basica,essencial,nao,,HORTIFRUTI VERDE VIDA
+T001206,saque,discricionario,nao,,SAQUE BANCO 24 HORAS
+T001207,alimentacao_basica,essencial,nao,,QUITANDA DO VALE
+T001208,energia,essencial,nao,,CIA ENERGIA ELETRICA
+T001209,alimentacao_basica,essencial,nao,,ATACADAO DO POVO
+T001210,renda_variavel,outros,sim,,
+T001211,assinaturas,discricionario,nao,,MUSICA PREMIUM
+T001212,agua,essencial,nao,,SANEAMENTO AGUAS CLARAS
+T001213,telecom,essencial,nao,,OPERADORA CONECTA TELECOM
+T001214,veiculos,essencial,nao,,IPVA 2026 DETRAN
+T001215,assinaturas,discricionario,nao,,CLUBE LIVROS DO MES
+T001216,restaurantes_bares,discricionario,nao,pico_categoria,ACAI DA PRAIA
+T001217,renda_variavel,outros,sim,,
+T001218,restaurantes_bares,discricionario,nao,,ACAI DA PRAIA
+T001219,alimentacao_basica,essencial,sim,,
+T001220,transferencia_interna,outros,nao,,
+T001221,transferencia_interna,outros,nao,,
+T001222,alimentacao_basica,essencial,nao,,QUITANDA DO VALE
+T001223,veiculos,essencial,nao,,OFICINA MECANICA DO TIAO
+T001224,restaurantes_bares,discricionario,nao,pico_categoria,ACAI DA PRAIA
+T001225,restaurantes_bares,discricionario,nao,pico_categoria,BAR DO ZECA
+T001226,compras,discricionario,sim,,
+T001227,transporte,essencial,nao,frequencia_incomum,PASSE ONIBUS URBANO
+T001228,transporte,essencial,nao,frequencia_incomum,PASSE ONIBUS URBANO
+T001229,transporte,essencial,nao,frequencia_incomum,PASSE ONIBUS URBANO
+T001230,transporte,essencial,nao,frequencia_incomum,PASSE ONIBUS URBANO
+T001231,transporte,essencial,nao,frequencia_incomum,PASSE ONIBUS URBANO
+T001232,transporte,essencial,nao,frequencia_incomum,PASSE ONIBUS URBANO
+T001233,transporte,essencial,nao,frequencia_incomum,PASSE ONIBUS URBANO
+T001234,transporte,essencial,nao,frequencia_incomum,PASSE ONIBUS URBANO
+T001235,transporte,essencial,nao,frequencia_incomum,PASSE ONIBUS URBANO
+T001236,transporte,essencial,nao,frequencia_incomum,PASSE ONIBUS URBANO
+T001237,moradia,essencial,sim,,
+T001238,moradia,essencial,nao,,IPTU 2026 PREFEITURA
+T001239,restaurantes_bares,discricionario,nao,,BAR DO ZECA
+T001240,restaurantes_bares,discricionario,nao,pico_categoria,ACAI DA PRAIA
+T001241,transporte,essencial,nao,,PASSE ONIBUS URBANO
+T001242,alimentacao_basica,essencial,nao,,ATACADAO DO POVO
+T001243,restaurantes_bares,discricionario,nao,,ACAI DA PRAIA
+T001244,lazer,discricionario,nao,,KARAOKE NOTURNO
+T001245,pagamento_fatura,outros,nao,,
+T001246,alimentacao_basica,essencial,nao,,QUITANDA DO VALE
+T001247,alimentacao_basica,essencial,nao,,HORTIFRUTI VERDE VIDA
+T001248,veiculos,essencial,nao,,SEGURO AUTO TRANQUILO
+T001249,compras,discricionario,nao,estabelecimento_novo_alto,ELETRONICOS IMPORTADOS LTDA
+T001250,impostos_contribuicoes,prioritario,nao,,DAS MEI SIMPLES NACIONAL
+T001251,veiculos,essencial,nao,,LICENCIAMENTO 2026 DETRAN
+T001252,renda_variavel,outros,nao,,
+T001253,alimentacao_basica,essencial,nao,,HORTIFRUTI VERDE VIDA
+T001254,compras,discricionario,nao,,AUTO SHOP ACESSORIOS
+T001255,restaurantes_bares,discricionario,nao,,ACAI DA PRAIA
+T001256,restaurantes_bares,discricionario,nao,pico_categoria,BAR DO ZECA
+T001257,saude,prioritario,nao,,DROGAMAIS
+T001258,restaurantes_bares,discricionario,nao,,ACAI DA PRAIA
+T001259,restaurantes_bares,discricionario,nao,pico_categoria,BAR DO ZECA
+T001260,veiculos,essencial,nao,,TAG PEDAGIO RODOVIA
+T001261,restaurantes_bares,discricionario,nao,pico_categoria,ACAI DA PRAIA
+T001262,energia,essencial,nao,,CIA ENERGIA ELETRICA
+T001263,alimentacao_basica,essencial,nao,,ATACADAO DO POVO
+T001264,alimentacao_basica,essencial,nao,,ATACADAO DO POVO
+T001265,transporte,essencial,nao,,PASSE ONIBUS URBANO
+T001266,pagamento_dividas,prioritario,sim,,
+T001267,assinaturas,discricionario,nao,,MUSICA PREMIUM
+T001268,alimentacao_basica,essencial,nao,,HORTIFRUTI VERDE VIDA
+T001269,agua,essencial,nao,,SANEAMENTO AGUAS CLARAS
+T001270,renda_variavel,outros,sim,,
+T001271,telecom,essencial,nao,,OPERADORA CONECTA TELECOM
+T001272,renda_variavel,outros,nao,,
+T001273,assinaturas,discricionario,nao,,CLUBE LIVROS DO MES
+T001274,alimentacao_basica,essencial,nao,,HORTIFRUTI VERDE VIDA
+T001275,alimentacao_basica,essencial,nao,,HORTIFRUTI VERDE VIDA
+T001276,restaurantes_bares,discricionario,nao,,ACAI DA PRAIA
+T001277,renda_variavel,outros,nao,,
+T001278,moradia,essencial,sim,,
+T001279,moradia,essencial,nao,,IPTU 2026 PREFEITURA
+T001280,compras,discricionario,nao,,AUTO SHOP ACESSORIOS
+T001281,renda_variavel,outros,nao,,
+T001282,transporte,essencial,nao,,RECARGA BILHETE TRANSPORTE
+T001283,pagamento_fatura,outros,nao,,
+T001284,alimentacao_basica,essencial,nao,,QUITANDA DO VALE
+T001285,veiculos,essencial,nao,,SEGURO AUTO TRANQUILO
+T001286,compras,discricionario,nao,,MKTPLACE*PEDIDO
+T001287,impostos_contribuicoes,prioritario,nao,,DAS MEI SIMPLES NACIONAL
+T001288,veiculos,essencial,nao,,TAG PEDAGIO RODOVIA
+T001289,restaurantes_bares,discricionario,nao,,ACAI DA PRAIA
+T001290,alimentacao_basica,essencial,sim,,
+T001291,transporte,essencial,nao,,APP CORRIDA *VIAGEM
+T001292,energia,essencial,nao,,CIA ENERGIA ELETRICA
+T001293,pagamento_dividas,prioritario,sim,,
+T001294,alimentacao_basica,essencial,nao,,HORTIFRUTI VERDE VIDA
+T001295,restaurantes_bares,discricionario,nao,,ACAI DA PRAIA
+T001296,lazer,discricionario,sim,,
+T001297,assinaturas,discricionario,nao,,MUSICA PREMIUM
+T001298,alimentacao_basica,essencial,nao,,HORTIFRUTI VERDE VIDA
+T001299,agua,essencial,nao,,SANEAMENTO AGUAS CLARAS
+T001300,saque,discricionario,nao,,SAQUE BANCO 24 HORAS
+T001301,telecom,essencial,nao,,OPERADORA CONECTA TELECOM
+T001302,assinaturas,discricionario,nao,,CLUBE LIVROS DO MES
+T001303,veiculos,essencial,nao,,TAG PEDAGIO RODOVIA
+T001304,compras,discricionario,nao,,MKTPLACE*PEDIDO
+T001305,alimentacao_basica,essencial,nao,,ATACADAO DO POVO
+T001306,alimentacao_basica,essencial,nao,,QUITANDA DO VALE
+T001307,restaurantes_bares,discricionario,nao,,ACAI DA PRAIA
+T001308,compras,discricionario,nao,,AUTO SHOP ACESSORIOS
+T001309,veiculos,essencial,nao,,TAG PEDAGIO RODOVIA
+T001310,veiculos,essencial,nao,,TAG PEDAGIO RODOVIA
+T001311,alimentacao_basica,essencial,nao,,QUITANDA DO VALE
+T001312,alimentacao_basica,essencial,nao,,HORTIFRUTI VERDE VIDA
+T001313,moradia,essencial,sim,,
+T001314,moradia,essencial,nao,,IPTU 2026 PREFEITURA
+T001315,alimentacao_basica,essencial,nao,,HORTIFRUTI VERDE VIDA
+T001316,veiculos,essencial,nao,,OFICINA MECANICA DO TIAO
+T001317,compras,discricionario,nao,,AUTO SHOP ACESSORIOS
+T001318,alimentacao_basica,essencial,nao,,ATACADAO DO POVO
+T001319,pagamento_fatura,outros,nao,,
+T001320,veiculos,essencial,nao,,OFICINA MECANICA DO TIAO
+T001321,veiculos,essencial,nao,,SEGURO AUTO TRANQUILO
+T001322,restaurantes_bares,discricionario,nao,,BAR DO ZECA
+T001323,impostos_contribuicoes,prioritario,nao,,DAS MEI SIMPLES NACIONAL
+T001324,restaurantes_bares,discricionario,nao,,BAR DO ZECA
+T001325,lazer,discricionario,sim,,
+T001326,restaurantes_bares,discricionario,nao,,ACAI DA PRAIA
+T001327,restaurantes_bares,discricionario,nao,,BAR DO ZECA
+T001328,renda_variavel,outros,sim,,
+T001329,compras,discricionario,nao,,AUTO SHOP ACESSORIOS
+T001330,energia,essencial,nao,,CIA ENERGIA ELETRICA
+T001331,transporte,essencial,nao,,APP CORRIDA *VIAGEM
+T001332,renda_variavel,outros,sim,,
+T001333,renda_variavel,outros,sim,,
+T001334,saque,discricionario,nao,,SAQUE BANCO 24 HORAS
+T001335,transporte,essencial,nao,,PASSE ONIBUS URBANO
+T001336,restaurantes_bares,discricionario,nao,,BAR DO ZECA
+T001337,assinaturas,discricionario,nao,,MUSICA PREMIUM
+T001338,saque,discricionario,nao,,SAQUE BANCO 24 HORAS
+T001339,agua,essencial,nao,,SANEAMENTO AGUAS CLARAS
+T001340,telecom,essencial,nao,conta_fixa_disparada,OPERADORA CONECTA TELECOM
+T001341,assinaturas,discricionario,nao,,CLUBE LIVROS DO MES
+T001342,alimentacao_basica,essencial,nao,,HORTIFRUTI VERDE VIDA
+T001343,alimentacao_basica,essencial,nao,,SACOLAO BARATAO
+T001344,renda_fixa,outros,nao,,
+T001345,moradia,essencial,sim,,
+T001346,energia,essencial,nao,,CIA ENERGIA ELETRICA
+T001347,compras,discricionario,nao,,BRECHO VINTAGE
+T001348,restaurantes_bares,discricionario,nao,,PIZZARIA FORNO A LENHA
+T001349,alimentacao_basica,essencial,nao,,SACOLAO BARATAO
+T001350,tarifas_bancarias,prioritario,nao,,TARIFA CESTA DE SERVICOS
+T001351,transferencia_familiar,prioritario,sim,,
+T001352,lazer,discricionario,sim,,
+T001353,transferencia_interna,outros,nao,,
+T001354,transferencia_interna,outros,nao,,
+T001355,assinaturas,discricionario,nao,,MUSICA PREMIUM
+T001356,pagamento_fatura,outros,nao,,
+T001357,telecom,essencial,nao,,OPERADORA CONECTA TELECOM
+T001358,lazer,discricionario,nao,,AGENCIA VIAGENS DESTINO
+T001359,restaurantes_bares,discricionario,nao,,PIZZARIA FORNO A LENHA
+T001360,compras,discricionario,nao,,MKTPLACE*PEDIDO
+T001361,assinaturas,discricionario,nao,,STREAMING FILMES MAIS
+T001362,saude,prioritario,nao,,CLINICA ODONTO SORRIR
+T001363,alimentacao_basica,essencial,nao,,HORTIFRUTI VERDE VIDA
+T001364,saude,prioritario,nao,,LAB ANALISES VIDA
+T001365,restaurantes_bares,discricionario,nao,,BAR DO ZECA
+T001366,pagamento_dividas,prioritario,nao,,FINANCIAMENTO MOTO VELOZ
+T001367,alimentacao_basica,essencial,nao,,HORTIFRUTI VERDE VIDA
+T001368,compras,discricionario,nao,,CELULARES CONECTADOS
+T001369,assinaturas,discricionario,nao,,ACADEMIA CORPO ATIVO
+T001370,transporte,essencial,nao,,RECARGA BILHETE TRANSPORTE
+T001371,educacao,prioritario,nao,,CURSO ONLINE CERTIFICA
+T001372,transporte,essencial,nao,,METRO LINHA AZUL
+T001373,restaurantes_bares,discricionario,nao,,BAR DO ZECA
+T001374,agua,essencial,nao,,SANEAMENTO AGUAS CLARAS
+T001375,pagamento_dividas,prioritario,nao,,EMPRESTIMO PESSOAL BANCO FACIL
+T001376,alimentacao_basica,essencial,nao,,HORTIFRUTI VERDE VIDA
+T001377,restaurantes_bares,discricionario,nao,,PIZZARIA FORNO A LENHA
+T001378,renda_fixa,outros,nao,,
+T001379,renda_eventual,outros,sim,,
+T001380,restaurantes_bares,discricionario,nao,,PIZZARIA FORNO A LENHA
+T001381,moradia,essencial,sim,,
+T001382,energia,essencial,nao,,CIA ENERGIA ELETRICA
+T001383,saude,prioritario,sim,,
+T001384,alimentacao_basica,essencial,nao,,SACOLAO BARATAO
+T001385,transporte,essencial,nao,,METRO LINHA AZUL
+T001386,compras,discricionario,nao,,BRECHO VINTAGE
+T001387,tarifas_bancarias,prioritario,nao,,TARIFA CESTA DE SERVICOS
+T001388,transferencia_familiar,prioritario,sim,,
+T001389,assinaturas,discricionario,nao,,MUSICA PREMIUM
+T001390,restaurantes_bares,discricionario,nao,,PIZZARIA FORNO A LENHA
+T001391,pagamento_fatura,outros,nao,,
+T001392,telecom,essencial,nao,,OPERADORA CONECTA TELECOM
+T001393,lazer,discricionario,nao,,AGENCIA VIAGENS DESTINO
+T001394,assinaturas,discricionario,nao,,STREAMING FILMES MAIS
+T001395,saude,prioritario,nao,,CLINICA ODONTO SORRIR
+T001396,pagamento_dividas,prioritario,nao,,FINANCIAMENTO MOTO VELOZ
+T001397,assinaturas,discricionario,nao,,ACADEMIA CORPO ATIVO
+T001398,alimentacao_basica,essencial,nao,,SACOLAO BARATAO
+T001399,alimentacao_basica,essencial,nao,,SACOLAO BARATAO
+T001400,alimentacao_basica,essencial,nao,,HORTIFRUTI VERDE VIDA
+T001401,educacao,prioritario,nao,,CURSO ONLINE CERTIFICA
+T001402,restaurantes_bares,discricionario,nao,,BAR DO ZECA
+T001403,compras,discricionario,nao,,MKTPLACE*PEDIDO
+T001404,agua,essencial,nao,,SANEAMENTO AGUAS CLARAS
+T001405,pagamento_dividas,prioritario,nao,,EMPRESTIMO PESSOAL BANCO FACIL
+T001406,saude,prioritario,nao,,LAB ANALISES VIDA
+T001407,restaurantes_bares,discricionario,nao,,BAR DO ZECA
+T001408,restaurantes_bares,discricionario,nao,,PIZZARIA FORNO A LENHA
+T001409,alimentacao_basica,essencial,nao,,HORTIFRUTI VERDE VIDA
+T001410,restaurantes_bares,discricionario,nao,,PIZZARIA FORNO A LENHA
+T001411,restaurantes_bares,discricionario,nao,,BAR DO ZECA
+T001412,renda_fixa,outros,nao,,
+T001413,alimentacao_basica,essencial,nao,,HORTIFRUTI VERDE VIDA
+T001414,restaurantes_bares,discricionario,nao,,BAR DO ZECA
+T001415,compras,discricionario,nao,,MKTPLACE*PEDIDO
+T001416,moradia,essencial,sim,,
+T001417,energia,essencial,nao,,CIA ENERGIA ELETRICA
+T001418,saude,prioritario,sim,,
+T001419,tarifas_bancarias,prioritario,nao,,TARIFA CESTA DE SERVICOS
+T001420,transferencia_familiar,prioritario,sim,,
+T001421,assinaturas,discricionario,nao,,MUSICA PREMIUM
+T001422,pagamento_fatura,outros,nao,,
+T001423,telecom,essencial,nao,,OPERADORA CONECTA TELECOM
+T001424,lazer,discricionario,nao,,AGENCIA VIAGENS DESTINO
+T001425,restaurantes_bares,discricionario,nao,,BAR DO ZECA
+T001426,assinaturas,discricionario,nao,,STREAMING FILMES MAIS
+T001427,alimentacao_basica,essencial,nao,,SACOLAO BARATAO
+T001428,pagamento_dividas,prioritario,nao,,FINANCIAMENTO MOTO VELOZ
+T001429,restaurantes_bares,discricionario,nao,,BAR DO ZECA
+T001430,alimentacao_basica,essencial,nao,,SACOLAO BARATAO
+T001431,transporte,essencial,nao,,RECARGA BILHETE TRANSPORTE
+T001432,assinaturas,discricionario,nao,,ACADEMIA CORPO ATIVO
+T001433,alimentacao_basica,essencial,nao,,SACOLAO BARATAO
+T001434,educacao,prioritario,nao,,CURSO ONLINE CERTIFICA
+T001435,restaurantes_bares,discricionario,nao,,BAR DO ZECA
+T001436,agua,essencial,nao,,SANEAMENTO AGUAS CLARAS
+T001437,restaurantes_bares,discricionario,nao,,BAR DO ZECA
+T001438,pagamento_dividas,prioritario,nao,,EMPRESTIMO PESSOAL BANCO FACIL
+T001439,compras,discricionario,nao,,BRECHO VINTAGE
+T001440,lazer,discricionario,nao,,RECARGA CREDITOS GAME
+T001441,alimentacao_basica,essencial,nao,,HORTIFRUTI VERDE VIDA
+T001442,alimentacao_basica,essencial,nao,,HORTIFRUTI VERDE VIDA
+T001443,renda_fixa,outros,nao,,
+T001444,moradia,essencial,sim,,
+T001445,energia,essencial,nao,,CIA ENERGIA ELETRICA
+T001446,tarifas_bancarias,prioritario,nao,,TARIFA CESTA DE SERVICOS
+T001447,transferencia_familiar,prioritario,sim,,
+T001448,alimentacao_basica,essencial,nao,,SACOLAO BARATAO
+T001449,assinaturas,discricionario,nao,,MUSICA PREMIUM
+T001450,pagamento_fatura,outros,nao,,
+T001451,telecom,essencial,nao,,OPERADORA CONECTA TELECOM
+T001452,lazer,discricionario,nao,,AGENCIA VIAGENS DESTINO
+T001453,assinaturas,discricionario,nao,,STREAMING FILMES MAIS
+T001454,transporte,essencial,nao,,RECARGA BILHETE TRANSPORTE
+T001455,restaurantes_bares,discricionario,nao,,PIZZARIA FORNO A LENHA
+T001456,restaurantes_bares,discricionario,nao,,PIZZARIA FORNO A LENHA
+T001457,assinaturas,discricionario,nao,cobranca_recorrente_nova,CLUBE VANTAGENS MENSAL
+T001458,restaurantes_bares,discricionario,nao,,PIZZARIA FORNO A LENHA
+T001459,pagamento_dividas,prioritario,nao,,FINANCIAMENTO MOTO VELOZ
+T001460,restaurantes_bares,discricionario,nao,,PIZZARIA FORNO A LENHA
+T001461,restaurantes_bares,discricionario,nao,,BAR DO ZECA
+T001462,saude,prioritario,sim,,
+T001463,assinaturas,discricionario,nao,,ACADEMIA CORPO ATIVO
+T001464,alimentacao_basica,essencial,nao,,HORTIFRUTI VERDE VIDA
+T001465,restaurantes_bares,discricionario,nao,,PIZZARIA FORNO A LENHA
+T001466,restaurantes_bares,discricionario,nao,,BAR DO ZECA
+T001467,educacao,prioritario,nao,,CURSO ONLINE CERTIFICA
+T001468,restaurantes_bares,discricionario,nao,,PIZZARIA FORNO A LENHA
+T001469,agua,essencial,nao,,SANEAMENTO AGUAS CLARAS
+T001470,pagamento_dividas,prioritario,nao,,EMPRESTIMO PESSOAL BANCO FACIL
+T001471,saude,prioritario,nao,,LAB ANALISES VIDA
+T001472,transporte,essencial,nao,,RECARGA BILHETE TRANSPORTE
+T001473,compras,discricionario,nao,,MKTPLACE*PEDIDO
+T001474,compras,discricionario,nao,,BRECHO VINTAGE
+T001475,restaurantes_bares,discricionario,nao,pico_categoria,BAR DO ZECA
+T001476,renda_fixa,outros,nao,,
+T001477,restaurantes_bares,discricionario,nao,,BAR DO ZECA
+T001478,restaurantes_bares,discricionario,nao,pico_categoria,BAR DO ZECA
+T001479,alimentacao_basica,essencial,nao,,HORTIFRUTI VERDE VIDA
+T001480,moradia,essencial,sim,,
+T001481,energia,essencial,nao,conta_fixa_disparada,CIA ENERGIA ELETRICA
+T001482,compras,discricionario,nao,,MAGAZINE ELETRO LAR
+T001483,lazer,discricionario,nao,,RECARGA CREDITOS GAME
+T001484,lazer,discricionario,nao,,RECARGA CREDITOS GAME
+T001485,transporte,essencial,nao,,METRO LINHA AZUL
+T001486,restaurantes_bares,discricionario,nao,pico_categoria,BAR DO ZECA
+T001487,tarifas_bancarias,prioritario,nao,,TARIFA CESTA DE SERVICOS
+T001488,transferencia_familiar,prioritario,sim,,
+T001489,assinaturas,discricionario,nao,,MUSICA PREMIUM
+T001490,alimentacao_basica,essencial,nao,,HORTIFRUTI VERDE VIDA
+T001491,transporte,essencial,nao,,RECARGA BILHETE TRANSPORTE
+T001492,compras,discricionario,nao,,MKTPLACE*PEDIDO
+T001493,restaurantes_bares,discricionario,nao,frequencia_incomum,BAR DO ZECA
+T001494,restaurantes_bares,discricionario,nao,frequencia_incomum,BAR DO ZECA
+T001495,restaurantes_bares,discricionario,nao,frequencia_incomum,BAR DO ZECA
+T001496,restaurantes_bares,discricionario,nao,frequencia_incomum,BAR DO ZECA
+T001497,restaurantes_bares,discricionario,nao,pico_categoria,PIZZARIA FORNO A LENHA
+T001498,pagamento_fatura,outros,nao,,
+T001499,telecom,essencial,nao,,OPERADORA CONECTA TELECOM
+T001500,lazer,discricionario,nao,,AGENCIA VIAGENS DESTINO
+T001501,restaurantes_bares,discricionario,nao,frequencia_incomum,BAR DO ZECA
+T001502,restaurantes_bares,discricionario,nao,frequencia_incomum,BAR DO ZECA
+T001503,restaurantes_bares,discricionario,nao,frequencia_incomum,BAR DO ZECA
+T001504,restaurantes_bares,discricionario,nao,frequencia_incomum,BAR DO ZECA
+T001505,restaurantes_bares,discricionario,nao,frequencia_incomum,BAR DO ZECA
+T001506,restaurantes_bares,discricionario,nao,frequencia_incomum,BAR DO ZECA
+T001507,restaurantes_bares,discricionario,nao,pico_categoria,BAR DO ZECA
+T001508,assinaturas,discricionario,nao,,STREAMING FILMES MAIS
+T001509,alimentacao_basica,essencial,nao,,SACOLAO BARATAO
+T001510,alimentacao_basica,essencial,nao,,HORTIFRUTI VERDE VIDA
+T001511,assinaturas,discricionario,nao,cobranca_recorrente_nova,CLUBE VANTAGENS MENSAL
+T001512,alimentacao_basica,essencial,nao,,HORTIFRUTI VERDE VIDA
+T001513,pagamento_dividas,prioritario,nao,,FINANCIAMENTO MOTO VELOZ
+T001514,lazer,discricionario,nao,,BOLICHE STRIKE
+T001515,restaurantes_bares,discricionario,nao,pico_categoria,BAR DO ZECA
+T001516,restaurantes_bares,discricionario,nao,pico_categoria,BAR DO ZECA
+T001517,assinaturas,discricionario,nao,,ACADEMIA CORPO ATIVO
+T001518,alimentacao_basica,essencial,nao,,HORTIFRUTI VERDE VIDA
+T001519,renda_eventual,outros,sim,,
+T001520,transporte,essencial,sim,,
+T001521,educacao,prioritario,nao,,CURSO ONLINE CERTIFICA
+T001522,restaurantes_bares,discricionario,nao,,PIZZARIA FORNO A LENHA
+T001523,agua,essencial,nao,,SANEAMENTO AGUAS CLARAS
+T001524,compras,discricionario,nao,,MKTPLACE*PEDIDO
+T001525,lazer,discricionario,sim,,
+T001526,pagamento_dividas,prioritario,nao,,EMPRESTIMO PESSOAL BANCO FACIL
+T001527,restaurantes_bares,discricionario,nao,,PIZZARIA FORNO A LENHA
+T001528,transporte,essencial,nao,,METRO LINHA AZUL
+T001529,saude,prioritario,sim,,
+T001530,lazer,discricionario,nao,,BOLICHE STRIKE
+T001531,restaurantes_bares,discricionario,nao,pico_categoria,BAR DO ZECA
+T001532,restaurantes_bares,discricionario,nao,pico_categoria,BAR DO ZECA
+T001533,compras,discricionario,nao,,MKTPLACE*PEDIDO
+T001534,alimentacao_basica,essencial,nao,,HORTIFRUTI VERDE VIDA
+T001535,renda_fixa,outros,nao,,
+T001536,moradia,essencial,sim,,
+T001537,energia,essencial,nao,,CIA ENERGIA ELETRICA
+T001538,compras,discricionario,nao,,MAGAZINE ELETRO LAR
+T001539,alimentacao_basica,essencial,nao,,SACOLAO BARATAO
+T001540,tarifas_bancarias,prioritario,nao,,TARIFA CESTA DE SERVICOS
+T001541,transferencia_familiar,prioritario,sim,,
+T001542,assinaturas,discricionario,nao,,MUSICA PREMIUM
+T001543,pagamento_fatura,outros,nao,,
+T001544,telecom,essencial,nao,,OPERADORA CONECTA TELECOM
+T001545,lazer,discricionario,nao,,AGENCIA VIAGENS DESTINO
+T001546,alimentacao_basica,essencial,nao,,HORTIFRUTI VERDE VIDA
+T001547,alimentacao_basica,essencial,nao,,HORTIFRUTI VERDE VIDA
+T001548,assinaturas,discricionario,nao,,STREAMING FILMES MAIS
+T001549,alimentacao_basica,essencial,nao,,SACOLAO BARATAO
+T001550,assinaturas,discricionario,nao,cobranca_recorrente_nova,CLUBE VANTAGENS MENSAL
+T001551,saude,prioritario,sim,,
+T001552,restaurantes_bares,discricionario,sim,,
+T001553,pagamento_dividas,prioritario,nao,,FINANCIAMENTO MOTO VELOZ
+T001554,assinaturas,discricionario,nao,,ACADEMIA CORPO ATIVO
+T001555,alimentacao_basica,essencial,nao,,SACOLAO BARATAO
+T001556,restaurantes_bares,discricionario,nao,,BAR DO ZECA
+T001557,educacao,prioritario,nao,,CURSO ONLINE CERTIFICA
+T001558,agua,essencial,nao,,SANEAMENTO AGUAS CLARAS
+T001559,pagamento_dividas,prioritario,nao,,EMPRESTIMO PESSOAL BANCO FACIL
+T001560,transporte,essencial,nao,,RECARGA BILHETE TRANSPORTE
+T001561,restaurantes_bares,discricionario,nao,,BAR DO ZECA
+T001562,restaurantes_bares,discricionario,nao,,PIZZARIA FORNO A LENHA
+T001563,alimentacao_basica,essencial,nao,,EMPORIO DONA ROSA
+T001564,alimentacao_basica,essencial,nao,,HORTIFRUTI VERDE VIDA
+T001565,compras,discricionario,nao,,CALCADOS PASSO FIRME
+T001566,renda_fixa,outros,nao,,
+T001567,compras,discricionario,nao,,UTILIDADES DO LAR
+T001568,energia,essencial,nao,,CIA ENERGIA ELETRICA
+T001569,pagamento_dividas,prioritario,nao,,EMPRESTIMO PESSOAL BANCO FACIL
+T001570,alimentacao_basica,essencial,nao,,EMPORIO DONA ROSA
+T001571,saude,prioritario,nao,,FARMACIA DO BAIRRO
+T001572,restaurantes_bares,discricionario,sim,,
+T001573,saque,discricionario,nao,,SAQUE BANCO 24 HORAS
+T001574,alimentacao_basica,essencial,nao,,EMPORIO DONA ROSA
+T001575,lazer,discricionario,nao,,BOLICHE STRIKE
+T001576,veiculos,essencial,nao,,GASOLINA E CIA
+T001577,moradia,essencial,sim,,
+T001578,alimentacao_basica,essencial,nao,,HORTIFRUTI VERDE VIDA
+T001579,pagamento_fatura,outros,nao,,
+T001580,alimentacao_basica,essencial,nao,,HORTIFRUTI VERDE VIDA
+T001581,compras,discricionario,nao,,MOVEIS CASA BELA
+T001582,transporte,essencial,nao,,RECARGA BILHETE TRANSPORTE
+T001583,renda_eventual,outros,sim,,
+T001584,pagamento_dividas,prioritario,nao,,ACORDO RENEGOCIACAO CARTAO
+T001585,veiculos,essencial,nao,,SEGURO AUTO PROTEGE
+T001586,telecom,essencial,nao,,OPERADORA CONECTA TELECOM
+T001587,saude,prioritario,nao,,CLINICA ODONTO SORRIR
+T001588,veiculos,essencial,nao,,IPVA 2026 DETRAN
+T001589,renda_variavel,outros,sim,,
+T001590,agua,essencial,nao,,SANEAMENTO AGUAS CLARAS
+T001591,transporte,essencial,nao,,APP CORRIDA *VIAGEM
+T001592,veiculos,essencial,nao,,AUTO PECAS RODA VIVA
+T001593,compras,discricionario,nao,,CALCADOS PASSO FIRME
+T001594,restaurantes_bares,discricionario,nao,,PIZZARIA FORNO A LENHA
+T001595,veiculos,essencial,nao,,ESTACIONAMENTO CENTRAL
+T001596,restaurantes_bares,discricionario,nao,,RESTAURANTE SABOR CASEIRO
+T001597,assinaturas,discricionario,nao,,ACADEMIA CORPO ATIVO
+T001598,restaurantes_bares,discricionario,nao,,PIZZARIA FORNO A LENHA
+T001599,tarifas_bancarias,prioritario,nao,,TARIFA CESTA DE SERVICOS
+T001600,compras,discricionario,nao,,UTILIDADES DO LAR
+T001601,transporte,essencial,nao,,RECARGA BILHETE TRANSPORTE
+T001602,renda_fixa,outros,nao,,
+T001603,veiculos,essencial,nao,,GASOLINA E CIA
+T001604,compras,discricionario,nao,,CALCADOS PASSO FIRME
+T001605,energia,essencial,nao,,CIA ENERGIA ELETRICA
+T001606,pagamento_dividas,prioritario,nao,,EMPRESTIMO PESSOAL BANCO FACIL
+T001607,compras,discricionario,nao,,UTILIDADES DO LAR
+T001608,restaurantes_bares,discricionario,nao,,RESTAURANTE SABOR CASEIRO
+T001609,alimentacao_basica,essencial,nao,,EMPORIO DONA ROSA
+T001610,transporte,essencial,nao,,METRO LINHA AZUL
+T001611,moradia,essencial,sim,,
+T001612,transporte,essencial,nao,,METRO LINHA AZUL
+T001613,compras,discricionario,nao,,MAGAZINE ELETRO LAR
+T001614,pagamento_fatura,outros,nao,,
+T001615,alimentacao_basica,essencial,nao,,HORTIFRUTI VERDE VIDA
+T001616,alimentacao_basica,essencial,nao,,EMPORIO DONA ROSA
+T001617,alimentacao_basica,essencial,nao,,HORTIFRUTI VERDE VIDA
+T001618,compras,discricionario,nao,,CALCADOS PASSO FIRME
+T001619,alimentacao_basica,essencial,nao,,EMPORIO DONA ROSA
+T001620,veiculos,essencial,nao,,GASOLINA E CIA
+T001621,renda_variavel,outros,sim,,
+T001622,pagamento_dividas,prioritario,nao,,ACORDO RENEGOCIACAO CARTAO
+T001623,veiculos,essencial,nao,,SEGURO AUTO PROTEGE
+T001624,telecom,essencial,nao,,OPERADORA CONECTA TELECOM
+T001625,saude,prioritario,nao,,CLINICA ODONTO SORRIR
+T001626,veiculos,essencial,nao,,IPVA 2026 DETRAN
+T001627,alimentacao_basica,essencial,nao,,HORTIFRUTI VERDE VIDA
+T001628,compras,discricionario,nao,,UTILIDADES DO LAR
+T001629,saque,discricionario,nao,,SAQUE BANCO 24 HORAS
+T001630,agua,essencial,nao,,SANEAMENTO AGUAS CLARAS
+T001631,alimentacao_basica,essencial,nao,,HORTIFRUTI VERDE VIDA
+T001632,saque,discricionario,nao,,SAQUE BANCO 24 HORAS
+T001633,alimentacao_basica,essencial,nao,,EMPORIO DONA ROSA
+T001634,transporte,essencial,nao,,RECARGA BILHETE TRANSPORTE
+T001635,restaurantes_bares,discricionario,nao,,RESTAURANTE SABOR CASEIRO
+T001636,alimentacao_basica,essencial,nao,,HORTIFRUTI VERDE VIDA
+T001637,assinaturas,discricionario,nao,,ACADEMIA CORPO ATIVO
+T001638,veiculos,essencial,nao,,ESTACIONAMENTO CENTRAL
+T001639,tarifas_bancarias,prioritario,nao,,TARIFA CESTA DE SERVICOS
+T001640,alimentacao_basica,essencial,nao,,EMPORIO DONA ROSA
+T001641,renda_fixa,outros,nao,,
+T001642,alimentacao_basica,essencial,nao,,EMPORIO DONA ROSA
+T001643,energia,essencial,nao,,CIA ENERGIA ELETRICA
+T001644,pagamento_dividas,prioritario,nao,,EMPRESTIMO PESSOAL BANCO FACIL
+T001645,alimentacao_basica,essencial,nao,,HORTIFRUTI VERDE VIDA
+T001646,transporte,essencial,nao,,APP CORRIDA *VIAGEM
+T001647,alimentacao_basica,essencial,nao,,EMPORIO DONA ROSA
+T001648,alimentacao_basica,essencial,nao,,HORTIFRUTI VERDE VIDA
+T001649,moradia,essencial,sim,,
+T001650,compras,discricionario,nao,,MAGAZINE ELETRO LAR
+T001651,pagamento_fatura,outros,nao,,
+T001652,compras,discricionario,nao,,CELULARES CONECTADOS
+T001653,saude,prioritario,nao,,FARMACIA DO BAIRRO
+T001654,compras,discricionario,nao,,CALCADOS PASSO FIRME
+T001655,lazer,discricionario,nao,,BOLICHE STRIKE
+T001656,veiculos,essencial,nao,,GASOLINA E CIA
+T001657,veiculos,essencial,nao,,AUTO PECAS RODA VIVA
+T001658,alimentacao_basica,essencial,sim,,
+T001659,pagamento_dividas,prioritario,nao,,ACORDO RENEGOCIACAO CARTAO
+T001660,veiculos,essencial,nao,,SEGURO AUTO PROTEGE
+T001661,telecom,essencial,nao,,OPERADORA CONECTA TELECOM
+T001662,saude,prioritario,nao,,CLINICA ODONTO SORRIR
+T001663,veiculos,essencial,nao,,IPVA 2026 DETRAN
+T001664,restaurantes_bares,discricionario,nao,,ACAI DA PRAIA
+T001665,lazer,discricionario,nao,,LOJA JOGOS DIGITAIS *ONLINE
+T001666,agua,essencial,nao,,SANEAMENTO AGUAS CLARAS
+T001667,veiculos,essencial,nao,,AUTO PECAS RODA VIVA
+T001668,saque,discricionario,nao,,SAQUE BANCO 24 HORAS
+T001669,transporte,essencial,nao,,RECARGA BILHETE TRANSPORTE
+T001670,assinaturas,discricionario,nao,,ACADEMIA CORPO ATIVO
+T001671,tarifas_bancarias,prioritario,nao,,TARIFA CESTA DE SERVICOS
+T001672,tarifas_bancarias,prioritario,nao,,JUROS CHEQUE ESPECIAL
+T001673,alimentacao_basica,essencial,nao,,EMPORIO DONA ROSA
+T001674,restaurantes_bares,discricionario,sim,,
+T001675,renda_fixa,outros,nao,,
+T001676,veiculos,essencial,nao,,GASOLINA E CIA
+T001677,energia,essencial,nao,,CIA ENERGIA ELETRICA
+T001678,pagamento_dividas,prioritario,nao,,EMPRESTIMO PESSOAL BANCO FACIL
+T001679,alimentacao_basica,essencial,nao,,EMPORIO DONA ROSA
+T001680,alimentacao_basica,essencial,nao,,HORTIFRUTI VERDE VIDA
+T001681,transporte,essencial,nao,,METRO LINHA AZUL
+T001682,alimentacao_basica,essencial,sim,pix_alto_desconhecido,
+T001683,restaurantes_bares,discricionario,nao,,PIZZARIA FORNO A LENHA
+T001684,alimentacao_basica,essencial,nao,,EMPORIO DONA ROSA
+T001685,transferencia_interna,outros,nao,,
+T001686,transferencia_interna,outros,nao,,
+T001687,moradia,essencial,sim,,
+T001688,alimentacao_basica,essencial,nao,,EMPORIO DONA ROSA
+T001689,compras,discricionario,nao,,MAGAZINE ELETRO LAR
+T001690,veiculos,essencial,nao,,AUTO PECAS RODA VIVA
+T001691,pagamento_fatura,outros,nao,,
+T001692,compras,discricionario,nao,,CELULARES CONECTADOS
+T001693,restaurantes_bares,discricionario,nao,,RESTAURANTE SABOR CASEIRO
+T001694,lazer,discricionario,nao,,BOLICHE STRIKE
+T001695,veiculos,essencial,nao,,ESTACIONAMENTO CENTRAL
+T001696,veiculos,essencial,nao,,LICENCIAMENTO 2026 DETRAN
+T001697,alimentacao_basica,essencial,nao,,EMPORIO DONA ROSA
+T001698,veiculos,essencial,nao,,AUTO PECAS RODA VIVA
+T001699,restaurantes_bares,discricionario,nao,,PIZZARIA FORNO A LENHA
+T001700,compras,discricionario,sim,,
+T001701,alimentacao_basica,essencial,nao,,HORTIFRUTI VERDE VIDA
+T001702,compras,discricionario,nao,,UTILIDADES DO LAR
+T001703,pagamento_dividas,prioritario,nao,,ACORDO RENEGOCIACAO CARTAO
+T001704,veiculos,essencial,nao,,SEGURO AUTO PROTEGE
+T001705,veiculos,essencial,nao,,ESTACIONAMENTO CENTRAL
+T001706,telecom,essencial,nao,,OPERADORA CONECTA TELECOM
+T001707,saude,prioritario,nao,,CLINICA ODONTO SORRIR
+T001708,compras,discricionario,nao,estabelecimento_novo_alto,ELETRONICOS IMPORTADOS LTDA
+T001709,alimentacao_basica,essencial,nao,,HORTIFRUTI VERDE VIDA
+T001710,agua,essencial,nao,,SANEAMENTO AGUAS CLARAS
+T001711,alimentacao_basica,essencial,nao,,HORTIFRUTI VERDE VIDA
+T001712,lazer,discricionario,nao,,LOJA JOGOS DIGITAIS *ONLINE
+T001713,transporte,essencial,nao,,RECARGA BILHETE TRANSPORTE
+T001714,veiculos,essencial,nao,,AUTO PECAS RODA VIVA
+T001715,alimentacao_basica,essencial,nao,,EMPORIO DONA ROSA
+T001716,transporte,essencial,nao,,RECARGA BILHETE TRANSPORTE
+T001717,assinaturas,discricionario,nao,,ACADEMIA CORPO ATIVO
+T001718,alimentacao_basica,essencial,nao,,EMPORIO DONA ROSA
+T001719,tarifas_bancarias,prioritario,nao,,TARIFA CESTA DE SERVICOS
+T001720,tarifas_bancarias,prioritario,nao,,JUROS CHEQUE ESPECIAL
+T001721,compras,discricionario,nao,,CALCADOS PASSO FIRME
+T001722,alimentacao_basica,essencial,nao,,EMPORIO DONA ROSA
+T001723,compras,discricionario,nao,pico_categoria,UTILIDADES DO LAR
+T001724,compras,discricionario,nao,pico_categoria,CALCADOS PASSO FIRME
+T001725,renda_fixa,outros,nao,,
+T001726,compras,discricionario,nao,pico_categoria,CALCADOS PASSO FIRME
+T001727,energia,essencial,nao,,CIA ENERGIA ELETRICA
+T001728,pagamento_dividas,prioritario,nao,,EMPRESTIMO PESSOAL BANCO FACIL
+T001729,alimentacao_basica,essencial,nao,,EMPORIO DONA ROSA
+T001730,transporte,essencial,nao,,METRO LINHA AZUL
+T001731,compras,discricionario,nao,pico_categoria,CALCADOS PASSO FIRME
+T001732,compras,discricionario,nao,pico_categoria,UTILIDADES DO LAR
+T001733,alimentacao_basica,essencial,nao,,HORTIFRUTI VERDE VIDA
+T001734,alimentacao_basica,essencial,nao,,HORTIFRUTI VERDE VIDA
+T001735,veiculos,essencial,nao,,AUTO PECAS RODA VIVA
+T001736,transporte,essencial,nao,,APP CORRIDA *VIAGEM
+T001737,compras,discricionario,nao,,UTILIDADES DO LAR
+T001738,moradia,essencial,sim,,
+T001739,compras,discricionario,nao,pico_categoria,UTILIDADES DO LAR
+T001740,compras,discricionario,nao,pico_categoria,UTILIDADES DO LAR
+T001741,compras,discricionario,nao,,MAGAZINE ELETRO LAR
+T001742,compras,discricionario,nao,pico_categoria,CALCADOS PASSO FIRME
+T001743,pagamento_fatura,outros,nao,,
+T001744,veiculos,essencial,nao,,GASOLINA E CIA
+T001745,compras,discricionario,nao,pico_categoria,UTILIDADES DO LAR
+T001746,compras,discricionario,nao,pico_categoria,CALCADOS PASSO FIRME
+T001747,compras,discricionario,nao,,CELULARES CONECTADOS
+T001748,compras,discricionario,nao,pico_categoria,UTILIDADES DO LAR
+T001749,alimentacao_basica,essencial,sim,,
+T001750,compras,discricionario,nao,pico_categoria,UTILIDADES DO LAR
+T001751,educacao,prioritario,nao,,CURSO ONLINE CERTIFICA
+T001752,alimentacao_basica,essencial,nao,,EMPORIO DONA ROSA
+T001753,renda_variavel,outros,sim,,
+T001754,pagamento_dividas,prioritario,nao,,ACORDO RENEGOCIACAO CARTAO
+T001755,veiculos,essencial,nao,,SEGURO AUTO PROTEGE
+T001756,alimentacao_basica,essencial,nao,,EMPORIO DONA ROSA
+T001757,compras,discricionario,nao,pico_categoria,UTILIDADES DO LAR
+T001758,compras,discricionario,nao,pico_categoria,UTILIDADES DO LAR
+T001759,telecom,essencial,nao,,OPERADORA CONECTA TELECOM
+T001760,saude,prioritario,nao,,CLINICA ODONTO SORRIR
+T001761,restaurantes_bares,discricionario,nao,frequencia_incomum,ACAI DA PRAIA
+T001762,restaurantes_bares,discricionario,nao,frequencia_incomum,ACAI DA PRAIA
+T001763,restaurantes_bares,discricionario,nao,frequencia_incomum,ACAI DA PRAIA
+T001764,restaurantes_bares,discricionario,nao,frequencia_incomum,ACAI DA PRAIA
+T001765,compras,discricionario,nao,pico_categoria,CALCADOS PASSO FIRME
+T001766,restaurantes_bares,discricionario,nao,frequencia_incomum,ACAI DA PRAIA
+T001767,restaurantes_bares,discricionario,nao,frequencia_incomum,ACAI DA PRAIA
+T001768,restaurantes_bares,discricionario,nao,frequencia_incomum,ACAI DA PRAIA
+T001769,restaurantes_bares,discricionario,nao,frequencia_incomum,ACAI DA PRAIA
+T001770,agua,essencial,nao,,SANEAMENTO AGUAS CLARAS
+T001771,compras,discricionario,nao,pico_categoria,CALCADOS PASSO FIRME
+T001772,compras,discricionario,nao,pico_categoria,UTILIDADES DO LAR
+T001773,compras,discricionario,nao,pico_categoria,CALCADOS PASSO FIRME
+T001774,alimentacao_basica,essencial,nao,,EMPORIO DONA ROSA
+T001775,compras,discricionario,nao,,UTILIDADES DO LAR
+T001776,saude,prioritario,nao,,LAB ANALISES VIDA
+T001777,restaurantes_bares,discricionario,nao,,RESTAURANTE SABOR CASEIRO
+T001778,assinaturas,discricionario,nao,,ACADEMIA CORPO ATIVO
+T001779,restaurantes_bares,discricionario,nao,,RESTAURANTE SABOR CASEIRO
+T001780,restaurantes_bares,discricionario,sim,,
+T001781,compras,discricionario,nao,pico_categoria,CALCADOS PASSO FIRME
+T001782,tarifas_bancarias,prioritario,nao,,TARIFA CESTA DE SERVICOS
+T001783,restaurantes_bares,discricionario,nao,,RESTAURANTE SABOR CASEIRO
+T001784,lazer,discricionario,nao,,TEATRO MUNICIPAL BILHETERIA
+T001785,alimentacao_basica,essencial,nao,,HORTIFRUTI VERDE VIDA
+T001786,renda_fixa,outros,nao,,
+T001787,restaurantes_bares,discricionario,nao,,PIZZARIA FORNO A LENHA
+T001788,energia,essencial,nao,,CIA ENERGIA ELETRICA
+T001789,pagamento_dividas,prioritario,nao,,EMPRESTIMO PESSOAL BANCO FACIL
+T001790,transporte,essencial,nao,,METRO LINHA AZUL
+T001791,transferencia_interna,outros,nao,,
+T001792,transferencia_interna,outros,nao,,
+T001793,veiculos,essencial,nao,,AUTO PECAS RODA VIVA
+T001794,alimentacao_basica,essencial,nao,,EMPORIO DONA ROSA
+T001795,transporte,essencial,nao,,METRO LINHA AZUL
+T001796,lazer,discricionario,nao,,LOJA JOGOS DIGITAIS *ONLINE
+T001797,compras,discricionario,nao,,UTILIDADES DO LAR
+T001798,alimentacao_basica,essencial,nao,,HORTIFRUTI VERDE VIDA
+T001799,restaurantes_bares,discricionario,nao,,ACAI DA PRAIA
+T001800,moradia,essencial,sim,,
+T001801,compras,discricionario,nao,,MAGAZINE ELETRO LAR
+T001802,pagamento_fatura,outros,nao,,
+T001803,compras,discricionario,nao,,CELULARES CONECTADOS
+T001804,saude,prioritario,nao,,FARMACIA DO BAIRRO
+T001805,lazer,discricionario,sim,,
+T001806,saque,discricionario,nao,,SAQUE BANCO 24 HORAS
+T001807,educacao,prioritario,nao,,CURSO ONLINE CERTIFICA
+T001808,transporte,essencial,nao,,RECARGA BILHETE TRANSPORTE
+T001809,restaurantes_bares,discricionario,nao,,ACAI DA PRAIA
+T001810,pagamento_dividas,prioritario,nao,,ACORDO RENEGOCIACAO CARTAO
+T001811,veiculos,essencial,nao,,SEGURO AUTO PROTEGE
+T001812,telecom,essencial,nao,,OPERADORA CONECTA TELECOM
+T001813,saude,prioritario,nao,,CLINICA ODONTO SORRIR
+T001814,alimentacao_basica,essencial,nao,,EMPORIO DONA ROSA
+T001815,renda_eventual,outros,sim,,
+T001816,agua,essencial,nao,,SANEAMENTO AGUAS CLARAS
+T001817,transporte,essencial,nao,,APP CORRIDA *VIAGEM
+T001818,veiculos,essencial,nao,,ESTACIONAMENTO CENTRAL
+T001819,veiculos,essencial,nao,,ESTACIONAMENTO CENTRAL
+T001820,restaurantes_bares,discricionario,sim,,
+T001821,alimentacao_basica,essencial,nao,,EMPORIO DONA ROSA
+T001822,alimentacao_basica,essencial,nao,,EMPORIO DONA ROSA
+T001823,alimentacao_basica,essencial,nao,,HORTIFRUTI VERDE VIDA
+T001824,compras,discricionario,nao,,UTILIDADES DO LAR
+T001825,compras,discricionario,nao,,CALCADOS PASSO FIRME
+T001826,assinaturas,discricionario,nao,,ACADEMIA CORPO ATIVO
+T001827,tarifas_bancarias,prioritario,nao,,TARIFA CESTA DE SERVICOS
+T001828,compras,discricionario,nao,,MOVEIS CASA BELA
+T001829,saque,discricionario,nao,,SAQUE BANCO 24 HORAS
+T001830,restaurantes_bares,discricionario,nao,,SUSHI KAZU
+T001831,assinaturas,discricionario,nao,,CLUBE LIVROS DO MES
+T001832,transporte,essencial,nao,,APP CORRIDA *VIAGEM
+T001833,renda_fixa,outros,nao,,
+T001834,tarifas_bancarias,prioritario,nao,,TARIFA CESTA DE SERVICOS
+T001835,transporte,essencial,nao,,APP CORRIDA *VIAGEM
+T001836,saude,prioritario,nao,,DROGARIA SAUDE TOTAL
+T001837,pagamento_dividas,prioritario,nao,,FINANCIAMENTO MOTO VELOZ
+T001838,saude,prioritario,nao,,CLINICA ODONTO SORRIR
+T001839,lazer,discricionario,nao,,KARAOKE NOTURNO
+T001840,transferencia_familiar,prioritario,sim,,
+T001841,alimentacao_basica,essencial,nao,,SUPERMERCADO BOM PRECO
+T001842,pagamento_fatura,outros,nao,,
+T001843,lazer,discricionario,nao,,AGENCIA VIAGENS DESTINO
+T001844,assinaturas,discricionario,nao,,NUVEM ARMAZENAMENTO
+T001845,veiculos,essencial,nao,,ESTACIONAMENTO CENTRAL
+T001846,lazer,discricionario,nao,,KARAOKE NOTURNO
+T001847,assinaturas,discricionario,nao,,ACADEMIA CORPO ATIVO
+T001848,pagamento_dividas,prioritario,nao,,EMPRESTIMO PESSOAL BANCO FACIL
+T001849,alimentacao_basica,essencial,nao,,EMPORIO DONA ROSA
+T001850,transporte,essencial,nao,,MOBI APP *TRIP
+T001851,saque,discricionario,nao,,SAQUE BANCO 24 HORAS
+T001852,alimentacao_basica,essencial,nao,,SUPERMERCADO BOM PRECO
+T001853,transporte,essencial,nao,,MOBI APP *TRIP
+T001854,restaurantes_bares,discricionario,nao,,LANCHONETE ESQUINA
+T001855,agua,essencial,nao,,SANEAMENTO AGUAS CLARAS
+T001856,restaurantes_bares,discricionario,nao,,LANCHONETE ESQUINA
+T001857,restaurantes_bares,discricionario,nao,,SUSHI KAZU
+T001858,veiculos,essencial,nao,,IPVA 2026 DETRAN
+T001859,alimentacao_basica,essencial,nao,,HORTIFRUTI VERDE VIDA
+T001860,compras,discricionario,nao,,AUTO SHOP ACESSORIOS
+T001861,saude,prioritario,nao,,LAB ANALISES VIDA
+T001862,telecom,essencial,nao,,OPERADORA CONECTA TELECOM
+T001863,energia,essencial,nao,,CIA ENERGIA ELETRICA
+T001864,moradia,essencial,nao,,IMOBILIARIA LAR DOCE LAR
+T001865,transporte,essencial,nao,,MOBI APP *TRIP
+T001866,restaurantes_bares,discricionario,nao,,LANCHONETE ESQUINA
+T001867,compras,discricionario,nao,,MOVEIS CASA BELA
+T001868,alimentacao_basica,essencial,nao,,SUPERMERCADO BOM PRECO
+T001869,moradia,essencial,nao,,IPTU 2026 PREFEITURA
+T001870,alimentacao_basica,essencial,nao,,HORTIFRUTI VERDE VIDA
+T001871,transporte,essencial,nao,,APP CORRIDA *VIAGEM
+T001872,restaurantes_bares,discricionario,nao,,SUSHI KAZU
+T001873,veiculos,essencial,nao,,ESTACIONAMENTO CENTRAL
+T001874,assinaturas,discricionario,nao,,CLUBE LIVROS DO MES
+T001875,transporte,essencial,nao,,APP CORRIDA *VIAGEM
+T001876,renda_fixa,outros,nao,,
+T001877,tarifas_bancarias,prioritario,nao,,TARIFA CESTA DE SERVICOS
+T001878,pagamento_dividas,prioritario,nao,,FINANCIAMENTO MOTO VELOZ
+T001879,compras,discricionario,nao,,AUTO SHOP ACESSORIOS
+T001880,saude,prioritario,nao,,CLINICA ODONTO SORRIR
+T001881,transferencia_familiar,prioritario,sim,,
+T001882,pagamento_fatura,outros,nao,,
+T001883,alimentacao_basica,essencial,nao,,EMPORIO DONA ROSA
+T001884,assinaturas,discricionario,nao,,NUVEM ARMAZENAMENTO
+T001885,assinaturas,discricionario,nao,,ACADEMIA CORPO ATIVO
+T001886,pagamento_dividas,prioritario,nao,,EMPRESTIMO PESSOAL BANCO FACIL
+T001887,alimentacao_basica,essencial,nao,,HORTIFRUTI VERDE VIDA
+T001888,agua,essencial,nao,,SANEAMENTO AGUAS CLARAS
+T001889,transporte,essencial,nao,,MOBI APP *TRIP
+T001890,transporte,essencial,nao,,APP CORRIDA *VIAGEM
+T001891,veiculos,essencial,nao,,IPVA 2026 DETRAN
+T001892,alimentacao_basica,essencial,sim,,
+T001893,veiculos,essencial,nao,,AUTO PECAS RODA VIVA
+T001894,educacao,prioritario,nao,,CURSO ONLINE CERTIFICA
+T001895,telecom,essencial,nao,,OPERADORA CONECTA TELECOM
+T001896,restaurantes_bares,discricionario,nao,,LANCHONETE ESQUINA
+T001897,energia,essencial,nao,,CIA ENERGIA ELETRICA
+T001898,saude,prioritario,nao,,LAB ANALISES VIDA
+T001899,moradia,essencial,nao,,IMOBILIARIA LAR DOCE LAR
+T001900,tarifas_bancarias,prioritario,nao,,JUROS CHEQUE ESPECIAL
+T001901,transporte,essencial,nao,,MOBI APP *TRIP
+T001902,compras,discricionario,nao,,MOVEIS CASA BELA
+T001903,moradia,essencial,nao,,IPTU 2026 PREFEITURA
+T001904,transporte,essencial,nao,,APP CORRIDA *VIAGEM
+T001905,assinaturas,discricionario,nao,,CLUBE LIVROS DO MES
+T001906,alimentacao_basica,essencial,nao,,EMPORIO DONA ROSA
+T001907,restaurantes_bares,discricionario,nao,,SUSHI KAZU
+T001908,tarifas_bancarias,prioritario,nao,,TARIFA CESTA DE SERVICOS
+T001909,restaurantes_bares,discricionario,nao,,SUSHI KAZU
+T001910,pagamento_dividas,prioritario,nao,,FINANCIAMENTO MOTO VELOZ
+T001911,veiculos,essencial,nao,,ESTACIONAMENTO CENTRAL
+T001912,saude,prioritario,nao,,CLINICA ODONTO SORRIR
+T001913,alimentacao_basica,essencial,nao,,SUPERMERCADO BOM PRECO
+T001914,transferencia_familiar,prioritario,sim,,
+T001915,pagamento_fatura,outros,nao,,
+T001916,restaurantes_bares,discricionario,nao,,LANCHONETE ESQUINA
+T001917,veiculos,essencial,nao,,ESTACIONAMENTO CENTRAL
+T001918,assinaturas,discricionario,nao,,NUVEM ARMAZENAMENTO
+T001919,assinaturas,discricionario,nao,,ACADEMIA CORPO ATIVO
+T001920,pagamento_dividas,prioritario,nao,,EMPRESTIMO PESSOAL BANCO FACIL
+T001921,restaurantes_bares,discricionario,nao,,LANCHONETE ESQUINA
+T001922,renda_variavel,outros,nao,,
+T001923,compras,discricionario,nao,,LOJA DEPARTAMENTO MODA
+T001924,renda_variavel,outros,nao,,
+T001925,veiculos,essencial,nao,,AUTO PECAS RODA VIVA
+T001926,alimentacao_basica,essencial,nao,,SUPERMERCADO BOM PRECO
+T001927,agua,essencial,nao,,SANEAMENTO AGUAS CLARAS
+T001928,alimentacao_basica,essencial,nao,,HORTIFRUTI VERDE VIDA
+T001929,renda_variavel,outros,nao,,
+T001930,veiculos,essencial,nao,,IPVA 2026 DETRAN
+T001931,restaurantes_bares,discricionario,nao,,SUSHI KAZU
+T001932,saude,prioritario,nao,,LAB ANALISES VIDA
+T001933,lazer,discricionario,nao,,KARAOKE NOTURNO
+T001934,educacao,prioritario,nao,,CURSO ONLINE CERTIFICA
+T001935,restaurantes_bares,discricionario,sim,,
+T001936,telecom,essencial,nao,,OPERADORA CONECTA TELECOM
+T001937,lazer,discricionario,nao,,INGRESSOS EVENTOS *SHOW
+T001938,energia,essencial,nao,,CIA ENERGIA ELETRICA
+T001939,transporte,essencial,nao,,MOBI APP *TRIP
+T001940,moradia,essencial,nao,,IMOBILIARIA LAR DOCE LAR
+T001941,restaurantes_bares,discricionario,nao,,LANCHONETE ESQUINA
+T001942,compras,discricionario,nao,,MOVEIS CASA BELA
+T001943,veiculos,essencial,nao,,ESTACIONAMENTO CENTRAL
+T001944,renda_fixa,outros,nao,,
+T001945,moradia,essencial,nao,,IPTU 2026 PREFEITURA
+T001946,alimentacao_basica,essencial,nao,,HORTIFRUTI VERDE VIDA
+T001947,transporte,essencial,nao,,MOBI APP *TRIP
+T001948,transferencia_interna,outros,nao,,
+T001949,transferencia_interna,outros,nao,,
+T001950,assinaturas,discricionario,nao,,CLUBE LIVROS DO MES
+T001951,compras,discricionario,nao,,LOJA DEPARTAMENTO MODA
+T001952,restaurantes_bares,discricionario,nao,,LANCHONETE ESQUINA
+T001953,tarifas_bancarias,prioritario,nao,,TARIFA CESTA DE SERVICOS
+T001954,pagamento_dividas,prioritario,nao,,FINANCIAMENTO MOTO VELOZ
+T001955,veiculos,essencial,nao,,LICENCIAMENTO 2026 DETRAN
+T001956,saude,prioritario,nao,,CLINICA ODONTO SORRIR
+T001957,transferencia_familiar,prioritario,sim,,
+T001958,pagamento_fatura,outros,nao,,
+T001959,restaurantes_bares,discricionario,nao,,SUSHI KAZU
+T001960,saque,discricionario,nao,,SAQUE BANCO 24 HORAS
+T001961,assinaturas,discricionario,nao,,NUVEM ARMAZENAMENTO
+T001962,restaurantes_bares,discricionario,nao,,SUSHI KAZU
+T001963,assinaturas,discricionario,nao,,ACADEMIA CORPO ATIVO
+T001964,pagamento_dividas,prioritario,nao,,EMPRESTIMO PESSOAL BANCO FACIL
+T001965,transporte,essencial,nao,,MOBI APP *TRIP
+T001966,lazer,discricionario,nao,,KARAOKE NOTURNO
+T001967,restaurantes_bares,discricionario,nao,,LANCHONETE ESQUINA
+T001968,restaurantes_bares,discricionario,nao,,SUSHI KAZU
+T001969,agua,essencial,nao,,SANEAMENTO AGUAS CLARAS
+T001970,alimentacao_basica,essencial,nao,,EMPORIO DONA ROSA
+T001971,transporte,essencial,nao,,MOBI APP *TRIP
+T001972,alimentacao_basica,essencial,nao,,HORTIFRUTI VERDE VIDA
+T001973,alimentacao_basica,essencial,nao,,SUPERMERCADO BOM PRECO
+T001974,educacao,prioritario,nao,,CURSO ONLINE CERTIFICA
+T001975,veiculos,essencial,nao,,ESTACIONAMENTO CENTRAL
+T001976,restaurantes_bares,discricionario,nao,,LANCHONETE ESQUINA
+T001977,compras,discricionario,nao,,AUTO SHOP ACESSORIOS
+T001978,telecom,essencial,nao,,OPERADORA CONECTA TELECOM
+T001979,energia,essencial,nao,,CIA ENERGIA ELETRICA
+T001980,moradia,essencial,nao,,IMOBILIARIA LAR DOCE LAR
+T001981,compras,discricionario,nao,,MAGAZINE ELETRO LAR
+T001982,compras,discricionario,nao,,AUTO SHOP ACESSORIOS
+T001983,renda_fixa,outros,nao,,
+T001984,moradia,essencial,nao,,IPTU 2026 PREFEITURA
+T001985,transporte,essencial,nao,,APP CORRIDA *VIAGEM
+T001986,saude,prioritario,nao,,DROGARIA SAUDE TOTAL
+T001987,saude,prioritario,nao,,FARMACIA DO BAIRRO
+T001988,assinaturas,discricionario,nao,,CLUBE LIVROS DO MES
+T001989,tarifas_bancarias,prioritario,nao,,TARIFA CESTA DE SERVICOS
+T001990,transporte,essencial,nao,,APP CORRIDA *VIAGEM
+T001991,pagamento_dividas,prioritario,nao,,FINANCIAMENTO MOTO VELOZ
+T001992,restaurantes_bares,discricionario,nao,,LANCHONETE ESQUINA
+T001993,transporte,essencial,nao,,APP CORRIDA *VIAGEM
+T001994,transferencia_familiar,prioritario,sim,,
+T001995,veiculos,essencial,nao,,AUTO PECAS RODA VIVA
+T001996,pagamento_fatura,outros,nao,,
+T001997,assinaturas,discricionario,nao,,NUVEM ARMAZENAMENTO
+T001998,transporte,essencial,nao,,APP CORRIDA *VIAGEM
+T001999,assinaturas,discricionario,nao,,ACADEMIA CORPO ATIVO
+T002000,pagamento_dividas,prioritario,nao,,EMPRESTIMO PESSOAL BANCO FACIL
+T002001,lazer,discricionario,nao,,KARAOKE NOTURNO
+T002002,alimentacao_basica,essencial,nao,,SUPERMERCADO BOM PRECO
+T002003,lazer,discricionario,nao,,INGRESSOS EVENTOS *SHOW
+T002004,saque,discricionario,nao,,SAQUE BANCO 24 HORAS
+T002005,alimentacao_basica,essencial,nao,,HORTIFRUTI VERDE VIDA
+T002006,agua,essencial,nao,,SANEAMENTO AGUAS CLARAS
+T002007,restaurantes_bares,discricionario,nao,,LANCHONETE ESQUINA
+T002008,assinaturas,discricionario,nao,cobranca_recorrente_nova,APPDIGITAL*PREMIUM
+T002009,alimentacao_basica,essencial,nao,,SUPERMERCADO BOM PRECO
+T002010,veiculos,essencial,nao,,ESTACIONAMENTO CENTRAL
+T002011,restaurantes_bares,discricionario,nao,,SUSHI KAZU
+T002012,transporte,essencial,nao,,MOBI APP *TRIP
+T002013,restaurantes_bares,discricionario,nao,,LANCHONETE ESQUINA
+T002014,restaurantes_bares,discricionario,nao,,LANCHONETE ESQUINA
+T002015,alimentacao_basica,essencial,nao,,EMPORIO DONA ROSA
+T002016,veiculos,essencial,nao,,ESTACIONAMENTO CENTRAL
+T002017,restaurantes_bares,discricionario,nao,,SUSHI KAZU
+T002018,educacao,prioritario,nao,,CURSO ONLINE CERTIFICA
+T002019,telecom,essencial,nao,,OPERADORA CONECTA TELECOM
+T002020,energia,essencial,nao,,CIA ENERGIA ELETRICA
+T002021,moradia,essencial,nao,,IMOBILIARIA LAR DOCE LAR
+T002022,restaurantes_bares,discricionario,nao,,SUSHI KAZU
+T002023,compras,discricionario,nao,,MAGAZINE ELETRO LAR
+T002024,renda_fixa,outros,nao,,
+T002025,moradia,essencial,nao,,IPTU 2026 PREFEITURA
+T002026,transporte,essencial,nao,,MOBI APP *TRIP
+T002027,assinaturas,discricionario,nao,,CLUBE LIVROS DO MES
+T002028,tarifas_bancarias,prioritario,nao,,TARIFA CESTA DE SERVICOS
+T002029,pagamento_dividas,prioritario,nao,,FINANCIAMENTO MOTO VELOZ
+T002030,restaurantes_bares,discricionario,nao,,LANCHONETE ESQUINA
+T002031,transferencia_familiar,prioritario,sim,,
+T002032,pagamento_fatura,outros,nao,,
+T002033,transporte,essencial,nao,,MOBI APP *TRIP
+T002034,restaurantes_bares,discricionario,nao,,LANCHONETE ESQUINA
+T002035,transferencia_interna,outros,nao,,
+T002036,transferencia_interna,outros,nao,,
+T002037,compras,discricionario,nao,estabelecimento_novo_alto,ARTIGOS ESPORTIVOS RADICAL
+T002038,restaurantes_bares,discricionario,nao,,SUSHI KAZU
+T002039,assinaturas,discricionario,nao,,NUVEM ARMAZENAMENTO
+T002040,alimentacao_basica,essencial,nao,,HORTIFRUTI VERDE VIDA
+T002041,alimentacao_basica,essencial,nao,,HORTIFRUTI VERDE VIDA
+T002042,alimentacao_basica,essencial,nao,,SUPERMERCADO BOM PRECO
+T002043,assinaturas,discricionario,nao,,ACADEMIA CORPO ATIVO
+T002044,pagamento_dividas,prioritario,nao,,EMPRESTIMO PESSOAL BANCO FACIL
+T002045,alimentacao_basica,essencial,nao,,HORTIFRUTI VERDE VIDA
+T002046,restaurantes_bares,discricionario,nao,,SUSHI KAZU
+T002047,transporte,essencial,nao,,MOBI APP *TRIP
+T002048,saque,discricionario,nao,,SAQUE BANCO 24 HORAS
+T002049,agua,essencial,nao,,SANEAMENTO AGUAS CLARAS
+T002050,veiculos,essencial,nao,,ESTACIONAMENTO CENTRAL
+T002051,alimentacao_basica,essencial,nao,,HORTIFRUTI VERDE VIDA
+T002052,assinaturas,discricionario,nao,cobranca_recorrente_nova,APPDIGITAL*PREMIUM
+T002053,restaurantes_bares,discricionario,nao,,SUSHI KAZU
+T002054,lazer,discricionario,nao,frequencia_incomum,KARAOKE NOTURNO
+T002055,lazer,discricionario,nao,frequencia_incomum,KARAOKE NOTURNO
+T002056,lazer,discricionario,nao,frequencia_incomum,KARAOKE NOTURNO
+T002057,lazer,discricionario,nao,frequencia_incomum,KARAOKE NOTURNO
+T002058,lazer,discricionario,nao,frequencia_incomum,KARAOKE NOTURNO
+T002059,compras,discricionario,nao,,LOJA DEPARTAMENTO MODA
+T002060,lazer,discricionario,nao,frequencia_incomum,KARAOKE NOTURNO
+T002061,lazer,discricionario,nao,frequencia_incomum,KARAOKE NOTURNO
+T002062,lazer,discricionario,nao,frequencia_incomum,KARAOKE NOTURNO
+T002063,lazer,discricionario,nao,frequencia_incomum,KARAOKE NOTURNO
+T002064,lazer,discricionario,nao,frequencia_incomum,KARAOKE NOTURNO
+T002065,lazer,discricionario,nao,frequencia_incomum,KARAOKE NOTURNO
+T002066,educacao,prioritario,nao,,CURSO ONLINE CERTIFICA
+T002067,veiculos,essencial,nao,,AUTO PECAS RODA VIVA
+T002068,saude,prioritario,nao,,LAB ANALISES VIDA
+T002069,telecom,essencial,nao,,OPERADORA CONECTA TELECOM
+T002070,restaurantes_bares,discricionario,nao,,LANCHONETE ESQUINA
+T002071,energia,essencial,nao,,CIA ENERGIA ELETRICA
+T002072,restaurantes_bares,discricionario,nao,,LANCHONETE ESQUINA
+T002073,moradia,essencial,nao,,IMOBILIARIA LAR DOCE LAR
+T002074,tarifas_bancarias,prioritario,nao,,JUROS CHEQUE ESPECIAL
+T002075,renda_fixa,outros,nao,,
+T002076,tarifas_bancarias,prioritario,nao,,TARIFA CESTA DE SERVICOS
+T002077,transporte,essencial,nao,,APP CORRIDA *VIAGEM
+T002078,educacao,prioritario,nao,,CURSO IDIOMAS FALE BEM
+T002079,transporte,essencial,nao,,PASSE ONIBUS URBANO
+T002080,restaurantes_bares,discricionario,nao,,RESTAURANTE SABOR CASEIRO
+T002081,alimentacao_basica,essencial,nao,,PADARIA PAO DOURADO
+T002082,moradia,essencial,sim,,
+T002083,pagamento_fatura,outros,nao,,
+T002084,alimentacao_basica,essencial,nao,,ATACADAO DO POVO
+T002085,alimentacao_basica,essencial,nao,,PADARIA PAO DOURADO
+T002086,compras,discricionario,nao,,LOJA DEPARTAMENTO MODA
+T002087,saque,discricionario,nao,,SAQUE CAIXA ELETRONICO
+T002088,energia,essencial,nao,,CIA ENERGIA ELETRICA
+T002089,transferencia_familiar,prioritario,sim,,
+T002090,alimentacao_basica,essencial,nao,,PADARIA PAO DOURADO
+T002091,renda_eventual,outros,sim,,
+T002092,assinaturas,discricionario,nao,,ACADEMIA CORPO ATIVO
+T002093,lazer,discricionario,nao,,RECARGA CREDITOS GAME
+T002094,saque,discricionario,nao,,SAQUE CAIXA ELETRONICO
+T002095,pagamento_dividas,prioritario,sim,,
+T002096,telecom,essencial,nao,,OPERADORA CONECTA TELECOM
+T002097,alimentacao_basica,essencial,nao,,ATACADAO DO POVO
+T002098,saude,prioritario,nao,,LAB ANALISES VIDA
+T002099,alimentacao_basica,essencial,sim,,
+T002100,restaurantes_bares,discricionario,nao,,RESTAURANTE SABOR CASEIRO
+T002101,agua,essencial,nao,,SANEAMENTO AGUAS CLARAS
+T002102,tarifas_bancarias,prioritario,nao,,JUROS CHEQUE ESPECIAL
+T002103,renda_fixa,outros,nao,,
+T002104,tarifas_bancarias,prioritario,nao,,TARIFA CESTA DE SERVICOS
+T002105,alimentacao_basica,essencial,nao,,ATACADAO DO POVO
+T002106,saude,prioritario,nao,,LAB ANALISES VIDA
+T002107,saque,discricionario,nao,,SAQUE CAIXA ELETRONICO
+T002108,transporte,essencial,nao,,APP CORRIDA *VIAGEM
+T002109,saude,prioritario,nao,,DROGARIA SAUDE TOTAL
+T002110,transporte,essencial,nao,,PASSE ONIBUS URBANO
+T002111,restaurantes_bares,discricionario,nao,,RESTAURANTE SABOR CASEIRO
+T002112,educacao,prioritario,nao,,CURSO IDIOMAS FALE BEM
+T002113,saque,discricionario,nao,,SAQUE CAIXA ELETRONICO
+T002114,alimentacao_basica,essencial,nao,,ATACADAO DO POVO
+T002115,transporte,essencial,nao,,APP CORRIDA *VIAGEM
+T002116,transporte,essencial,nao,,APP CORRIDA *VIAGEM
+T002117,moradia,essencial,sim,,
+T002118,alimentacao_basica,essencial,sim,,
+T002119,pagamento_fatura,outros,nao,,
+T002120,compras,discricionario,nao,,PAPELARIA ESCOLAR
+T002121,energia,essencial,nao,,CIA ENERGIA ELETRICA
+T002122,transferencia_familiar,prioritario,sim,,
+T002123,transferencia_interna,outros,nao,,
+T002124,transferencia_interna,outros,nao,,
+T002125,assinaturas,discricionario,nao,,ACADEMIA CORPO ATIVO
+T002126,alimentacao_basica,essencial,nao,,ATACADAO DO POVO
+T002127,transporte,essencial,nao,,APP CORRIDA *VIAGEM
+T002128,renda_eventual,outros,sim,,
+T002129,alimentacao_basica,essencial,nao,,QUITANDA DO VALE
+T002130,saude,prioritario,nao,,LAB ANALISES VIDA
+T002131,alimentacao_basica,essencial,nao,,PADARIA PAO DOURADO
+T002132,transporte,essencial,sim,,
+T002133,telecom,essencial,nao,,OPERADORA CONECTA TELECOM
+T002134,alimentacao_basica,essencial,nao,,PADARIA PAO DOURADO
+T002135,alimentacao_basica,essencial,nao,,ATACADAO DO POVO
+T002136,lazer,discricionario,nao,,INGRESSOS EVENTOS *SHOW
+T002137,alimentacao_basica,essencial,nao,,ATACADAO DO POVO
+T002138,compras,discricionario,nao,,LOJA DEPARTAMENTO MODA
+T002139,alimentacao_basica,essencial,nao,,ATACADAO DO POVO
+T002140,agua,essencial,nao,,SANEAMENTO AGUAS CLARAS
+T002141,restaurantes_bares,discricionario,nao,,LANCHONETE ESQUINA
+T002142,restaurantes_bares,discricionario,nao,,LANCHONETE ESQUINA
+T002143,lazer,discricionario,nao,,RECARGA CREDITOS GAME
+T002144,renda_fixa,outros,nao,,
+T002145,compras,discricionario,nao,,MOVEIS CASA BELA
+T002146,tarifas_bancarias,prioritario,nao,,TARIFA CESTA DE SERVICOS
+T002147,transporte,essencial,nao,,APP CORRIDA *VIAGEM
+T002148,alimentacao_basica,essencial,nao,,ATACADAO DO POVO
+T002149,lazer,discricionario,nao,,RECARGA CREDITOS GAME
+T002150,alimentacao_basica,essencial,nao,,ATACADAO DO POVO
+T002151,transporte,essencial,nao,,PASSE ONIBUS URBANO
+T002152,educacao,prioritario,nao,,CURSO IDIOMAS FALE BEM
+T002153,compras,discricionario,nao,,PAPELARIA ESCOLAR
+T002154,moradia,essencial,sim,,
+T002155,restaurantes_bares,discricionario,nao,,RESTAURANTE SABOR CASEIRO
+T002156,pagamento_fatura,outros,nao,,
+T002157,alimentacao_basica,essencial,nao,,PADARIA PAO DOURADO
+T002158,energia,essencial,nao,,CIA ENERGIA ELETRICA
+T002159,transferencia_familiar,prioritario,sim,,
+T002160,assinaturas,discricionario,nao,,ACADEMIA CORPO ATIVO
+T002161,alimentacao_basica,essencial,nao,,ATACADAO DO POVO
+T002162,compras,discricionario,nao,,PAPELARIA ESCOLAR
+T002163,saude,prioritario,nao,,LAB ANALISES VIDA
+T002164,lazer,discricionario,nao,,INGRESSOS EVENTOS *SHOW
+T002165,transporte,essencial,nao,,PASSE ONIBUS URBANO
+T002166,telecom,essencial,nao,,OPERADORA CONECTA TELECOM
+T002167,transporte,essencial,nao,,APP CORRIDA *VIAGEM
+T002168,lazer,discricionario,nao,,INGRESSOS EVENTOS *SHOW
+T002169,transporte,essencial,nao,,APP CORRIDA *VIAGEM
+T002170,transferencia_interna,outros,nao,,
+T002171,transferencia_interna,outros,nao,,
+T002172,alimentacao_basica,essencial,nao,,PADARIA PAO DOURADO
+T002173,transporte,essencial,nao,,APP CORRIDA *VIAGEM
+T002174,agua,essencial,nao,,SANEAMENTO AGUAS CLARAS
+T002175,renda_fixa,outros,nao,,
+T002176,compras,discricionario,nao,,MOVEIS CASA BELA
+T002177,tarifas_bancarias,prioritario,nao,,TARIFA CESTA DE SERVICOS
+T002178,transporte,essencial,nao,,PASSE ONIBUS URBANO
+T002179,alimentacao_basica,essencial,nao,,QUITANDA DO VALE
+T002180,educacao,prioritario,nao,,CURSO IDIOMAS FALE BEM
+T002181,alimentacao_basica,essencial,nao,,QUITANDA DO VALE
+T002182,transporte,essencial,nao,,PASSE ONIBUS URBANO
+T002183,lazer,discricionario,nao,,INGRESSOS EVENTOS *SHOW
+T002184,moradia,essencial,sim,,
+T002185,alimentacao_basica,essencial,nao,,PADARIA PAO DOURADO
+T002186,pagamento_fatura,outros,nao,,
+T002187,compras,discricionario,nao,estabelecimento_novo_alto,LOJA TECH PREMIUM
+T002188,alimentacao_basica,essencial,nao,,ATACADAO DO POVO
+T002189,alimentacao_basica,essencial,nao,,PADARIA PAO DOURADO
+T002190,saude,prioritario,nao,,DROGARIA SAUDE TOTAL
+T002191,energia,essencial,nao,,CIA ENERGIA ELETRICA
+T002192,transferencia_familiar,prioritario,sim,,
+T002193,alimentacao_basica,essencial,nao,,PADARIA PAO DOURADO
+T002194,saude,prioritario,nao,,LAB ANALISES VIDA
+T002195,assinaturas,discricionario,nao,,ACADEMIA CORPO ATIVO
+T002196,restaurantes_bares,discricionario,nao,,RESTAURANTE SABOR CASEIRO
+T002197,saude,prioritario,nao,,LAB ANALISES VIDA
+T002198,compras,discricionario,nao,,PAPELARIA ESCOLAR
+T002199,alimentacao_basica,essencial,nao,,ATACADAO DO POVO
+T002200,transporte,essencial,nao,,APP CORRIDA *VIAGEM
+T002201,telecom,essencial,nao,conta_fixa_disparada,OPERADORA CONECTA TELECOM
+T002202,transporte,essencial,nao,,PASSE ONIBUS URBANO
+T002203,alimentacao_basica,essencial,nao,,ATACADAO DO POVO
+T002204,alimentacao_basica,essencial,nao,,QUITANDA DO VALE
+T002205,saque,discricionario,nao,,SAQUE CAIXA ELETRONICO
+T002206,agua,essencial,nao,,SANEAMENTO AGUAS CLARAS
+T002207,tarifas_bancarias,prioritario,nao,,JUROS CHEQUE ESPECIAL
+T002208,saque,discricionario,nao,,SAQUE CAIXA ELETRONICO
+T002209,renda_fixa,outros,nao,,
+T002210,compras,discricionario,nao,,MOVEIS CASA BELA
+T002211,tarifas_bancarias,prioritario,nao,,TARIFA CESTA DE SERVICOS
+T002212,restaurantes_bares,discricionario,nao,,LANCHONETE ESQUINA
+T002213,transporte,essencial,nao,,PASSE ONIBUS URBANO
+T002214,transporte,essencial,nao,,APP CORRIDA *VIAGEM
+T002215,educacao,prioritario,nao,,CURSO IDIOMAS FALE BEM
+T002216,moradia,essencial,sim,,
+T002217,alimentacao_basica,essencial,nao,,QUITANDA DO VALE
+T002218,pagamento_fatura,outros,nao,,
+T002219,lazer,discricionario,nao,,RECARGA CREDITOS GAME
+T002220,energia,essencial,nao,,CIA ENERGIA ELETRICA
+T002221,transferencia_familiar,prioritario,sim,,
+T002222,restaurantes_bares,discricionario,nao,,RESTAURANTE SABOR CASEIRO
+T002223,assinaturas,discricionario,nao,,ACADEMIA CORPO ATIVO
+T002224,alimentacao_basica,essencial,nao,,QUITANDA DO VALE
+T002225,alimentacao_basica,essencial,nao,,PADARIA PAO DOURADO
+T002226,transporte,essencial,nao,,PASSE ONIBUS URBANO
+T002227,alimentacao_basica,essencial,nao,,PADARIA PAO DOURADO
+T002228,alimentacao_basica,essencial,nao,,ATACADAO DO POVO
+T002229,restaurantes_bares,discricionario,nao,,LANCHONETE ESQUINA
+T002230,compras,discricionario,nao,,LOJA DEPARTAMENTO MODA
+T002231,restaurantes_bares,discricionario,nao,cobranca_duplicada,LANCHONETE ESQUINA
+T002232,saque,discricionario,nao,,SAQUE CAIXA ELETRONICO
+T002233,telecom,essencial,nao,,OPERADORA CONECTA TELECOM
+T002234,compras,discricionario,nao,,PAPELARIA ESCOLAR
+T002235,agua,essencial,nao,,SANEAMENTO AGUAS CLARAS
+T002236,tarifas_bancarias,prioritario,nao,,JUROS CHEQUE ESPECIAL
+T002237,assinaturas,discricionario,nao,cobranca_recorrente_nova,CLUBE VANTAGENS MENSAL
+T002238,alimentacao_basica,essencial,nao,,QUITANDA DO VALE
+T002239,renda_fixa,outros,nao,,
+T002240,compras,discricionario,nao,,MOVEIS CASA BELA
+T002241,tarifas_bancarias,prioritario,nao,,TARIFA CESTA DE SERVICOS
+T002242,lazer,discricionario,nao,,RECARGA CREDITOS GAME
+T002243,alimentacao_basica,essencial,nao,,PADARIA PAO DOURADO
+T002244,restaurantes_bares,discricionario,nao,,RESTAURANTE SABOR CASEIRO
+T002245,educacao,prioritario,nao,,CURSO IDIOMAS FALE BEM
+T002246,restaurantes_bares,discricionario,nao,,RESTAURANTE SABOR CASEIRO
+T002247,alimentacao_basica,essencial,nao,,ATACADAO DO POVO
+T002248,moradia,essencial,sim,,
+T002249,pagamento_fatura,outros,nao,,
+T002250,transporte,essencial,nao,,APP CORRIDA *VIAGEM
+T002251,compras,discricionario,nao,,PAPELARIA ESCOLAR
+T002252,energia,essencial,nao,,CIA ENERGIA ELETRICA
+T002253,transferencia_familiar,prioritario,sim,,
+T002254,alimentacao_basica,essencial,nao,,ATACADAO DO POVO
+T002255,assinaturas,discricionario,nao,,ACADEMIA CORPO ATIVO
+T002256,alimentacao_basica,essencial,nao,,PADARIA PAO DOURADO
+T002257,alimentacao_basica,essencial,nao,,PADARIA PAO DOURADO
+T002258,saque,discricionario,nao,,SAQUE CAIXA ELETRONICO
+T002259,telecom,essencial,nao,,OPERADORA CONECTA TELECOM
+T002260,transporte,essencial,nao,,PASSE ONIBUS URBANO
+T002261,agua,essencial,nao,,SANEAMENTO AGUAS CLARAS
+T002262,assinaturas,discricionario,nao,cobranca_recorrente_nova,CLUBE VANTAGENS MENSAL
+T002263,veiculos,essencial,nao,,SEGURO AUTO PROTEGE
+T002264,saque,discricionario,nao,,SAQUE 24H BANCO
+T002265,assinaturas,discricionario,nao,,MUSICA PREMIUM
+T002266,veiculos,essencial,nao,,IPVA 2026 DETRAN
+T002267,transporte,essencial,nao,,MOBI APP *TRIP
+T002268,renda_fixa,outros,nao,,
+T002269,veiculos,essencial,nao,,TAG PEDAGIO RODOVIA
+T002270,alimentacao_basica,essencial,nao,,SACOLAO BARATAO
+T002271,veiculos,essencial,nao,,ESTACIONAMENTO CENTRAL
+T002272,alimentacao_basica,essencial,nao,,QUITANDA DO VALE
+T002273,transporte,essencial,nao,,RECARGA BILHETE TRANSPORTE
+T002274,transporte,essencial,nao,,MOBI APP *TRIP
+T002275,lazer,discricionario,nao,,LOJA JOGOS DIGITAIS *ONLINE
+T002276,transferencia_familiar,prioritario,sim,,
+T002277,saude,prioritario,nao,,DROGARIA SAUDE TOTAL
+T002278,telecom,essencial,nao,,OPERADORA CONECTA TELECOM
+T002279,restaurantes_bares,discricionario,nao,,BAR DO ZECA
+T002280,pagamento_fatura,outros,nao,,
+T002281,assinaturas,discricionario,nao,,STREAMING FILMES MAIS
+T002282,renda_variavel,outros,sim,,
+T002283,moradia,essencial,nao,,IMOBILIARIA CHAVE CERTA
+T002284,alimentacao_basica,essencial,nao,,QUITANDA DO VALE
+T002285,alimentacao_basica,essencial,nao,,SACOLAO BARATAO
+T002286,alimentacao_basica,essencial,nao,,SACOLAO BARATAO
+T002287,alimentacao_basica,essencial,nao,,QUITANDA DO VALE
+T002288,restaurantes_bares,discricionario,nao,,BAR DO ZECA
+T002289,transporte,essencial,nao,,MOBI APP *TRIP
+T002290,compras,discricionario,nao,,CALCADOS PASSO FIRME
+T002291,veiculos,essencial,nao,,AUTO PECAS RODA VIVA
+T002292,energia,essencial,nao,,CIA ENERGIA ELETRICA
+T002293,transporte,essencial,nao,,MOBI APP *TRIP
+T002294,restaurantes_bares,discricionario,nao,,PIZZARIA FORNO A LENHA
+T002295,compras,discricionario,nao,,PAPELARIA ESCOLAR
+T002296,transporte,essencial,nao,,MOBI APP *TRIP
+T002297,alimentacao_basica,essencial,nao,,HORTIFRUTI VERDE VIDA
+T002298,transporte,essencial,nao,,RECARGA BILHETE TRANSPORTE
+T002299,veiculos,essencial,nao,,ESTACIONAMENTO CENTRAL
+T002300,veiculos,essencial,nao,,AUTO PECAS RODA VIVA
+T002301,saude,prioritario,nao,,DROGARIA SAUDE TOTAL
+T002302,tarifas_bancarias,prioritario,nao,,TARIFA CESTA DE SERVICOS
+T002303,pagamento_dividas,prioritario,sim,,
+T002304,renda_eventual,outros,sim,,
+T002305,agua,essencial,nao,,SANEAMENTO AGUAS CLARAS
+T002306,tarifas_bancarias,prioritario,nao,,JUROS CHEQUE ESPECIAL
+T002307,veiculos,essencial,nao,,SEGURO AUTO PROTEGE
+T002308,assinaturas,discricionario,nao,,MUSICA PREMIUM
+T002309,veiculos,essencial,nao,,IPVA 2026 DETRAN
+T002310,alimentacao_basica,essencial,nao,,SACOLAO BARATAO
+T002311,restaurantes_bares,discricionario,nao,,PIZZARIA FORNO A LENHA
+T002312,renda_fixa,outros,nao,,
+T002313,alimentacao_basica,essencial,nao,,QUITANDA DO VALE
+T002314,alimentacao_basica,essencial,nao,,SACOLAO BARATAO
+T002315,compras,discricionario,nao,,PAPELARIA ESCOLAR
+T002316,veiculos,essencial,nao,,ESTACIONAMENTO CENTRAL
+T002317,transferencia_familiar,prioritario,sim,,
+T002318,transporte,essencial,nao,,RECARGA BILHETE TRANSPORTE
+T002319,transporte,essencial,nao,,RECARGA BILHETE TRANSPORTE
+T002320,lazer,discricionario,nao,,LOJA JOGOS DIGITAIS *ONLINE
+T002321,telecom,essencial,nao,,OPERADORA CONECTA TELECOM
+T002322,alimentacao_basica,essencial,nao,,HORTIFRUTI VERDE VIDA
+T002323,restaurantes_bares,discricionario,nao,,BAR DO ZECA
+T002324,compras,discricionario,nao,,CALCADOS PASSO FIRME
+T002325,pagamento_fatura,outros,nao,,
+T002326,assinaturas,discricionario,nao,,STREAMING FILMES MAIS
+T002327,veiculos,essencial,nao,,ESTACIONAMENTO CENTRAL
+T002328,moradia,essencial,nao,,IMOBILIARIA CHAVE CERTA
+T002329,renda_variavel,outros,sim,,
+T002330,veiculos,essencial,nao,,ESTACIONAMENTO CENTRAL
+T002331,transporte,essencial,nao,,RECARGA BILHETE TRANSPORTE
+T002332,transporte,essencial,nao,,RECARGA BILHETE TRANSPORTE
+T002333,energia,essencial,nao,,CIA ENERGIA ELETRICA
+T002334,transporte,essencial,nao,,MOBI APP *TRIP
+T002335,restaurantes_bares,discricionario,nao,,PIZZARIA FORNO A LENHA
+T002336,transferencia_interna,outros,nao,,
+T002337,transferencia_interna,outros,nao,,
+T002338,alimentacao_basica,essencial,nao,,HORTIFRUTI VERDE VIDA
+T002339,tarifas_bancarias,prioritario,nao,,TARIFA CESTA DE SERVICOS
+T002340,alimentacao_basica,essencial,nao,,HORTIFRUTI VERDE VIDA
+T002341,restaurantes_bares,discricionario,nao,,PIZZARIA FORNO A LENHA
+T002342,transporte,essencial,nao,,MOBI APP *TRIP
+T002343,restaurantes_bares,discricionario,nao,,PIZZARIA FORNO A LENHA
+T002344,saque,discricionario,nao,,SAQUE 24H BANCO
+T002345,alimentacao_basica,essencial,nao,,HORTIFRUTI VERDE VIDA
+T002346,transporte,essencial,nao,,MOBI APP *TRIP
+T002347,transporte,essencial,nao,,RECARGA BILHETE TRANSPORTE
+T002348,veiculos,essencial,nao,,ESTACIONAMENTO CENTRAL
+T002349,agua,essencial,nao,,SANEAMENTO AGUAS CLARAS
+T002350,veiculos,essencial,nao,,SEGURO AUTO PROTEGE
+T002351,saude,prioritario,nao,,DROGARIA SAUDE TOTAL
+T002352,veiculos,essencial,nao,,AUTO PECAS RODA VIVA
+T002353,assinaturas,discricionario,nao,,MUSICA PREMIUM
+T002354,veiculos,essencial,nao,,IPVA 2026 DETRAN
+T002355,alimentacao_basica,essencial,nao,,QUITANDA DO VALE
+T002356,renda_fixa,outros,nao,,
+T002357,alimentacao_basica,essencial,nao,,SACOLAO BARATAO
+T002358,renda_variavel,outros,sim,,
+T002359,transporte,essencial,nao,,RECARGA BILHETE TRANSPORTE
+T002360,transferencia_familiar,prioritario,sim,,
+T002361,telecom,essencial,nao,,OPERADORA CONECTA TELECOM
+T002362,pagamento_fatura,outros,nao,,
+T002363,assinaturas,discricionario,nao,,STREAMING FILMES MAIS
+T002364,alimentacao_basica,essencial,nao,,HORTIFRUTI VERDE VIDA
+T002365,moradia,essencial,nao,,IMOBILIARIA CHAVE CERTA
+T002366,transporte,essencial,nao,,RECARGA BILHETE TRANSPORTE
+T002367,transporte,essencial,nao,,RECARGA BILHETE TRANSPORTE
+T002368,restaurantes_bares,discricionario,nao,,BOTECO DO ALEMAO
+T002369,veiculos,essencial,nao,,AUTO PECAS RODA VIVA
+T002370,compras,discricionario,nao,,CALCADOS PASSO FIRME
+T002371,alimentacao_basica,essencial,nao,,SACOLAO BARATAO
+T002372,restaurantes_bares,discricionario,nao,,PIZZARIA FORNO A LENHA
+T002373,veiculos,essencial,nao,,AUTO PECAS RODA VIVA
+T002374,saude,prioritario,nao,,DROGAMAIS
+T002375,transferencia_interna,outros,nao,,
+T002376,transferencia_interna,outros,nao,,
+T002377,energia,essencial,nao,,CIA ENERGIA ELETRICA
+T002378,compras,discricionario,nao,,CALCADOS PASSO FIRME
+T002379,restaurantes_bares,discricionario,nao,,BOTECO DO ALEMAO
+T002380,veiculos,essencial,nao,,ESTACIONAMENTO CENTRAL
+T002381,alimentacao_basica,essencial,nao,,HORTIFRUTI VERDE VIDA
+T002382,alimentacao_basica,essencial,nao,,HORTIFRUTI VERDE VIDA
+T002383,tarifas_bancarias,prioritario,nao,,TARIFA CESTA DE SERVICOS
+T002384,restaurantes_bares,discricionario,nao,,BOTECO DO ALEMAO
+T002385,alimentacao_basica,essencial,nao,,SACOLAO BARATAO
+T002386,alimentacao_basica,essencial,nao,,HORTIFRUTI VERDE VIDA
+T002387,saque,discricionario,nao,,SAQUE 24H BANCO
+T002388,agua,essencial,nao,,SANEAMENTO AGUAS CLARAS
+T002389,tarifas_bancarias,prioritario,nao,,JUROS CHEQUE ESPECIAL
+T002390,veiculos,essencial,nao,,ESTACIONAMENTO CENTRAL
+T002391,veiculos,essencial,nao,,SEGURO AUTO PROTEGE
+T002392,alimentacao_basica,essencial,nao,,SACOLAO BARATAO
+T002393,transporte,essencial,nao,,RECARGA BILHETE TRANSPORTE
+T002394,veiculos,essencial,nao,,ESTACIONAMENTO CENTRAL
+T002395,restaurantes_bares,discricionario,nao,,BAR DO ZECA
+T002396,assinaturas,discricionario,nao,,MUSICA PREMIUM
+T002397,compras,discricionario,nao,,CALCADOS PASSO FIRME
+T002398,renda_fixa,outros,nao,,
+T002399,alimentacao_basica,essencial,nao,,QUITANDA DO VALE
+T002400,saude,prioritario,nao,,DROGARIA SAUDE TOTAL
+T002401,transferencia_familiar,prioritario,sim,,
+T002402,telecom,essencial,nao,,OPERADORA CONECTA TELECOM
+T002403,saque,discricionario,nao,,SAQUE 24H BANCO
+T002404,alimentacao_basica,essencial,nao,,HORTIFRUTI VERDE VIDA
+T002405,veiculos,essencial,nao,,TAG PEDAGIO RODOVIA
+T002406,pagamento_fatura,outros,nao,,
+T002407,assinaturas,discricionario,nao,,STREAMING FILMES MAIS
+T002408,saude,prioritario,nao,,DROGARIA SAUDE TOTAL
+T002409,moradia,essencial,nao,,IMOBILIARIA CHAVE CERTA
+T002410,alimentacao_basica,essencial,nao,,QUITANDA DO VALE
+T002411,veiculos,essencial,nao,,LICENCIAMENTO 2026 DETRAN
+T002412,restaurantes_bares,discricionario,nao,,BAR DO ZECA
+T002413,energia,essencial,nao,,CIA ENERGIA ELETRICA
+T002414,saque,discricionario,nao,,SAQUE 24H BANCO
+T002415,veiculos,essencial,nao,,AUTO PECAS RODA VIVA
+T002416,compras,discricionario,nao,,CALCADOS PASSO FIRME
+T002417,restaurantes_bares,discricionario,nao,,BOTECO DO ALEMAO
+T002418,renda_variavel,outros,sim,,
+T002419,transporte,essencial,nao,,MOBI APP *TRIP
+T002420,restaurantes_bares,discricionario,nao,,BAR DO ZECA
+T002421,pagamento_dividas,prioritario,sim,,
+T002422,tarifas_bancarias,prioritario,nao,,TARIFA CESTA DE SERVICOS
+T002423,transporte,essencial,nao,,MOBI APP *TRIP
+T002424,veiculos,essencial,nao,,ESTACIONAMENTO CENTRAL
+T002425,alimentacao_basica,essencial,nao,,HORTIFRUTI VERDE VIDA
+T002426,restaurantes_bares,discricionario,nao,,BOTECO DO ALEMAO
+T002427,agua,essencial,nao,,SANEAMENTO AGUAS CLARAS
+T002428,lazer,discricionario,nao,,PIXEL GAMES STORE
+T002429,veiculos,essencial,nao,,SEGURO AUTO PROTEGE
+T002430,transporte,essencial,nao,,RECARGA BILHETE TRANSPORTE
+T002431,veiculos,essencial,nao,,TAG PEDAGIO RODOVIA
+T002432,restaurantes_bares,discricionario,nao,,PIZZARIA FORNO A LENHA
+T002433,alimentacao_basica,essencial,nao,,SACOLAO BARATAO
+T002434,restaurantes_bares,discricionario,nao,,PIZZARIA FORNO A LENHA
+T002435,assinaturas,discricionario,nao,,MUSICA PREMIUM
+T002436,alimentacao_basica,essencial,nao,,HORTIFRUTI VERDE VIDA
+T002437,transporte,essencial,nao,,MOBI APP *TRIP
+T002438,pagamento_dividas,prioritario,sim,,
+T002439,renda_fixa,outros,nao,,
+T002440,lazer,discricionario,nao,,LOJA JOGOS DIGITAIS *ONLINE
+T002441,restaurantes_bares,discricionario,nao,,BAR DO ZECA
+T002442,veiculos,essencial,nao,,AUTO PECAS RODA VIVA
+T002443,assinaturas,discricionario,nao,cobranca_recorrente_nova,APPDIGITAL*PREMIUM
+T002444,transferencia_familiar,prioritario,sim,,
+T002445,alimentacao_basica,essencial,nao,,SACOLAO BARATAO
+T002446,saude,prioritario,nao,,DROGARIA SAUDE TOTAL
+T002447,telecom,essencial,nao,,OPERADORA CONECTA TELECOM
+T002448,saude,prioritario,nao,,DROGARIA SAUDE TOTAL
+T002449,pagamento_fatura,outros,nao,,
+T002450,assinaturas,discricionario,nao,,STREAMING FILMES MAIS
+T002451,moradia,essencial,nao,,IMOBILIARIA CHAVE CERTA
+T002452,restaurantes_bares,discricionario,nao,,BAR DO ZECA
+T002453,alimentacao_basica,essencial,nao,,QUITANDA DO VALE
+T002454,restaurantes_bares,discricionario,nao,,BAR DO ZECA
+T002455,compras,discricionario,nao,,BRECHO VINTAGE
+T002456,energia,essencial,nao,,CIA ENERGIA ELETRICA
+T002457,veiculos,essencial,nao,,ESTACIONAMENTO CENTRAL
+T002458,saque,discricionario,nao,,SAQUE 24H BANCO
+T002459,transporte,essencial,nao,frequencia_incomum,MOBI APP *TRIP
+T002460,transporte,essencial,nao,frequencia_incomum,MOBI APP *TRIP
+T002461,transporte,essencial,nao,frequencia_incomum,MOBI APP *TRIP
+T002462,transporte,essencial,nao,frequencia_incomum,MOBI APP *TRIP
+T002463,transporte,essencial,nao,frequencia_incomum,MOBI APP *TRIP
+T002464,transporte,essencial,nao,frequencia_incomum,MOBI APP *TRIP
+T002465,transporte,essencial,nao,frequencia_incomum,MOBI APP *TRIP
+T002466,lazer,discricionario,nao,,PIXEL GAMES STORE
+T002467,transporte,essencial,nao,frequencia_incomum,MOBI APP *TRIP
+T002468,transporte,essencial,nao,frequencia_incomum,MOBI APP *TRIP
+T002469,transporte,essencial,nao,frequencia_incomum,MOBI APP *TRIP
+T002470,restaurantes_bares,discricionario,nao,,PIZZARIA FORNO A LENHA
+T002471,compras,discricionario,nao,,PAPELARIA ESCOLAR
+T002472,tarifas_bancarias,prioritario,nao,,TARIFA CESTA DE SERVICOS
+T002473,transporte,essencial,nao,,RECARGA BILHETE TRANSPORTE
+T002474,veiculos,essencial,nao,,AUTO PECAS RODA VIVA
+T002475,saque,discricionario,nao,,SAQUE 24H BANCO
+T002476,transporte,essencial,nao,,RECARGA BILHETE TRANSPORTE
+T002477,agua,essencial,nao,,SANEAMENTO AGUAS CLARAS
+T002478,tarifas_bancarias,prioritario,nao,,JUROS CHEQUE ESPECIAL
+T002479,alimentacao_basica,essencial,nao,,SACOLAO BARATAO
+T002480,veiculos,essencial,nao,,SEGURO AUTO PROTEGE
+T002481,alimentacao_basica,essencial,nao,,QUITANDA DO VALE
+T002482,transporte,essencial,nao,,RECARGA BILHETE TRANSPORTE
+T002483,restaurantes_bares,discricionario,nao,pico_categoria,PIZZARIA FORNO A LENHA
+T002484,assinaturas,discricionario,nao,,MUSICA PREMIUM
+T002485,renda_fixa,outros,nao,,
+T002486,restaurantes_bares,discricionario,nao,,PIZZARIA FORNO A LENHA
+T002487,restaurantes_bares,discricionario,nao,,PIZZARIA FORNO A LENHA
+T002488,restaurantes_bares,discricionario,nao,pico_categoria,BOTECO DO ALEMAO
+T002489,assinaturas,discricionario,nao,cobranca_recorrente_nova,APPDIGITAL*PREMIUM
+T002490,saude,prioritario,nao,,DROGAMAIS
+T002491,transferencia_familiar,prioritario,sim,,
+T002492,telecom,essencial,nao,,OPERADORA CONECTA TELECOM
+T002493,veiculos,essencial,nao,,AUTO PECAS RODA VIVA
+T002494,saque,discricionario,nao,,SAQUE 24H BANCO
+T002495,restaurantes_bares,discricionario,nao,,PIZZARIA FORNO A LENHA
+T002496,lazer,discricionario,nao,,LOJA JOGOS DIGITAIS *ONLINE
+T002497,restaurantes_bares,discricionario,nao,pico_categoria,BAR DO ZECA
+T002498,pagamento_fatura,outros,nao,,
+T002499,assinaturas,discricionario,nao,,STREAMING FILMES MAIS
+T002500,compras,discricionario,nao,,CALCADOS PASSO FIRME
+T002501,moradia,essencial,nao,,IMOBILIARIA CHAVE CERTA
+T002502,transporte,essencial,nao,,RECARGA BILHETE TRANSPORTE
+T002503,veiculos,essencial,nao,,TAG PEDAGIO RODOVIA
+T002504,alimentacao_basica,essencial,nao,,SACOLAO BARATAO
+T002505,lazer,discricionario,nao,,PIXEL GAMES STORE
+T002506,transporte,essencial,nao,,RECARGA BILHETE TRANSPORTE
+T002507,energia,essencial,nao,,CIA ENERGIA ELETRICA
+T002508,saque,discricionario,nao,,SAQUE 24H BANCO
+T002509,restaurantes_bares,discricionario,nao,,BAR DO ZECA
+T002510,compras,discricionario,nao,,CALCADOS PASSO FIRME
+T002511,compras,discricionario,nao,,BRECHO VINTAGE
+T002512,tarifas_bancarias,prioritario,nao,,TARIFA CESTA DE SERVICOS
+T002513,alimentacao_basica,essencial,nao,,SACOLAO BARATAO
+T002514,restaurantes_bares,discricionario,nao,pico_categoria,BOTECO DO ALEMAO
+T002515,renda_variavel,outros,sim,,
+T002516,veiculos,essencial,nao,,AUTO PECAS RODA VIVA
+T002517,restaurantes_bares,discricionario,nao,pico_categoria,PIZZARIA FORNO A LENHA
+T002518,alimentacao_basica,essencial,nao,,SACOLAO BARATAO
+T002519,agua,essencial,nao,,SANEAMENTO AGUAS CLARAS
+T002520,alimentacao_basica,essencial,nao,,SACOLAO BARATAO
+T002521,transporte,essencial,nao,,MOBI APP *TRIP
+T002522,veiculos,essencial,nao,,AUTO PECAS RODA VIVA
+T002523,veiculos,essencial,nao,,TAG PEDAGIO RODOVIA
+T002524,veiculos,essencial,nao,,IPVA 2026 DETRAN
+T002525,renda_fixa,outros,nao,,
+T002526,alimentacao_basica,essencial,nao,,QUITANDA DO VALE
+T002527,transporte,essencial,nao,,MOBI APP *TRIP
+T002528,moradia,essencial,sim,,
+T002529,veiculos,essencial,nao,,AUTOPOSTO TREVO
+T002530,assinaturas,discricionario,nao,,NUVEM ARMAZENAMENTO
+T002531,transporte,essencial,nao,,MOBI APP *TRIP
+T002532,restaurantes_bares,discricionario,nao,,LANCHONETE ESQUINA
+T002533,compras,discricionario,nao,,AUTO SHOP ACESSORIOS
+T002534,energia,essencial,nao,,CIA ENERGIA ELETRICA
+T002535,alimentacao_basica,essencial,nao,,ACOUGUE BOI NOBRE
+T002536,alimentacao_basica,essencial,nao,,ATACADAO DO POVO
+T002537,saude,prioritario,nao,,LAB ANALISES VIDA
+T002538,compras,discricionario,nao,,AUTO SHOP ACESSORIOS
+T002539,pagamento_fatura,outros,nao,,
+T002540,alimentacao_basica,essencial,nao,,QUITANDA DO VALE
+T002541,restaurantes_bares,discricionario,nao,,LANCHONETE ESQUINA
+T002542,restaurantes_bares,discricionario,nao,,LANCHONETE ESQUINA
+T002543,transferencia_familiar,prioritario,sim,,
+T002544,veiculos,essencial,nao,,AUTOPOSTO TREVO
+T002545,agua,essencial,nao,,SANEAMENTO AGUAS CLARAS
+T002546,telecom,essencial,nao,,OPERADORA CONECTA TELECOM
+T002547,alimentacao_basica,essencial,nao,,QUITANDA DO VALE
+T002548,transporte,essencial,nao,,MOBI APP *TRIP
+T002549,alimentacao_basica,essencial,nao,,ATACADAO DO POVO
+T002550,restaurantes_bares,discricionario,nao,,LANCHONETE ESQUINA
+T002551,transporte,essencial,nao,,METRO LINHA AZUL
+T002552,tarifas_bancarias,prioritario,nao,,TARIFA PACOTE SERVICOS
+T002553,restaurantes_bares,discricionario,nao,,HAMBURGUERIA DO CHEF
+T002554,alimentacao_basica,essencial,sim,,
+T002555,assinaturas,discricionario,nao,,STREAMING FILMES MAIS
+T002556,alimentacao_basica,essencial,nao,,ATACADAO DO POVO
+T002557,restaurantes_bares,discricionario,nao,,LANCHONETE ESQUINA
+T002558,saque,discricionario,nao,,SAQUE CAIXA ELETRONICO
+T002559,alimentacao_basica,essencial,nao,,ACOUGUE BOI NOBRE
+T002560,saude,prioritario,nao,,DROGAMAIS
+T002561,assinaturas,discricionario,nao,,ACADEMIA CORPO ATIVO
+T002562,saque,discricionario,nao,,SAQUE CAIXA ELETRONICO
+T002563,alimentacao_basica,essencial,nao,,QUITANDA DO VALE
+T002564,veiculos,essencial,nao,,IPVA 2026 DETRAN
+T002565,alimentacao_basica,essencial,nao,,ATACADAO DO POVO
+T002566,saude,prioritario,nao,,DROGARIA SAUDE TOTAL
+T002567,restaurantes_bares,discricionario,nao,,HAMBURGUERIA DO CHEF
+T002568,saque,discricionario,nao,,SAQUE CAIXA ELETRONICO
+T002569,renda_fixa,outros,nao,,
+T002570,alimentacao_basica,essencial,nao,,QUITANDA DO VALE
+T002571,compras,discricionario,nao,,UTILIDADES DO LAR
+T002572,transporte,essencial,nao,,MOBI APP *TRIP
+T002573,restaurantes_bares,discricionario,nao,,LANCHONETE ESQUINA
+T002574,compras,discricionario,nao,,UTILIDADES DO LAR
+T002575,saude,prioritario,sim,,
+T002576,moradia,essencial,sim,,
+T002577,alimentacao_basica,essencial,nao,,ACOUGUE BOI NOBRE
+T002578,assinaturas,discricionario,nao,,NUVEM ARMAZENAMENTO
+T002579,energia,essencial,nao,,CIA ENERGIA ELETRICA
+T002580,transporte,essencial,nao,,MOBI APP *TRIP
+T002581,pagamento_fatura,outros,nao,,
+T002582,alimentacao_basica,essencial,nao,,QUITANDA DO VALE
+T002583,saude,prioritario,nao,,DROGARIA SAUDE TOTAL
+T002584,transferencia_familiar,prioritario,sim,,
+T002585,agua,essencial,nao,,SANEAMENTO AGUAS CLARAS
+T002586,telecom,essencial,nao,,OPERADORA CONECTA TELECOM
+T002587,veiculos,essencial,nao,,GASOLINA E CIA
+T002588,alimentacao_basica,essencial,nao,,ATACADAO DO POVO
+T002589,compras,discricionario,nao,,AUTO SHOP ACESSORIOS
+T002590,tarifas_bancarias,prioritario,nao,,TARIFA PACOTE SERVICOS
+T002591,alimentacao_basica,essencial,nao,,QUITANDA DO VALE
+T002592,restaurantes_bares,discricionario,nao,,LANCHONETE ESQUINA
+T002593,assinaturas,discricionario,nao,,STREAMING FILMES MAIS
+T002594,alimentacao_basica,essencial,nao,,ACOUGUE BOI NOBRE
+T002595,assinaturas,discricionario,nao,,ACADEMIA CORPO ATIVO
+T002596,alimentacao_basica,essencial,nao,,QUITANDA DO VALE
+T002597,veiculos,essencial,nao,,AUTOPOSTO TREVO
+T002598,alimentacao_basica,essencial,nao,,QUITANDA DO VALE
+T002599,alimentacao_basica,essencial,nao,,ATACADAO DO POVO
+T002600,veiculos,essencial,nao,,IPVA 2026 DETRAN
+T002601,restaurantes_bares,discricionario,nao,,LANCHONETE ESQUINA
+T002602,restaurantes_bares,discricionario,nao,,HAMBURGUERIA DO CHEF
+T002603,saude,prioritario,sim,,
+T002604,alimentacao_basica,essencial,nao,,ATACADAO DO POVO
+T002605,transporte,essencial,nao,,METRO LINHA AZUL
+T002606,restaurantes_bares,discricionario,nao,,LANCHONETE ESQUINA
+T002607,moradia,essencial,sim,,
+T002608,alimentacao_basica,essencial,nao,,QUITANDA DO VALE
+T002609,transporte,essencial,nao,,MOBI APP *TRIP
+T002610,restaurantes_bares,discricionario,nao,,HAMBURGUERIA DO CHEF
+T002611,assinaturas,discricionario,nao,,NUVEM ARMAZENAMENTO
+T002612,restaurantes_bares,discricionario,nao,,LANCHONETE ESQUINA
+T002613,energia,essencial,nao,,CIA ENERGIA ELETRICA
+T002614,renda_variavel,outros,nao,,
+T002615,compras,discricionario,nao,,AUTO SHOP ACESSORIOS
+T002616,pagamento_fatura,outros,nao,,
+T002617,transferencia_familiar,prioritario,sim,,
+T002618,alimentacao_basica,essencial,nao,,QUITANDA DO VALE
+T002619,renda_variavel,outros,nao,,
+T002620,agua,essencial,nao,,SANEAMENTO AGUAS CLARAS
+T002621,telecom,essencial,nao,,OPERADORA CONECTA TELECOM
+T002622,veiculos,essencial,nao,,GASOLINA E CIA
+T002623,alimentacao_basica,essencial,nao,,QUITANDA DO VALE
+T002624,transporte,essencial,nao,,MOBI APP *TRIP
+T002625,veiculos,essencial,nao,,GASOLINA E CIA
+T002626,alimentacao_basica,essencial,nao,,QUITANDA DO VALE
+T002627,transporte,essencial,nao,,METRO LINHA AZUL
+T002628,tarifas_bancarias,prioritario,nao,,TARIFA PACOTE SERVICOS
+T002629,alimentacao_basica,essencial,nao,,QUITANDA DO VALE
+T002630,assinaturas,discricionario,nao,,STREAMING FILMES MAIS
+T002631,restaurantes_bares,discricionario,nao,,HAMBURGUERIA DO CHEF
+T002632,transferencia_interna,outros,nao,,
+T002633,transferencia_interna,outros,nao,,
+T002634,alimentacao_basica,essencial,nao,,ATACADAO DO POVO
+T002635,transporte,essencial,nao,,METRO LINHA AZUL
+T002636,compras,discricionario,nao,,AUTO SHOP ACESSORIOS
+T002637,assinaturas,discricionario,nao,,ACADEMIA CORPO ATIVO
+T002638,veiculos,essencial,nao,,GASOLINA E CIA
+T002639,renda_fixa,outros,nao,,
+T002640,lazer,discricionario,nao,,TEATRO MUNICIPAL BILHETERIA
+T002641,saude,prioritario,sim,,
+T002642,alimentacao_basica,essencial,nao,,ATACADAO DO POVO
+T002643,alimentacao_basica,essencial,nao,,ATACADAO DO POVO
+T002644,veiculos,essencial,nao,,ESTACIONAMENTO CENTRAL
+T002645,transporte,essencial,nao,,MOBI APP *TRIP
+T002646,assinaturas,discricionario,nao,cobranca_recorrente_nova,APPDIGITAL*PREMIUM
+T002647,moradia,essencial,sim,,
+T002648,restaurantes_bares,discricionario,nao,,LANCHONETE ESQUINA
+T002649,restaurantes_bares,discricionario,nao,,LANCHONETE ESQUINA
+T002650,compras,discricionario,nao,,UTILIDADES DO LAR
+T002651,assinaturas,discricionario,nao,,NUVEM ARMAZENAMENTO
+T002652,energia,essencial,nao,conta_fixa_disparada,CIA ENERGIA ELETRICA
+T002653,pagamento_fatura,outros,nao,,
+T002654,transferencia_familiar,prioritario,sim,,
+T002655,lazer,discricionario,nao,,TEATRO MUNICIPAL BILHETERIA
+T002656,lazer,discricionario,nao,,RECARGA CREDITOS GAME
+T002657,agua,essencial,nao,,SANEAMENTO AGUAS CLARAS
+T002658,telecom,essencial,nao,,OPERADORA CONECTA TELECOM
+T002659,alimentacao_basica,essencial,nao,,ACOUGUE BOI NOBRE
+T002660,restaurantes_bares,discricionario,nao,,HAMBURGUERIA DO CHEF
+T002661,restaurantes_bares,discricionario,nao,,HAMBURGUERIA DO CHEF
+T002662,alimentacao_basica,essencial,nao,,QUITANDA DO VALE
+T002663,lazer,discricionario,nao,,RECARGA CREDITOS GAME
+T002664,veiculos,essencial,nao,,LICENCIAMENTO 2026 DETRAN
+T002665,alimentacao_basica,essencial,nao,,QUITANDA DO VALE
+T002666,transporte,essencial,nao,,MOBI APP *TRIP
+T002667,tarifas_bancarias,prioritario,nao,,TARIFA PACOTE SERVICOS
+T002668,assinaturas,discricionario,nao,,STREAMING FILMES MAIS
+T002669,alimentacao_basica,essencial,nao,,ACOUGUE BOI NOBRE
+T002670,alimentacao_basica,essencial,nao,,QUITANDA DO VALE
+T002671,veiculos,essencial,nao,,GASOLINA E CIA
+T002672,assinaturas,discricionario,nao,,ACADEMIA CORPO ATIVO
+T002673,transferencia_interna,outros,nao,,
+T002674,transferencia_interna,outros,nao,,
+T002675,alimentacao_basica,essencial,nao,,ACOUGUE BOI NOBRE
+T002676,renda_fixa,outros,nao,,
+T002677,alimentacao_basica,essencial,nao,,QUITANDA DO VALE
+T002678,restaurantes_bares,discricionario,nao,pico_categoria,LANCHONETE ESQUINA
+T002679,alimentacao_basica,essencial,nao,,ATACADAO DO POVO
+T002680,saude,prioritario,nao,,DROGARIA SAUDE TOTAL
+T002681,restaurantes_bares,discricionario,nao,pico_categoria,HAMBURGUERIA DO CHEF
+T002682,restaurantes_bares,discricionario,nao,,LANCHONETE ESQUINA
+T002683,pagamento_dividas,prioritario,sim,,
+T002684,assinaturas,discricionario,nao,cobranca_recorrente_nova,APPDIGITAL*PREMIUM
+T002685,moradia,essencial,sim,,
+T002686,restaurantes_bares,discricionario,sim,,
+T002687,restaurantes_bares,discricionario,nao,pico_categoria,HAMBURGUERIA DO CHEF
+T002688,assinaturas,discricionario,nao,,NUVEM ARMAZENAMENTO
+T002689,energia,essencial,nao,,CIA ENERGIA ELETRICA
+T002690,alimentacao_basica,essencial,nao,,ATACADAO DO POVO
+T002691,pagamento_fatura,outros,nao,,
+T002692,alimentacao_basica,essencial,nao,,ACOUGUE BOI NOBRE
+T002693,saude,prioritario,sim,,
+T002694,restaurantes_bares,discricionario,nao,pico_categoria,LANCHONETE ESQUINA
+T002695,renda_eventual,outros,sim,,
+T002696,transporte,essencial,nao,,METRO LINHA AZUL
+T002697,saude,prioritario,nao,,LAB ANALISES VIDA
+T002698,restaurantes_bares,discricionario,nao,,LANCHONETE ESQUINA
+T002699,transferencia_familiar,prioritario,sim,,
+T002700,alimentacao_basica,essencial,nao,,QUITANDA DO VALE
+T002701,restaurantes_bares,discricionario,nao,,LANCHONETE ESQUINA
+T002702,transporte,essencial,nao,,METRO LINHA AZUL
+T002703,agua,essencial,nao,,SANEAMENTO AGUAS CLARAS
+T002704,telecom,essencial,nao,,OPERADORA CONECTA TELECOM
+T002705,veiculos,essencial,nao,,AUTOPOSTO TREVO
+T002706,restaurantes_bares,discricionario,nao,pico_categoria,HAMBURGUERIA DO CHEF
+T002707,alimentacao_basica,essencial,nao,,QUITANDA DO VALE
+T002708,tarifas_bancarias,prioritario,nao,,TARIFA PACOTE SERVICOS
+T002709,assinaturas,discricionario,nao,,STREAMING FILMES MAIS
+T002710,restaurantes_bares,discricionario,nao,,HAMBURGUERIA DO CHEF
+T002711,compras,discricionario,nao,,AUTO SHOP ACESSORIOS
+T002712,restaurantes_bares,discricionario,nao,pico_categoria,HAMBURGUERIA DO CHEF
+T002713,alimentacao_basica,essencial,nao,,QUITANDA DO VALE
+T002714,assinaturas,discricionario,nao,,ACADEMIA CORPO ATIVO
+T002715,veiculos,essencial,nao,,ESTACIONAMENTO CENTRAL
+T002716,tarifas_bancarias,prioritario,nao,,JUROS CHEQUE ESPECIAL
+T002717,renda_fixa,outros,nao,,
+T002718,alimentacao_basica,essencial,nao,,QUITANDA DO VALE
+T002719,veiculos,essencial,nao,,AUTOPOSTO TREVO
+T002720,alimentacao_basica,essencial,nao,,ATACADAO DO POVO
+T002721,transporte,essencial,nao,,MOBI APP *TRIP
+T002722,alimentacao_basica,essencial,nao,,QUITANDA DO VALE
+T002723,lazer,discricionario,nao,,PIXEL GAMES STORE
+T002724,compras,discricionario,sim,,
+T002725,assinaturas,discricionario,nao,cobranca_recorrente_nova,APPDIGITAL*PREMIUM
+T002726,moradia,essencial,sim,,
+T002727,alimentacao_basica,essencial,nao,,QUITANDA DO VALE
+T002728,assinaturas,discricionario,nao,,NUVEM ARMAZENAMENTO
+T002729,energia,essencial,nao,,CIA ENERGIA ELETRICA
+T002730,transporte,essencial,nao,,METRO LINHA AZUL
+T002731,alimentacao_basica,essencial,nao,,QUITANDA DO VALE
+T002732,transporte,essencial,nao,,MOBI APP *TRIP
+T002733,saude,prioritario,nao,,DROGARIA SAUDE TOTAL
+T002734,pagamento_fatura,outros,nao,,
+T002735,transporte,essencial,nao,,MOBI APP *TRIP
+T002736,veiculos,essencial,nao,,AUTOPOSTO TREVO
+T002737,transferencia_familiar,prioritario,sim,,
+T002738,restaurantes_bares,discricionario,nao,,LANCHONETE ESQUINA
+T002739,lazer,discricionario,nao,,TEATRO MUNICIPAL BILHETERIA
+T002740,agua,essencial,nao,,SANEAMENTO AGUAS CLARAS
+T002741,telecom,essencial,nao,,OPERADORA CONECTA TELECOM
+T002742,compras,discricionario,nao,,AUTO SHOP ACESSORIOS
+T002743,restaurantes_bares,discricionario,nao,,LANCHONETE ESQUINA
+T002744,restaurantes_bares,discricionario,nao,,LANCHONETE ESQUINA
+T002745,restaurantes_bares,discricionario,nao,,LANCHONETE ESQUINA
+T002746,saque,discricionario,nao,,SAQUE CAIXA ELETRONICO
+T002747,tarifas_bancarias,prioritario,nao,,TARIFA PACOTE SERVICOS
+T002748,assinaturas,discricionario,nao,,STREAMING FILMES MAIS
+T002749,alimentacao_basica,essencial,nao,,ACOUGUE BOI NOBRE
+T002750,alimentacao_basica,essencial,nao,,ACOUGUE BOI NOBRE
+T002751,assinaturas,discricionario,nao,cobranca_duplicada,STREAMING FILMES MAIS
+T002752,transporte,essencial,nao,,METRO LINHA AZUL
+T002753,veiculos,essencial,nao,,ESTACIONAMENTO CENTRAL
+T002754,assinaturas,discricionario,nao,,ACADEMIA CORPO ATIVO
+T002755,veiculos,essencial,nao,,GASOLINA E CIA
+T002756,lazer,discricionario,nao,,RECARGA CREDITOS GAME

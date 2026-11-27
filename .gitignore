@@ -12,3 +12,9 @@ dados_gerados/*
 # ...exceto a documentação do projeto
 !documentos/*.pdf
 .claude
+
+# ...exceto os dados fictícios que alimentam o sistema (pedido do professor)
+!dados_gerados/usuarios.csv
+!dados_gerados/extrato.csv
+!dados_gerados/verdade.csv
+!dados_gerados/usuarios_verdade.csv

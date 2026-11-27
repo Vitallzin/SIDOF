@@ -1,0 +1,13 @@
+id_usuario,perfil,renda_base,troca_emprego
+U01,renda_fixa_poucos_compromissos,6377.76,False
+U02,renda_fixa_poucos_compromissos,6632.84,False
+U03,renda_fixa_poucos_compromissos,6286.6,True
+U04,renda_variavel_autonomo,4375.56,False
+U05,renda_variavel_autonomo,3897.31,False
+U06,renda_variavel_autonomo,3268.81,False
+U07,renda_fixa_com_dividas,3895.06,False
+U08,renda_fixa_com_dividas,4792.35,False
+U09,renda_fixa_com_dividas,4653.49,True
+U10,renda_baixa_pouca_margem,1718.43,False
+U11,renda_baixa_pouca_margem,1672.54,False
+U12,renda_baixa_pouca_margem,2013.67,True
